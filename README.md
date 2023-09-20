@@ -42,16 +42,12 @@ To run this application locally, follow these steps:
     ```bash
    composer install
    
-    ```bash   
    php artisan cp .env.example .env
    
-    ```bash
    php artisan key:generate
    
-    ```bash
    npm install and npm run dev
 
-   ```bash
    php artisan serve
   
   
