@@ -38,16 +38,21 @@ To run this application locally, follow these steps:
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/transport-fare-management.git
+   
+    ```bash
    composer install
-   npm install
-  # or
-  yarn install
-  php artisan migrate --seed
-  # or
-  php artisan migrate
-  php artisan db:seed
-  php artisan serve
-  npm run dev
+   
+    ```bash   
+   php artisan cp .env.example .env
+   
+    ```bash
+   php artisan key:generate
+   
+    ```bash
+   npm install and npm run dev
+
+   ```bash
+   php artisan serve
   
   
 
