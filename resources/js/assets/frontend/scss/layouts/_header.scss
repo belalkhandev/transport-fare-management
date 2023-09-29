@@ -1,0 +1,92 @@
+header {
+    .header-top {
+        color: $color-white;
+        background-color: $color-primary;
+        min-height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            color: $color-white;
+        }
+
+        .header-top-item {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            column-gap: 20px;
+
+            &.left-item {
+                justify-content: flex-start;
+            }
+
+            ul {
+                @include flex-item-center(20px);
+
+                &.right {
+                    justify-content: flex-end;
+                }
+
+                li {
+                    span {
+                        @include flex-item-center(10px);
+                    }
+                }
+            }
+
+            .langs {
+                ul {
+                    column-gap: 10px;
+                    li {
+                        span {
+                            cursor: pointer;
+                            border: 1px solid $color-primary-bg-light;
+                            border-radius: 3px;
+                            padding: 0 4px;
+                            font-size: 0.875rem;
+
+                            &:hover {
+                                background-color: $color-primary-dark;
+                                transition: 250ms;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    .header {
+        padding: 10px 0;
+        .content {
+            @include flex-item-center(20px);
+            justify-content: space-between;
+            .logo {
+                a {
+                    @include flex-item-center(10px);
+                    img {
+                        width: 85px;
+                    }
+                    .logo-content {
+                        h2 {
+                            font-size: 2.25rem;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                        }
+
+                        h4 {
+                            font-size: 1.5rem;
+                            margin-top: 5px;
+                        }
+                    }
+                }
+            }
+
+            .logo-m100 {
+                width: 110px;
+            }
+        }
+    }
+}

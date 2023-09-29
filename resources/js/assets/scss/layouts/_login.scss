@@ -1,0 +1,92 @@
+#login-wrap {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @media screen and (max-width: 480px) {
+        background-color: $color-white;
+    }
+
+    .login-box {
+        background-color: $color-white;
+        padding: 50px;
+        border-radius: 10px;
+        width: 480px;
+        box-shadow: 0px 5px 10px -7px #00000015;
+
+        @media screen and (max-width: 480px) {
+            width: 80%;
+            background: none;
+            box-shadow: none;
+            padding: 50px 0px;
+        }
+
+        .login-header {
+            text-align: center;
+
+            .logo {
+                text-align: center;
+
+                h2 {
+                    color: $color-primary;
+                }
+
+                h3 {
+                    margin-top: 30px;
+                }
+            }
+        }
+
+        .login-body {
+            padding: 30px 0px;
+            .form-group {
+                margin-bottom: 20px;
+                .form-control {
+                    background-color: $color-white;
+                    border: none;
+                    height: 45px;
+                }
+
+                .input-group {
+                    border: 1px solid $color-input-border;
+                    border-radius: 10px;
+                    overflow: hidden;
+
+                    .input-group-text {
+                        border: none;
+                        background: none;
+                        background-color: #FFFFFF;
+                        color: $color-primary;
+                    }
+
+                    .form-control {
+                        background-color: #FFFFFF;
+
+                        &:focus {
+                            box-shadow: none;
+                        }
+                    }
+
+                }
+            }
+
+            .form-rem-pass {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+                font-size: 0.875rem;
+            }
+
+            .form-submit {
+                .btn {
+                    font-size: 1.125rem;
+                    font-weight: 500;
+                    padding: 10px 0px;
+                }
+            }
+        }
+
+        .login-footer {}
+    }
+}

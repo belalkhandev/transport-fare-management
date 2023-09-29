@@ -1,0 +1,143 @@
+.wrapper {
+    display: flex;
+    height: calc(100vh - 60px);
+
+    .sidebar {
+        width: 270px;
+        height: 100%;
+        overflow-y: auto;
+        padding: 15px 0 15px;
+        position: relative;
+        z-index: 1;
+
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            content: '';
+            background-color: $color-white;
+            border-right: 1px solid $color-gray-light;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .sidebar-items {
+            .sidebar-item {
+                margin-bottom: 20px;
+
+                .sidebar-item-header {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 10px;
+                    padding-bottom: 5px;
+                    margin: 0px 15px 0px 15px;
+                    border-bottom: 1px solid $color-bg;
+
+                    .icon {
+                        color: $color-primary;
+                        font-size: 1.125rem;
+                    }
+
+                    h4 {
+                        font-weight: 400;
+                        color: $color-secondary;
+                        margin: 0;
+                        font-size: 1rem;
+                        font-family: $fonts-primary;
+                    }
+                }
+                .sidebar-item-body {
+                    margin: 10px 0;
+                    ul {
+
+                        li {
+                            position: relative;
+                            padding-left: 15px;
+                            margin-bottom: 2px;
+
+                            a {
+                                color: $color-secondary;
+                                text-transform: capitalize;
+                                display: block;
+                                padding: 5px 0px;
+                                font-size: 1rem;
+
+                                &.router-link-active {
+                                    color: $color-primary;
+                                }
+                            }
+
+                            &::after {
+                                position: absolute;
+                                top: 50%;
+                                left: 0;
+                                width: 0;
+                                height: 100%;
+                                background-color: $color-gray-light;
+                                content: '';
+                                transform: translate(0%, -50%);
+                                visibility: hidden;
+                            }
+
+
+                            &.active, &:hover {
+                                background-color: $color-primary-bg-light;
+                                transition: 250ms;
+
+                                &::after {
+                                    background-color: $color-primary;
+                                    transition: 250ms;
+                                    visibility: visible;
+                                    width: 4px;
+                                }
+
+                                a {
+                                    color: $color-primary;
+                                    transition: 0.25s;
+                                }
+                            }
+
+                            &.active {
+                                &::after {
+                                    width: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .main-content {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        position: relative;
+        z-index: 1;
+
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            content: '';
+            background: $color-bg;
+            border-right: 1px solid $color-gray-light;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+
+        .content {
+            padding: 15px;
+        }
+    }
+
+    .sidebar ~ .main-content {
+        width: calc(100% - 270px);
+    }
+}

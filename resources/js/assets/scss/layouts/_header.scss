@@ -1,0 +1,85 @@
+header {
+    background-color: $color-primary;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px 10px;
+    min-height: 50px;
+    color: $color-white;
+
+    .apps {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 270px;
+        column-gap: 10px;
+
+        .app-icon {
+            cursor: pointer;
+            img {
+                width: 45px;
+            }
+        }
+
+        .app-brand {
+            h3 {
+                font-weight: 500;
+                font-size: 1.25rem;
+                color: $color-white;
+            }
+        }
+    }
+
+    .header-navs {
+        width: calc(100% - 270px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .page-title {
+            h5 {
+                font-weight: 400;
+                font-size: 1.125rem;
+                color: $color-white;
+            }
+        }
+
+        .nav-items {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            column-gap: 10px;
+
+            .nav-item {
+                cursor: pointer;
+
+                .nav-icon {
+                    color: $color-primary-bg-light;
+                    font-size: 1.125rem;
+                    line-height: 0;
+                    border: 1px solid $color-primary-light;
+                    border-radius: 10px;
+                    padding: 5px 6px 3px 6px;
+
+                    i {
+                        line-height: 0;
+                    }
+                }
+
+                &:hover {
+                    .nav-icon {
+                        background-color: $color-primary-dark;
+                        color: $color-white;
+                        box-shadow: 0px 2px 5px $shadow-white;
+                    }
+                }
+            }
+        }
+    }
+}

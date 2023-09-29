@@ -1,0 +1,44 @@
+.config-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;     
+    column-gap: 20px;
+    row-gap: 15px;
+
+    @include responsd(phone) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .config-item {
+        text-align: center;
+        position: relative;
+
+        span {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: $color-primary-light;
+            visibility: hidden;
+        }
+
+        a {
+            display: block;
+            padding: 15px 30px;
+            border: 1px solid $color-gray-light;
+            background-color: #ffffffce;
+            border-radius: 5px;
+            color: $color-gray-dark2;
+        }
+
+        &:hover {
+            span {
+                visibility: visible;
+                color: $color-gray-light;
+            }
+            a {
+                background-color: $color-primary;
+                color: $color-white;
+            }
+        }
+    }
+}

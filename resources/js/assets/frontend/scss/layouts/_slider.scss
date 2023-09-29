@@ -1,0 +1,26 @@
+.message-slides {
+    &.carousel {
+        text-align: left;
+    }
+
+    .message-slide-content {
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        p {
+            text-align: justify;
+        }
+    }
+
+    .message-slide-thumbnail {
+        margin-top: 50px;
+    }
+
+    .message-author {
+        margin-top: 30px;
+        h3 {
+            font-size: 1.15rem;
+        }
+    }
+}

@@ -1,0 +1,97 @@
+.menu {
+    background-color: #F4FBFD;
+    box-shadow: 0px 3px 7px #6d28d90a;
+    text-align: center;
+    transition: 250ms;
+
+    a {
+        color: $color-secondary;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .menu-icon {
+        position: relative;
+        color: $color-white;
+        z-index: 1;
+
+        &::after {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            content: '';
+            background-color: #6d28d9;
+            z-index: -1;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+    }
+
+    &.menu-primary {
+        .menu-icon {
+            &::after {
+                background-color: #6d28d9;
+            }
+        }
+
+        .menu-content {
+            color: #6d28d9;
+        }
+    }
+
+    &.menu-success {
+        .menu-icon {
+            &::after {
+                background-color: #258F1C;
+            }
+        }
+
+        .menu-content {
+            color: #258F1C;
+        }
+    }
+
+    &.menu-info {
+        .menu-icon {
+            &::after {
+                background-color: #0EA5E9;
+            }
+        }  
+        .menu-content {
+            color: #0EA5E9;
+        }    
+    }
+
+    &.menu-warning {
+        .menu-icon {
+            &::after {
+                background-color: #F59E0B;
+            }
+        }
+
+        .menu-content {
+            color: #F59E0B;
+        }    
+    }
+
+    &.menu-danger {
+        .menu-icon {
+            &::after {
+                background-color: #DC2626;
+            }
+        }
+
+        .menu-content {
+            color: #DC2626;
+        }    
+    }
+
+    &:hover {
+        background-color: $color-white;
+        transform: scale(1.05);
+        transition: 500ms;
+    }
+}

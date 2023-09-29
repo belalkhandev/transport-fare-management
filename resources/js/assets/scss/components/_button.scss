@@ -1,0 +1,95 @@
+.btn {
+    padding: 7px 15px;
+    background-color: $color-white;
+    border: 1px solid $color-gray;
+
+    &.btn-primary {
+        background-color: $color-primary !important;
+        border-color: $color-primary;
+
+        &:hover {
+            background-color: $color-primary-dark !important;
+        }
+    }
+
+    &.btn-success {
+        background-color: $color-success !important;
+        border-color: $color-success-dark;
+
+        &:hover {
+            background-color: $color-success-dark !important;
+        }
+    }
+
+    &.btn-outline-primary {
+        color: $color-primary;
+        background-color: $color-primary-light2;
+        border: 1px solid $color-primary-light2;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-primary;
+            border: 1px solid $color-primary;
+        }
+    }
+
+    &.btn-outline-success {
+        color: $color-success;
+        background-color: $color-success-light;
+        border: 1px solid $color-success-light;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-success;
+            border: 1px solid $color-success;
+        }
+    }
+
+    &.btn-outline-info {
+        color: $color-info;
+        background-color: $color-info-light;
+        border: 1px solid $color-info-light;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-info;
+            border: 1px solid $color-info;
+        }
+    }
+
+    &.btn-outline-warning {
+        color: $color-warning;
+        background-color: $color-warning-light;
+        border: 1px solid $color-warning-light;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-warning;
+            border: 1px solid $color-warning;
+        }
+    }
+
+    &.btn-outline-danger {
+        color: $color-danger;
+        background-color: $color-danger-light;
+        border: 1px solid $color-danger-light;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-danger;
+            border: 1px solid $color-danger;
+        }
+    }
+
+    &.btn-sm {
+        line-height: auto;
+        font-size: 0.875rem;
+        padding: 5px 7px;
+    }
+
+    &.btn-rounded {
+        padding: 6px 7px;
+        border-radius: 50%;
+        line-height: 0;
+    }
+}

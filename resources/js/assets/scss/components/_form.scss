@@ -1,0 +1,79 @@
+.form-group {
+    margin-bottom: 15px;
+
+    label {
+        font-weight: 500;
+        font-size: 15px;
+        margin-bottom: 5px;
+        color: $color-dark;
+    }
+
+    .form-control, .form-select {
+        height: 40px;
+        border-color: $color-gray-light;
+        border-radius: 5px;
+
+        &:focus {
+            box-shadow: none;
+            border-color: $color-primary;
+            outline: none;
+        }
+
+        &.form-control-textarea {
+            height: auto;
+        }
+        &::placeholder {
+            font-weight: 300;
+        }
+
+        &.input-file {
+            width: 100%;
+            background: none;
+        }
+    }
+
+    .file-upload-group {
+        .preview-images {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 10px;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .image {
+                width: 150px;
+                .filename {
+                    font-size: 0.775rem;
+                }
+                img {
+                    border: 1px solid $color-primary-light;
+                    padding: 3px;
+                    border-radius: 5px;
+                }
+            }
+        }
+    }
+
+    span.text-danger {
+        font-weight: 300;
+        font-size: 0.875rem;
+    }
+
+
+    // form
+    .form-check-input{
+        border-color: $color-primary;
+        width: 15px;
+        height: 15px;
+        &:checked {
+            background-color: $color-primary;
+            border-color: $color-primary;
+        }
+
+        &:focus {
+            box-shadow: 0px 0px 0px .25rem $color-primary-bg-light;
+            border-color: $color-primary;
+        }
+    }
+}

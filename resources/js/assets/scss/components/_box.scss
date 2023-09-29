@@ -1,0 +1,97 @@
+.box {
+    background-color: #ffffffce;
+    border-radius: 10px;
+    padding: 0px 15px;
+    overflow-y: auto;
+    border: 1px solid $color-primary-bg-light;
+    margin-bottom: 15px;
+
+    .box-header {
+        border-bottom: 1px solid $color-gray-light;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px;
+
+        .box-title {
+            h4 {
+                font-size: 1rem;
+                font-weight: 500;
+            }
+        }
+
+        .box-action {
+            ul {
+                display: flex;
+                column-gap: 10px;
+                li {
+                    a {
+
+                    }
+                }
+            }
+
+            .collapse-btn {
+                &.btn {
+                    margin: 0;
+                    padding: 0;
+                    line-height: 0;
+
+                    .bx {
+                        font-size: 1.25rem;
+                        transform: rotate(180deg);
+                        transition: 250ms;
+                    }
+
+                    &.collapsed {
+                        .bx {
+                            transform: rotate(0deg);
+                            transition: 250ms;
+                        }
+                    }
+                }
+            }
+        }
+
+        .no-border {
+            border-bottom-width: 0px;
+        }
+    }
+    
+    .box-body {
+        padding: 10px 0px;
+        font-size: 0.875rem;
+        font-family: $fonts-primary;
+        color: #425483;
+    }
+    
+    .box-footer {
+        padding: 10px 0px;
+    }
+
+
+    &.box-collapsible {
+        .box-header {
+            border-bottom-width: 0px;
+            padding: 12px 0px;
+        }
+        .box-body {
+            padding: 0px 0px;
+        }
+    }
+
+    &.sidebar-box {
+        .box-header {
+            border: none;
+            .box-title {
+                font-size: 1rem !important;
+
+                h4 {
+                    font-size: 1rem !important;
+                }
+            }
+        }
+    }
+
+
+}

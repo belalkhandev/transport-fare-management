@@ -1,0 +1,95 @@
+footer {
+    .footer-top {
+        background-color: #172B4D;
+        .footer-item {
+            .footer-title {
+                margin-bottom: 40px;
+
+                h3 {
+                    color: $color-gray-light;
+                    font-weight: 500;
+                    font-size: 1.25rem;
+                }
+            }
+            .footer-content {
+                .logo {
+                    a {
+                        @include flex-item-center(10px);
+
+                        img {
+                            width: 75px;
+                        }
+
+                        .logo-content {
+                            h2 {
+                                font-size: 1rem;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                                color: $color-white;
+                            }
+
+                            h4 {
+                                font-size: 0.875rem;
+                                color: $color-white;
+                                margin-top: 5px;
+                            }
+                        }
+                    }
+                }
+
+                .footer-navs {
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    column-gap: 16px;
+
+                    li {
+                        width: calc(50% - 8px);
+                        a {
+                            color: $color-gray-light;
+                            padding: 7px 0;
+                            display: flex;
+                            flex-direction:row;
+                            flex-wrap: nowrap;
+                            justify-content: flex-start;
+                            align-items: center;
+                            column-gap: 5px;
+                            transition: 250ms;
+                            font-weight: 300;
+
+                            i.bx {
+                                line-height: 0;
+                                color: $color-secondary;
+                                font-size: 1.125rem;
+                                transition: 250ms;
+                            }
+                        }
+
+                        &:hover {
+                            a {
+                                color: $color-primary;
+                                i.bx {
+                                    color: $color-white;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    .footer-bottom {
+        color: $color-white;
+        background-color: #0F203E;
+        padding: 10px 0;
+        font-weight: 300;
+
+        a {
+            color: $color-primary;
+            font-weight: 400;
+        }
+    }
+}

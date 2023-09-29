@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-size: 1rem;
+    font-family: $font-primary;
+    color: $text-secondary;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul, li {
+    list-style: none;
+}
+
+ul, ol, p {
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 95%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 90%;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1280px;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1680px;
+    }
+}
+
+
+.section-padding-50 {
+    padding: 50px 0;
+}
+
+.section-padding-60 {
+    padding: 60px 0;
+}
+
+.section-padding-70 {
+    padding: 70px 0;
+}
+
+.section-padding-80 {
+    padding: 80px 0;
+}
+
+.section-padding-100 {
+    padding: 100px 0;
+}
+
+.section-padding-top-60 {
+    padding-top: 50px;
+}
+
+.section-padding-bottom-60 {
+    padding-bottom: 50px;
+}
+
+.btn {
+    &.btn-primary {
+        background-color: $color-primary;
+        border-color: $color-primary;
+
+        &:hover {
+            background-color: $color-primary-dark-2;
+            border-color: $color-primary-dark-2;
+        }
+    }
+}
+
+.text-right {
+    text-align: right;
+}
+
+.section-title-area {
+    margin-bottom: 40px;
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        h2 {
+            text-transform: capitalize;
+        }
+
+        .section-action {
+        }
+    }
+}
+
+.page-title-section {
+    background-color: $color-secondary;
+
+    .page-title-content {
+        h3 {
+            padding-top: 30px;
+            color: $color-white;
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+    }
+}

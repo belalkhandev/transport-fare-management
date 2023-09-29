@@ -1,0 +1,69 @@
+    .table {
+        overflow: hidden;
+        thead {
+            
+            tr {
+                border-bottom: 1px solid $color-primary-bg-light;
+                th {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    padding: 7px 10px;
+                    border-bottom: none;
+                    
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid $color-primary-bg-light;
+                position: relative;
+                cursor: pointer;
+
+                td {
+                    font-size: 0.875rem;
+                    font-weight: 300;
+                    color: $color-secondary;
+                    border-bottom: none;
+                    padding: 8px 10px;
+                    vertical-align: middle;
+
+                    .action {
+                        ul {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            column-gap: 5px;
+                            flex-wrap: wrap;
+                        }
+                    }
+                }
+
+                &::after {
+                    position: absolute;
+                    content: '';
+                    top: 0;
+                    left: -4px;
+                    width: 4px;
+                    height: 100%;
+                    background-color: $color-primary-light;
+                    border-radius: 5px 0 0 5px;
+
+                }
+
+                &:hover {
+                    background-color: $color-primary-bg-light;
+
+                    &::after {
+                        left: 0;
+                        transition: 250ms;
+                    }
+                }
+                
+            }
+        }
+
+        > :not(:first-child) {
+            border-top: 0 solid $color-gray-light !important;
+        }
+    }

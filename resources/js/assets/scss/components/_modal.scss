@@ -1,0 +1,26 @@
+.modal {
+    .modal-content {
+
+        .modal-header {
+            background-color: $color-primary-bg-light;
+            padding: 12px 15px;
+            border-bottom: 1px solid $color-primary-light2;
+
+            .modal-title {
+                font-size: 1.125rem;
+                font-weight: 500;
+                color: $color-secondary;
+            }
+        }
+
+        .modal-body {
+            padding: 15px;
+
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding: 10px 15px;
+        }
+    }
+}

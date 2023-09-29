@@ -1,0 +1,25 @@
+.project-photos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    column-gap: 30px;
+    row-gap: 30px;
+
+    .photo {
+        width: calc(25% - 30px);
+        overflow: hidden;
+        position: relative;
+
+        img {
+            min-height: 100%;
+        }
+
+        .action {
+            position: absolute;
+            z-index: 1;
+            top: 5px;
+            left: 5px;
+        }
+    }
+}
