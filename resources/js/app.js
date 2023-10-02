@@ -23,7 +23,7 @@ window.Toast = Swal.mixin({
     }
 })
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'School';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'TFM';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

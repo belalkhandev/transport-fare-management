@@ -28,11 +28,16 @@
                 text-align: center;
 
                 h2 {
-                    color: $color-primary;
+                    color: $color-secondary;
+                    margin-top: 30px;
                 }
 
                 h3 {
-                    margin-top: 30px;
+                    margin-top: 15px;
+                }
+                img {
+                    width: 120px;
+                    margin: 0 auto;
                 }
             }
         }
