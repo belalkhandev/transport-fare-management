@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AcademicClassController;
 use App\Http\Controllers\Admin\AcademicGroupController;
 use App\Http\Controllers\Admin\AcademicSectionController;
 use App\Http\Controllers\Admin\AcademicYearController;
+use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ContactSettingController;
@@ -73,6 +74,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{academicSectionId}/edit', [AcademicSectionController::class, 'edit'])->name('academic-section.edit');
         Route::put('/{academicSectionId}/edit', [AcademicSectionController::class, 'update']);
         Route::delete('/{academicSectionId}', [AcademicSectionController::class, 'destroy'])->name('academic-section.delete');
+    });
+
+    Route::prefix('areas')->group(function () {
+        Route::get('/', [AreaController::class, 'index'])->name('area.index');
+        Route::get('/create', [AreaController::class, 'create'])->name('area.create');
+        Route::post('/create', [AreaController::class, 'store']);
+        Route::get('/{areaId}/edit', [AreaController::class, 'edit'])->name('area.edit');
+        Route::put('/{areaId}/edit', [AreaController::class, 'update']);
+        Route::delete('/{areaId}', [AreaController::class, 'destroy'])->name('area.delete');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

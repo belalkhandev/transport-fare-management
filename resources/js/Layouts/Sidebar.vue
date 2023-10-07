@@ -138,8 +138,8 @@ const getActivePath = (routeName) => {
                                 Fees setup
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('area.index')) }">
+                            <NavLink :href="route('area.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Areas
                             </NavLink>
