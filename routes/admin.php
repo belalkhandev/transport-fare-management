@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AcademicClassController;
 use App\Http\Controllers\Admin\AcademicGroupController;
+use App\Http\Controllers\Admin\AcademicPlanController;
 use App\Http\Controllers\Admin\AcademicSectionController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\AreaController;
@@ -93,6 +94,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{feeId}/edit', [FeeController::class, 'edit'])->name('fee.edit');
         Route::put('/{feeId}/edit', [FeeController::class, 'update']);
         Route::delete('/{feeId}', [FeeController::class, 'destroy'])->name('fee.delete');
+    });
+
+    Route::prefix('academic-plans')->group(function () {
+        Route::get('/', [AcademicPlanController::class, 'index'])->name('academic-plan.index');
+        Route::get('/create', [AcademicPlanController::class, 'create'])->name('academic-plan.create');
+        Route::post('/create', [AcademicPlanController::class, 'store']);
+        Route::get('/{academicPlanId}/edit', [AcademicPlanController::class, 'edit'])->name('academic-plan.edit');
+        Route::put('/{academicPlanId}/edit', [AcademicPlanController::class, 'update']);
+        Route::delete('/{academicPlanId}', [AcademicPlanController::class, 'destroy'])->name('academic-plan.delete');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

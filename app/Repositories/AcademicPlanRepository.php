@@ -15,6 +15,14 @@ class AcademicPlanRepository extends Repository
         return AcademicPlan::class;
     }
 
+    public function getByPaginate($limit = 15)
+    {
+        return $this->query()
+            ->with('academicYear', 'academicClass', 'academicGroup', 'academicSection')
+            ->latest()
+            ->paginate($limit);
+    }
+
     public function storeByRequest(Request $request)
     {
         return $this->query()->create([
