@@ -43,10 +43,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
-        'frontend'  => [
-            \App\Http\Middleware\HandleInertiaFrontendRequest::class,
-        ],
-
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',

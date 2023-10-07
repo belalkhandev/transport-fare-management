@@ -150,8 +150,8 @@ const getActivePath = (routeName) => {
                                 Academic Plans
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('academic-year.index')) }">
+                            <NavLink :href="route('academic-year.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Academic years
                             </NavLink>

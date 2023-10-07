@@ -18,21 +18,22 @@ class AcademicYearRepository extends Repository
     public function storeByRequest(Request $request)
     {
         return $this->query()->create([
-
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
         ]);
     }
 
-
-    public function updateByRequest(Request $request, $id)
+    public function updateByRequest(Request $request, $academicYearId)
     {
-        return $this->query()->findOrFail($id)?->update([
-
-            ]);
+        return $this->query()->findOrFail($academicYearId)?->update([
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
+        ]);
     }
 
-    public function deleteByRequest($id)
+    public function deleteByRequest($academicYearId)
     {
-        return $this->query()->findOrFail($id)?->delete();
+        return $this->query()->findOrFail($academicYearId)?->delete();
     }
 
 }
