@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class {{RepositoryName}} extends Repository
 {
-    /**
-     * @inheritDoc
-     */
     public function model()
     {
         return {{Model}}::class;
@@ -22,17 +19,16 @@ class {{RepositoryName}} extends Repository
         ]);
     }
 
-
     public function updateByRequest(Request $request, ${{ModelId}})
     {
-        return $this->query()->findOrFail(${{ModelId}})->update([
+        return $this->query()->findOrFail(${{ModelId}})?->update([
 
-            ]);
+        ]);
     }
 
     public function deleteByRequest(${{ModelId}})
     {
-        return $this->query()->findOrFail(${{ModelId}})->delete();
+        return $this->query()->findOrFail(${{ModelId}})?->delete();
     }
 
 }

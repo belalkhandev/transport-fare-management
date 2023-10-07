@@ -18,7 +18,8 @@ class AcademicGroupRepository extends Repository
     public function storeByRequest(Request $request)
     {
         return $this->query()->create([
-
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
         ]);
     }
 
@@ -26,8 +27,9 @@ class AcademicGroupRepository extends Repository
     public function updateByRequest(Request $request, $academicGroupId)
     {
         return $this->query()->findOrFail($academicGroupId)->update([
-
-            ]);
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
+        ]);
     }
 
     public function deleteByRequest($academicGroupId)

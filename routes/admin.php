@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicClassController;
+use App\Http\Controllers\Admin\AcademicGroupController;
+use App\Http\Controllers\Admin\AcademicSectionController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
@@ -43,6 +46,33 @@ Route::middleware('auth')->group(function () {
         Route::get('/{academicYearId}/edit', [AcademicYearController::class, 'edit'])->name('academic-year.edit');
         Route::put('/{academicYearId}/edit', [AcademicYearController::class, 'update']);
         Route::delete('/{academicYearId}', [AcademicYearController::class, 'destroy'])->name('academic-year.delete');
+    });
+
+    Route::prefix('academic-classes')->group(function () {
+        Route::get('/', [AcademicClassController::class, 'index'])->name('academic-class.index');
+        Route::get('/create', [AcademicClassController::class, 'create'])->name('academic-class.create');
+        Route::post('/create', [AcademicClassController::class, 'store']);
+        Route::get('/{academicClassId}/edit', [AcademicClassController::class, 'edit'])->name('academic-class.edit');
+        Route::put('/{academicClassId}/edit', [AcademicClassController::class, 'update']);
+        Route::delete('/{academicClassId}', [AcademicClassController::class, 'destroy'])->name('academic-class.delete');
+    });
+
+    Route::prefix('academic-groups')->group(function () {
+        Route::get('/', [AcademicGroupController::class, 'index'])->name('academic-group.index');
+        Route::get('/create', [AcademicGroupController::class, 'create'])->name('academic-group.create');
+        Route::post('/create', [AcademicGroupController::class, 'store']);
+        Route::get('/{academicGroupId}/edit', [AcademicGroupController::class, 'edit'])->name('academic-group.edit');
+        Route::put('/{academicGroupId}/edit', [AcademicGroupController::class, 'update']);
+        Route::delete('/{academicGroupId}', [AcademicGroupController::class, 'destroy'])->name('academic-group.delete');
+    });
+
+    Route::prefix('academic-sections')->group(function () {
+        Route::get('/', [AcademicSectionController::class, 'index'])->name('academic-section.index');
+        Route::get('/create', [AcademicSectionController::class, 'create'])->name('academic-section.create');
+        Route::post('/create', [AcademicSectionController::class, 'store']);
+        Route::get('/{academicSectionId}/edit', [AcademicSectionController::class, 'edit'])->name('academic-section.edit');
+        Route::put('/{academicSectionId}/edit', [AcademicSectionController::class, 'update']);
+        Route::delete('/{academicSectionId}', [AcademicSectionController::class, 'destroy'])->name('academic-section.delete');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

@@ -156,20 +156,20 @@ const getActivePath = (routeName) => {
                                 Academic years
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('academic-class.index')) }">
+                            <NavLink :href="route('academic-class.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Academic Class
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('academic-group.index')) }">
+                            <NavLink :href="route('academic-group.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Academic Group
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('academic-section.index')) }">
+                            <NavLink :href="route('academic-section.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Academic Section
                             </NavLink>

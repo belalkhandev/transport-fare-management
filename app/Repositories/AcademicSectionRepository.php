@@ -18,21 +18,23 @@ class AcademicSectionRepository extends Repository
     public function storeByRequest(Request $request)
     {
         return $this->query()->create([
-
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
         ]);
     }
 
 
     public function updateByRequest(Request $request, $academicSectionId)
     {
-        return $this->query()->findOrFail($academicSectionId)->update([
-
-            ]);
+        return $this->query()->findOrFail($academicSectionId)?->update([
+            'name' => $request->name,
+            'is_active' => $request->is_active ? 1 : 0
+        ]);
     }
 
     public function deleteByRequest($academicSectionId)
     {
-        return $this->query()->findOrFail($academicSectionId)->delete();
+        return $this->query()->findOrFail($academicSectionId)?->delete();
     }
 
 }
