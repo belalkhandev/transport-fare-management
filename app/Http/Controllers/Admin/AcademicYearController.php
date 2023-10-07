@@ -37,11 +37,8 @@ class AcademicYearController extends Controller
 
     public function update(Request $request, $academicYearId)
     {
-        $academicYear = $this->academicYearRepository->query()
-            ->findOrFail($academicYearId);
-
         $request->validate([
-            'name' => ['required', 'unique:academic_years,name,'.$academicYear->id]
+            'name' => ['required', 'unique:academic_years,name,'.$academicYearId]
         ]);
 
         $this->academicYearRepository->updateByRequest($request, $academicYearId);

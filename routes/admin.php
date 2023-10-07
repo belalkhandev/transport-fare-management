@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ContactSettingController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FeeController;
 use App\Http\Controllers\Admin\LeaderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PartnerController;
@@ -83,6 +84,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{areaId}/edit', [AreaController::class, 'edit'])->name('area.edit');
         Route::put('/{areaId}/edit', [AreaController::class, 'update']);
         Route::delete('/{areaId}', [AreaController::class, 'destroy'])->name('area.delete');
+    });
+
+    Route::prefix('fees')->group(function () {
+        Route::get('/', [FeeController::class, 'index'])->name('fee.index');
+        Route::get('/create', [FeeController::class, 'create'])->name('fee.create');
+        Route::post('/create', [FeeController::class, 'store']);
+        Route::get('/{feeId}/edit', [FeeController::class, 'edit'])->name('fee.edit');
+        Route::put('/{feeId}/edit', [FeeController::class, 'update']);
+        Route::delete('/{feeId}', [FeeController::class, 'destroy'])->name('fee.delete');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

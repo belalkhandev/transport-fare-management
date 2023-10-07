@@ -132,8 +132,8 @@ const getActivePath = (routeName) => {
                 </div>
                 <div class="sidebar-item-body">
                     <ul>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('fee.index')) }">
+                            <NavLink :href="route('fee.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Fees setup
                             </NavLink>

@@ -37,11 +37,8 @@ class AcademicGroupController extends Controller
 
     public function update(Request $request, $academicGroupId)
     {
-        $academicGroup = $this->academicGroupRepository->query()
-            ->findOrFail($academicGroupId);
-
         $request->validate([
-            'name' => ['required', 'unique:academic_groups,name,'.$academicGroup->id]
+            'name' => ['required', 'unique:academic_groups,name,'.$academicGroupId]
         ]);
 
         $this->academicGroupRepository->updateByRequest($request, $academicGroupId);

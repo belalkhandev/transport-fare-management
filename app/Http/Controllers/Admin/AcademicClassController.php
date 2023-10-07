@@ -37,11 +37,8 @@ class AcademicClassController extends Controller
 
     public function update(Request $request, $academicClassId)
     {
-        $academicClass = $this->academicClassRepository->query()
-            ->findOrFail($academicClassId);
-
         $request->validate([
-            'name' => ['required', 'unique:academic_classes,name,'.$academicClass->id]
+            'name' => ['required', 'unique:academic_classes,name,'.$academicClassId]
         ]);
 
         $this->academicClassRepository->updateByRequest($request, $academicClassId);

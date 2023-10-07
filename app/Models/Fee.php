@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Fee extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'area_id',
+        'amount'
+    ];
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
 }

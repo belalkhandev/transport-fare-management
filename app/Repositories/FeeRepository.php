@@ -15,24 +15,26 @@ class FeeRepository extends Repository
         return Fee::class;
     }
 
-    public function storeByRequest(Request $request)
+    public function getByPaginate($limit = 15)
     {
-        return $this->query()->create([
-
-        ]);
+        return $this->query()
+            ->with('area')
+            ->latest()
+            ->paginate($limit);
     }
 
-
-    public function updateByRequest(Request $request, $feeId)
+    public function storeByRequest(Request $request)
     {
-        return $this->query()->findOrFail($feeId)->update([
-
-            ]);
+        return $this->query()->updateOrCreate([
+            'area_id' => $request->get('area_id'),
+        ],[
+            'amount' => $request->get('amount')
+        ]);
     }
 
     public function deleteByRequest($feeId)
     {
-        return $this->query()->findOrFail($feeId)->delete();
+        return $this->query()->findOrFail($feeId)?->delete();
     }
 
 }

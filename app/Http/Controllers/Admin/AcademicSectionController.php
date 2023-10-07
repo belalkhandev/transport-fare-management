@@ -37,11 +37,8 @@ class AcademicSectionController extends Controller
 
     public function update(Request $request, $academicSectionId)
     {
-        $academicSection = $this->academicSectionRepository->query()
-            ->findOrFail($academicSectionId);
-
         $request->validate([
-            'name' => ['required', 'unique:academic_sections,name,'.$academicSection->id]
+            'name' => ['required', 'unique:academic_sections,name,'.$academicSectionId]
         ]);
 
         $this->academicSectionRepository->updateByRequest($request, $academicSectionId);

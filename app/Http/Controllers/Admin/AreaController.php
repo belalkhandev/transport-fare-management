@@ -37,11 +37,8 @@ class AreaController extends Controller
 
     public function update(Request $request, $areaId)
     {
-        $area = $this->areaRepository->query()
-            ->findOrFail($areaId);
-
         $request->validate([
-            'name' => ['required', 'unique:areas,name,'.$area->id]
+            'name' => ['required', 'unique:areas,name,'.$areaId]
         ]);
 
         $this->areaRepository->updateByRequest($request, $areaId);
