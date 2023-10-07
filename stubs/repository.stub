@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{Model}};
+use Illuminate\Http\Request;
+
+class {{RepositoryName}} extends Repository
+{
+    /**
+     * @inheritDoc
+     */
+    public function model()
+    {
+        return {{Model}}::class;
+    }
+
+    public function storeByRequest(Request $request)
+    {
+        return $this->query()->create([
+
+        ]);
+    }
+
+
+    public function updateByRequest(Request $request, ${{ModelId}})
+    {
+        return $this->query()->findOrFail(${{ModelId}})->update([
+
+            ]);
+    }
+
+    public function deleteByRequest(${{ModelId}})
+    {
+        return $this->query()->findOrFail(${{ModelId}})->delete();
+    }
+
+}

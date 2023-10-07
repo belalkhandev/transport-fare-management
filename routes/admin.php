@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ContactSettingController;
@@ -35,22 +36,19 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::prefix('academic-years')->group(function () {
+        Route::get('/', [AcademicYearController::class, 'index'])->name('academic-year.index');
+        Route::get('/create', [AcademicYearController::class, 'create'])->name('academic-year.create');
+        Route::post('/create', [AcademicYearController::class, 'store']);
+        Route::get('/{academicYearId}/edit', [AcademicYearController::class, 'edit'])->name('academic-year.edit');
+        Route::put('/{academicYearId}/edit', [AcademicYearController::class, 'update']);
+        Route::delete('/{academicYearId}', [AcademicYearController::class, 'destroy'])->name('academic-year.delete');
+    });
+
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');
     Route::post('site-settings', [SiteSettingsController::class, 'store']);
 
-    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware('throttle:6,1')
-                ->name('verification.send');
-
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-                ->name('password.confirm');
-
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
