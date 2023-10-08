@@ -73,6 +73,10 @@
                                 &.router-link-active {
                                     color: $color-primary;
                                 }
+
+                                .bx-radio-circle-marked {
+                                    color: $color-primary-bg-light
+                                }
                             }
 
                             &::after {
@@ -162,7 +166,7 @@
             &.toggle-sidebar {
                 left: 0;
                 background-color: $color-white;
-                box-shadow: 5px 0 7px #00000026;
+                box-shadow: 5px 0 7px #00000006;
             }
         }
 
