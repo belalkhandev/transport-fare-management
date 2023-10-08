@@ -25,6 +25,8 @@ const showFormModal = () => {
 const form = useForm({
     academic_year_id: '',
     name: '',
+    start_date: '',
+    end_date: '',
     is_active: true
 })
 
@@ -60,6 +62,8 @@ const submitForm = () => {
 const editAction = (academic_year) => {
     form.academic_year_id = academic_year.id;
     form.name = academic_year.name;
+    form.start_date = academic_year.start_date;
+    form.end_date = academic_year.end_date;
     form.is_active = !!academic_year.is_active;
 
     displayFormModal.value = true
@@ -96,7 +100,7 @@ const deleteAction = (academic_year_id) => {
     <AdminPanelLayout>
         <template #header>Academic years</template>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header">
                         <h5 class="title">Academic years</h5>
@@ -110,6 +114,8 @@ const deleteAction = (academic_year_id) => {
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Start date</th>
+                                <th>End date</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -118,6 +124,8 @@ const deleteAction = (academic_year_id) => {
                             <tr v-for="(academic_year, i) in academic_years.data">
                                 <td>{{ i+1 }}</td>
                                 <td>{{ academic_year.name }}</td>
+                                <td>{{ academic_year.start_date }}</td>
+                                <td>{{ academic_year.end_date }}</td>
                                 <td>
                                     <span v-if="academic_year.is_active" class="text-success">Active</span>
                                     <span v-else class="text-danger">Inactive</span>
@@ -157,6 +165,24 @@ const deleteAction = (academic_year_id) => {
                         <input type="text" class="form-control" v-model="form.name" placeholder="e.g: 2023-24">
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
+
+                   <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group">
+                               <label>Start Date</label>
+                               <input type="date" class="form-control" v-model="form.start_date">
+                               <InputError class="mt-2" :message="form.errors.start_date" />
+                           </div>
+                       </div>
+                       <div class="col-md-6">
+                           <div class="form-group">
+                               <label>End Date</label>
+                               <input type="date" class="form-control" v-model="form.end_date">
+                               <InputError class="mt-2" :message="form.errors.end_date" />
+                           </div>
+                       </div>
+                   </div>
+
                     <div class="form-check">
                         <input class="form-check-input" v-model="form.is_active" type="checkbox" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">
