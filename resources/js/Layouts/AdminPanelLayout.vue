@@ -11,7 +11,6 @@ defineProps({
 
 <template>
     <Head :title="title"/>
-
     <Header>
         <template #header>
             <slot name="header"/>

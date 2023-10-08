@@ -7,6 +7,8 @@ use App\Enums\BloodGroup;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\Controller;
 use App\Repositories\AcademicPlanRepository;
+use App\Repositories\AreaRepository;
+use App\Repositories\FeeRepository;
 use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,6 +17,7 @@ class StudentController extends Controller
 {
     public function __construct(
         protected AcademicPlanRepository $academicPlanRepository,
+        protected FeeRepository $feeRepository,
         protected StudentRepository $studentRepository,
     )
     {
@@ -35,10 +38,13 @@ class StudentController extends Controller
             ->latest()
             ->get();
 
+        $fees = $this->feeRepository->query()->with('area')->get();
+
         return Inertia::render('Student/Create', [
             'academic_plans' => $academicPlans,
             'gender' => GenderEnum::values(),
-            'blood_group' => BloodGroup::values()
+            'blood_group' => BloodGroup::values(),
+            'fees' => $fees
         ]);
     }
 
@@ -64,29 +70,35 @@ class StudentController extends Controller
         return to_route('student.index');
     }
 
-    public function edit($academicPlanId)
+    public function edit($studentId)
     {
-        $academicPlan = $this->academicPlanRepository->findOrFail($academicPlanId);
-        $academicYears = $this->academicYearRepository->query()->active()->latest()->get();
-        $academicClasses = $this->academicClassRepository->query()->active()->orderBy('numeric_name')->get();
-        $academicGroups = $this->academicGroupRepository->query()->active()->latest()->get();
-        $academicSections = $this->academicSectionRepository->query()->active()->latest()->get();
+        $student = $this->studentRepository->findOrFail($studentId);
+        $academicPlans = $this->academicPlanRepository->query()
+            ->latest()
+            ->get();
 
-        return Inertia::render('AcademicPlan/Edit', [
-            'academic_years' => $academicYears,
-            'academic_classes' => $academicClasses,
-            'academic_groups' => $academicGroups,
-            'academic_sections' => $academicSections,
-            'versions' => AcademicVersion::values(),
-            'academic_plan' => $academicPlan
+        $fees = $this->feeRepository->query()->with('area')->get();
+
+        return Inertia::render('Student/Edit', [
+            'academic_plans' => $academicPlans,
+            'gender' => GenderEnum::values(),
+            'blood_group' => BloodGroup::values(),
+            'fees' => $fees,
+            'student' => $student
         ]);
     }
 
     public function update(Request $request, $studentId)
     {
         $request->validate([
-            'academic_year_id' => ['required'],
-            'academic_class_id' => ['required'],
+            'student_id' => ['required', 'unique:students,student_id,'.$studentId],
+            'name' => ['required'],
+            'gender' => ['required'],
+            'father_name' => ['required'],
+            'mother_name' => ['required'],
+            'contact_no' => ['required'],
+            'address_line_1' => ['required'],
+            'academic_plan_id' => ['required'],
         ]);
 
         $this->studentRepository->updateByRequest($request, $studentId);
@@ -99,5 +111,21 @@ class StudentController extends Controller
         $this->studentRepository->deleteByRequest($studentId);
 
         return to_route('student.index');
+    }
+
+    public function bulkImport()
+    {
+        $academicPlans = $this->academicPlanRepository->query()
+            ->latest()
+            ->get();
+
+        $fees = $this->feeRepository->query()->with('area')->get();
+
+        return Inertia::render('Student/Create', [
+            'academic_plans' => $academicPlans,
+            'gender' => GenderEnum::values(),
+            'blood_group' => BloodGroup::values(),
+            'fees' => $fees
+        ]);
     }
 }

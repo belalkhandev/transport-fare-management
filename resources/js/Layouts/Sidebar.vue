@@ -1,14 +1,24 @@
 <script setup>
 import NavLink from "@/Components/NavLink.vue";
+import {ref} from "vue";
 
 const getActivePath = (routeName) => {
     const url = new URL(routeName)
     return url.pathname
 }
+
+let sidebarHidden = ref(false);
+const toggleSidebar = () => {
+    sidebarHidden.value = !sidebarHidden.value
+}
+
 </script>
 
 <template>
-    <aside class="sidebar">
+    <span class="sidebar-toggle" @click="toggleSidebar">
+        <i class='bx bx-menu-alt-left'></i>
+    </span>
+    <aside class="sidebar" :class="{ 'toggle-sidebar': sidebarHidden }">
         <div class="sidebar-items">
             <div class="sidebar-item">
                 <div class="sidebar-item-body">
@@ -81,8 +91,8 @@ const getActivePath = (routeName) => {
                                 Student list
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('student.import')) }">
+                            <NavLink :href="route('student.import')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Student Bulk Import
                             </NavLink>

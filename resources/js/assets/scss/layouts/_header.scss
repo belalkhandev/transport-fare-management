@@ -82,4 +82,14 @@ header {
             }
         }
     }
+
+    @media (max-width: 768px) {
+        .apps {
+            width: 100%;
+        }
+
+        .header-navs {
+            display: none;
+        }
+    }
 }
