@@ -16,7 +16,7 @@ body {
     background: $color-bg url('./../images/bg-image.jpg') no-repeat fixed center / cover;
     font-size: 1rem;
     line-height: 1.625;
-    font-family: $fonts-primary;
+    font-family: $fonts-primary !important;
 }
 
 a {

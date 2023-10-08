@@ -15,16 +15,19 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('student_id');
+            $table->string('student_id')->unique();
             $table->string('name');
             $table->string('father_name');
             $table->string('mother_name');
             $table->string('contact_no');
-            $table->string('emergency_contact');
-            $table->string('dob');
-            $table->string('blood_group');
-            $table->string('address_line_1');
-            $table->string('address_line_2');
+            $table->string('email')->nullable();
+            $table->string('emergency_contact')->nullable();
+            $table->date('dob')->nullable();
+            $table->enum('gender', \App\Enums\GenderEnum::values())->nullable();
+            $table->enum('blood_group', \App\Enums\BloodGroup::values())->nullable();
+            $table->string('address_line_1')->nullable();
+            $table->string('address_line_2')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

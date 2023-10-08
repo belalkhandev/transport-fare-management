@@ -69,14 +69,14 @@ const getActivePath = (routeName) => {
                 </div>
                 <div class="sidebar-item-body">
                     <ul>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('student.create')) }">
+                            <NavLink :href="route('student.create')">
                                 <i class='bx bx-radio-circle-marked' ></i>
-                                New Students
+                                Add Student
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('student.index')) }">
+                            <NavLink :href="route('student.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Student list
                             </NavLink>

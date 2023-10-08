@@ -17,6 +17,8 @@ class AcademicPlan extends Model
         'academic_version'
     ];
 
+    protected $appends = ['name'];
+
     public function academicYear()
     {
         return $this->belongsTo(AcademicYear::class);
@@ -33,4 +35,19 @@ class AcademicPlan extends Model
     {
         return $this->belongsTo(AcademicSection::class);
     }
+
+    public function getNameAttribute()
+    {
+        $attributes = [
+            $this->academicYear->name ?? null,
+            $this->academicClass->name ?? null,
+            $this->academicGroup->name ?? null,
+            $this->academicSection->name ?? null,
+            $this->academic_version,
+        ];
+
+        $nameParts = array_filter($attributes);
+        return implode(' / ', $nameParts);
+    }
+
 }

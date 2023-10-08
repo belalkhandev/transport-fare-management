@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('academic_plan_students', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('academic_plan_id');
-            $table->foreignId('student_id');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+        Schema::create('student_academic_plan', function (Blueprint $table) {
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->foreignId('academic_plan_id')->constrained('academic_plans')->cascadeOnDelete();
+            $table->primary(['student_id', 'academic_plan_id']);
         });
     }
 

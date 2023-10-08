@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SiteSettingsController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -103,6 +104,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{academicPlanId}/edit', [AcademicPlanController::class, 'edit'])->name('academic-plan.edit');
         Route::put('/{academicPlanId}/edit', [AcademicPlanController::class, 'update']);
         Route::delete('/{academicPlanId}', [AcademicPlanController::class, 'destroy'])->name('academic-plan.delete');
+    });
+
+    Route::prefix('students')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('student.index');
+        Route::get('/create', [StudentController::class, 'create'])->name('student.create');
+        Route::post('/create', [StudentController::class, 'store']);
+        Route::get('/{studentId}/edit', [StudentController::class, 'edit'])->name('student.edit');
+        Route::put('/{studentId}/edit', [StudentController::class, 'update']);
+        Route::delete('/{studentId}', [StudentController::class, 'destroy'])->name('student.delete');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');
