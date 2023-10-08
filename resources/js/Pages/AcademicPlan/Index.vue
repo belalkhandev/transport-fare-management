@@ -24,12 +24,12 @@ const deleteAction = (academic_plan_id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('academic_plan.delete', academic_plan_id), {
+            form.delete(route('academic-plan.delete', academic_plan_id), {
                 onSuccess: () => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Deleted!',
-                        text: "Project has been deleted successfully"
+                        text: "Academic plan has been deleted successfully"
                     });
                 }
             })
@@ -41,7 +41,7 @@ const deleteAction = (academic_plan_id) => {
 </script>
 
 <template>
-    <Head title="Project" />
+    <Head title="Academic plan" />
     <AdminPanelLayout>
         <template #header>Academic Plans</template>
         <div class="box">
@@ -61,7 +61,6 @@ const deleteAction = (academic_plan_id) => {
                             <th>Class</th>
                             <th>Group</th>
                             <th>Section</th>
-                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -69,7 +68,7 @@ const deleteAction = (academic_plan_id) => {
                         <tr v-for="(academic_plan, i) in academic_plans.data">
                             <td>{{ ++i }}</td>
                             <td>{{ academic_plan.academic_year.name }}</td>
-                            <td>{{ academic_plan.version }}</td>
+                            <td>{{ academic_plan.academic_version }}</td>
                             <td>{{ academic_plan.academic_class.name }}</td>
                             <td>{{ academic_plan.academic_group ? academic_plan.academic_group.name : '' }}</td>
                             <td>{{ academic_plan.academic_section ? academic_plan.academic_section.name : '' }}</td>

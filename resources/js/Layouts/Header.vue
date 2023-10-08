@@ -17,9 +17,6 @@
                 <h5><slot name="header"/></h5>
             </div>
             <div class="nav-items">
-                <div class="nav-item">
-                    <a class="text-white" href="/" target="_blank">View Website</a>
-                </div>
                 <div class="nav-item no-border">
                     {{ $page.props.auth.user.name }}
                 </div>

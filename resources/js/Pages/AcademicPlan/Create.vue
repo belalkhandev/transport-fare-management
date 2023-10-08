@@ -36,10 +36,10 @@ const form = useForm({
     academic_class_id: '',
     academic_group_id: '',
     academic_section_id: '',
-    version: '',
+    academic_version: '',
 });
 
-const createForm = () => {
+const submitForm = () => {
     form.post(route('academic-plan.create'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -57,59 +57,69 @@ const createForm = () => {
 </script>
 
 <template>
-    <Head title="Project Create" />
+    <Head title="Academic Plan Create" />
     <AdminPanelLayout>
         <template #header>Academic plan</template>
         <div class="box">
             <div class="box-header">
-                <h5 class="title">Create plan</h5>
+                <h5 class="title">Create academic plan</h5>
                 <div class="action">
                     <NavLink :href="route('academic-plan.index')" class="btn btn-sm btn-outline-primary">Plan list</NavLink>
                 </div>
             </div>
             <div class="box-body pb-4">
                 <div class="row">
-                    <div class="col-xl-6 offset-xl-3 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-                        <form @submit.prevent="createForm">
-                            <div class="form-group">
-                                <label for="">Academic Year</label>
-                                <select v-model="form.academic_year_id" class="form-control">
-                                    <option value="">Select year</option>
-                                    <option v-for="academic_year in academic_years" :value="academic_year.id">{{ academic_year.name }}</option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.academic_year_id" />
+                    <div class="col-xl-8 offset-xl-2 col-md-12 col-lg-10 offset-lg-1">
+                        <form @submit.prevent="submitForm">
+                            <div class="form-group row">
+                                <label for="" class="col-md-4 col-form-label">Academic Year</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.academic_year_id" class="form-control">
+                                        <option value="">Select year</option>
+                                        <option v-for="academic_year in academic_years" :value="academic_year.id">{{ academic_year.name }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.academic_year_id" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="">Academic Class</label>
-                                <select v-model="form.academic_class_id" class="form-control">
-                                    <option value="">Select class</option>
-                                    <option v-for="academic_class in academic_classes" :value="academic_class.id">{{ academic_class.name }}</option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.academic_class_id" />
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Academic Class</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.academic_class_id" class="form-control">
+                                        <option value="">Select class</option>
+                                        <option v-for="academic_class in academic_classes" :value="academic_class.id">{{ academic_class.name }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.academic_class_id" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="">Academic Group</label>
-                                <select v-model="form.academic_group_id" class="form-control">
-                                    <option value="">Select group</option>
-                                    <option v-for="academic_group in academic_groups" :value="academic_group.id">{{ academic_group.name }}</option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.academic_group_id" />
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Academic Group</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.academic_group_id" class="form-control">
+                                        <option value="">Select group</option>
+                                        <option v-for="academic_group in academic_groups" :value="academic_group.id">{{ academic_group.name }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.academic_group_id" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="">Academic Section</label>
-                                <select v-model="form.academic_section_id" class="form-control">
-                                    <option value="">Select section</option>
-                                    <option v-for="academic_section in academic_sections" :value="academic_section.id">{{ academic_section.name }}</option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.academic_section_id" />
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Academic Section</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.academic_section_id" class="form-control">
+                                        <option value="">Select section</option>
+                                        <option v-for="academic_section in academic_sections" :value="academic_section.id">{{ academic_section.name }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.academic_section_id" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="">Version</label>
-                                <select v-model="form.version" class="form-control">
-                                    <option value="">Select version</option>
-                                    <option v-for="version in versions" :value="version.id">{{ version.name }}</option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.version" />
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Version</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.academic_version" class="form-control">
+                                        <option value="">Select version</option>
+                                        <option v-for="version in versions" :value="version">{{ version.toUpperCase() }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.academic_version" />
+                                </div>
                             </div>
 
                             <div class="form-group mt-4 d-flex justify-content-end align-items-center">

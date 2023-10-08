@@ -37,8 +37,8 @@ class AcademicPlanController extends Controller
     {
         $academicYears = $this->academicYearRepository->query()->active()->latest()->get();
         $academicClasses = $this->academicClassRepository->query()->active()->orderBy('numeric_name')->get();
-        $academicGroups = $this->academicGroupRepository->query()->active()->latest()->get();
-        $academicSections = $this->academicSectionRepository->query()->active()->latest()->get();
+        $academicGroups = $this->academicGroupRepository->query()->active()->orderBy('name')->get();
+        $academicSections = $this->academicSectionRepository->query()->active()->orderBy('name')->get();
 
         return Inertia::render('AcademicPlan/Create', [
             'academic_years' => $academicYears,
@@ -58,11 +58,12 @@ class AcademicPlanController extends Controller
 
         $this->academicPlanRepository->storeByRequest($request);
 
-        return to_route('fee.index');
+        return to_route('academic-plan.index');
     }
 
-    public function edit()
+    public function edit($academicPlanId)
     {
+        $academicPlan = $this->academicPlanRepository->findOrFail($academicPlanId);
         $academicYears = $this->academicYearRepository->query()->active()->latest()->get();
         $academicClasses = $this->academicClassRepository->query()->active()->orderBy('numeric_name')->get();
         $academicGroups = $this->academicGroupRepository->query()->active()->latest()->get();
@@ -74,25 +75,26 @@ class AcademicPlanController extends Controller
             'academic_groups' => $academicGroups,
             'academic_sections' => $academicSections,
             'versions' => AcademicVersion::values(),
+            'academic_plan' => $academicPlan
         ]);
     }
 
-    public function update(Request $request, $feeId)
+    public function update(Request $request, $academicPlanId)
     {
         $request->validate([
-            'area_id' => ['required'],
-            'amount' => ['required']
+            'academic_year_id' => ['required'],
+            'academic_class_id' => ['required'],
         ]);
 
-        $this->academicPlanRepository->storeByRequest($request);
+        $this->academicPlanRepository->updateByRequest($request, $academicPlanId);
 
-        return to_route('fee.index');
+        return to_route('academic-plan.edit', $academicPlanId);
     }
 
     public function destroy($feeId)
     {
         $this->academicPlanRepository->deleteByRequest($feeId);
 
-        return to_route('fee.index');
+        return to_route('academic-plan.index');
     }
 }
