@@ -27,11 +27,16 @@ class Student extends Model
 
     public function academicPlans()
     {
-        return $this->belongsToMany(AcademicPlan::class, 'student_academic_plan', 'academic_plan_id', 'student_id');
+        return $this->belongsToMany(AcademicPlan::class, 'student_academic_plan', 'student_id', 'academic_plan_id');
     }
 
     public function academicPlan()
     {
         return $this->academicPlan()->latest()->first();
+    }
+
+    public function transportFee()
+    {
+        return $this->hasOne(TransportFee::class);
     }
 }

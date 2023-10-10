@@ -19,7 +19,7 @@ class StudentRepository extends Repository
     {
         return $this->query()
             ->with(['academicPlans' => function ($query) {
-                $query->latest()->first();
+                $query->latest();
             }])
             ->latest()
             ->paginate($limit);
