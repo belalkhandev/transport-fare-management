@@ -174,7 +174,7 @@ const submitForm = () => {
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-form-label col-md-4">address line 2</label>
+                                <label class="col-form-label col-md-4">Address line 2</label>
                                 <div class="col-md-8">
                                     <input type="text" v-model="form.address_line_2" class="form-control" placeholder="Enter  address line 2">
                                     <InputError class="mt-2" :message="form.errors.address_line_2" />
@@ -196,8 +196,8 @@ const submitForm = () => {
                         </div>
                         <div class="col-lg-5 col-md-12">
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-3">Fee</label>
-                                <div class="col-md-9">
+                                <label for="" class="col-form-label col-md-4 col-lg-3">Fee</label>
+                                <div class="col-md-8 col-lg-9">
                                     <select v-model="form.fee_id" class="form-control">
                                         <option value="">Select fee</option>
                                         <option v-for="fee in fees" :value="fee.id">{{ fee.area.name }} - {{ fee.amount }}</option>
@@ -206,15 +206,15 @@ const submitForm = () => {
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-form-label col-md-3">Discounted Amount</label>
-                                <div class="col-md-9">
+                                <label class="col-form-label  col-md-4 col-lg-3">Discounted Amount</label>
+                                <div class="col-md-8 col-lg-9">
                                     <input type="number" v-model="form.discounted_amount" class="form-control" placeholder="0.00">
                                     <InputError class="mt-2" :message="form.errors.discounted_amount" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-form-label col-md-3">Remarks</label>
-                                <div class="col-md-9">
+                                <label class="col-form-label  col-md-4 col-lg-3">Remarks</label>
+                                <div class="col-md-8 col-lg-9">
                                     <textarea v-model="form.remarks" placeholder="Remarks" class="form-control-textarea form-control"></textarea>
                                     <InputError class="mt-2" :message="form.errors.remarks" />
                                 </div>

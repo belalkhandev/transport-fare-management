@@ -10,6 +10,7 @@ use App\Repositories\AcademicPlanRepository;
 use App\Repositories\AreaRepository;
 use App\Repositories\FeeRepository;
 use App\Repositories\StudentRepository;
+use App\Repositories\TransportFeeRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,6 +20,7 @@ class StudentController extends Controller
         protected AcademicPlanRepository $academicPlanRepository,
         protected FeeRepository $feeRepository,
         protected StudentRepository $studentRepository,
+        protected TransportFeeRepository $transportFeeRepository
     )
     {
     }
@@ -29,6 +31,15 @@ class StudentController extends Controller
 
         return Inertia::render('Student/Index', [
             'students' => $students
+        ]);
+    }
+
+    public function show($studentId)
+    {
+        $student = $this->studentRepository->getById($studentId);
+
+        return Inertia::render('Student/Show', [
+            'student' => $student
         ]);
     }
 
@@ -63,8 +74,12 @@ class StudentController extends Controller
 
         $student = $this->studentRepository->storeByRequest($request);
 
-        if ($request->has('academic_plan_id')) {
+        if ($student && $request->has('academic_plan_id')) {
             $student->academicPlans()->attach([$request->get('academic_plan_id')]);
+        }
+
+        if ($student && $request->fee_id) {
+            $this->transportFeeRepository->storeByRequestAndStudentId($request, $student->id);
         }
 
         return to_route('student.index');

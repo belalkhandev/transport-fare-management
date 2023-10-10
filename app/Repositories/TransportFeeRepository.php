@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Student;
 use App\Models\TransportFee;
 use Illuminate\Http\Request;
 
@@ -15,24 +16,22 @@ class TransportFeeRepository extends Repository
         return TransportFee::class;
     }
 
-    public function storeByRequest(Request $request)
+    public function storeByRequestAndStudentId(Request $request, $studentId)
     {
         return $this->query()->create([
-
+            'student_id' => $studentId,
+            'fee_id' => $request->get('fee_id'),
+            'discounted_amount' => $request->get('discounted_amount'),
+            'remarks' => $request->get('remarks')
         ]);
     }
 
-
     public function updateByRequest(Request $request, $transportFeeId)
     {
-        return $this->query()->findOrFail($transportFeeId)->update([
-
-            ]);
+        return $this->query()->findOrFail($transportFeeId)?->update([
+            'fee_id' => $request->get('fee_id'),
+            'discounted_amount' => $request->get('discounted_amount'),
+            'remarks' => $request->get('remarks')
+        ]);
     }
-
-    public function deleteByRequest($transportFeeId)
-    {
-        return $this->query()->findOrFail($transportFeeId)->delete();
-    }
-
 }

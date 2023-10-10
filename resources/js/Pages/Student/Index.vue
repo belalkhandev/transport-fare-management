@@ -67,13 +67,18 @@ const deleteAction = (student_id) => {
                     </thead>
                     <tbody>
                         <tr v-for="(student, i) in students.data">
-                            <td>{{ student.student_id }}</td>
+                            <td>
+                                <Link :href="route('student.show', student.id)">{{ student.student_id }}</Link>
+                            </td>
                             <td>{{ student.name }}</td>
                             <td>{{ student.father_name }}</td>
                             <td>{{ student.mother_name }}</td>
                             <td>{{ student.contact_no }}</td>
-                            <td>{{ student.contact_no }}</td>
-                            <td>{{ student.is_active }}</td>
+                            <td>{{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}</td>
+                            <td>
+                                <span v-if="student.is_active" class="badge bg-success">Active</span>
+                                <span v-else class="badge bg-danger">Inactive</span>
+                            </td>
                             <td>
                                 <div class="action">
                                     <ul>

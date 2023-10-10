@@ -14,9 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_academic_plan', function (Blueprint $table) {
-            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->foreignId('academic_plan_id')->constrained('academic_plans')->cascadeOnDelete();
-            $table->primary(['student_id', 'academic_plan_id']);
+            $table->unsignedBigInteger('academic_plan_id')->unsigned();
+            $table->unsignedBigInteger('student_id')->unsigned();
+
+            $table->foreign('academic_plan_id')->references('id')->on('academic_plans')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
+
+            $table->primary(['academic_plan_id', 'student_id']);
         });
     }
 
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('academic_students');
+        Schema::dropIfExists('student_academic_plan');
     }
 };

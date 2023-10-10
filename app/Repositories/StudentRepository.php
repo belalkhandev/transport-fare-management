@@ -18,9 +18,25 @@ class StudentRepository extends Repository
     public function getByPaginate($limit = 15)
     {
         return $this->query()
-            ->with('academicPlans')
+            ->with(['academicPlans' => function ($query) {
+                $query->latest()->first();
+            }])
             ->latest()
             ->paginate($limit);
+    }
+
+    public function getById($studentId)
+    {
+        return $this->query()
+            ->with([
+                'transportFee',
+                'academicPlans' => function ($query) { $query->latest(); },
+                'academicPlans.academicYear',
+                'academicPlans.academicClass',
+                'academicPlans.academicGroup',
+                'academicPlans.academicSection',
+            ])
+            ->findOrFail($studentId);
     }
 
     public function storeByRequest(Request $request)
