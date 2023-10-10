@@ -130,17 +130,11 @@ class StudentController extends Controller
 
     public function bulkImport()
     {
-        $academicPlans = $this->academicPlanRepository->query()
-            ->latest()
-            ->get();
+        return Inertia::render('Student/BulkImport');
+    }
 
-        $fees = $this->feeRepository->query()->with('area')->get();
+    public function storeBulkImport(Request $request)
+    {
 
-        return Inertia::render('Student/Create', [
-            'academic_plans' => $academicPlans,
-            'gender' => GenderEnum::values(),
-            'blood_group' => BloodGroup::values(),
-            'fees' => $fees
-        ]);
     }
 }
