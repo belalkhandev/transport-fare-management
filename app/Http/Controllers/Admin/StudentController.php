@@ -6,11 +6,14 @@ use App\Enums\AcademicVersion;
 use App\Enums\BloodGroup;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportRequest;
 use App\Repositories\AcademicPlanRepository;
 use App\Repositories\AreaRepository;
 use App\Repositories\FeeRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportFeeRepository;
+use App\Services\StudentImport;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -20,7 +23,8 @@ class StudentController extends Controller
         protected AcademicPlanRepository $academicPlanRepository,
         protected FeeRepository $feeRepository,
         protected StudentRepository $studentRepository,
-        protected TransportFeeRepository $transportFeeRepository
+        protected TransportFeeRepository $transportFeeRepository,
+        protected StudentImport $studentImport
     )
     {
     }
@@ -133,8 +137,19 @@ class StudentController extends Controller
         return Inertia::render('Student/BulkImport');
     }
 
-    public function storeBulkImport(Request $request)
+    public function storeBulkImport(ImportRequest $request)
     {
+        try{
+            $students = $this->studentImport->importCsv($request->file('import_file'));
+        }catch (Exception $e) {
+            dd($e->getMessage().$e->getLine());
+            return to_route('student.import')->with('error', $e->getMessage());
+        }
 
+        if (count($students) === 0) {
+            return to_route('student.import')->with('error', 'No new student  to be import');
+        }
+
+        return to_route('student.import')->with('message', count($students)." New students imported successfully");
     }
 }

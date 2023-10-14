@@ -1,6 +1,7 @@
 <script setup>
 import {Head, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
+import InputError from "@/Components/InputError.vue";
 
 
 const form = useForm({
@@ -38,8 +39,9 @@ const formSubmit = () => {
                             <div class="form-group mt-2">
                                 <label for="formFile">Choose a CSV file to bulk student import</label>
                                 <input class="form-control" type="file" id="formFile" @input="form.import_file = $event.target.files[0]">
+                                <InputError class="mt-2" :message="form.errors.import_file" />
                             </div>
-                            <div class="mb-4 text-warning bg-gray-50 p-1 font-sans">Caution: Only formatted file can be upload, so please download the sample download file and put your student data.</div>
+                            <div class="mb-4 text-warning bg-gray-50 p-1 font-sans"> To get started, we've attached a sample file for your convenience. Ensure that your data is correctly formatted and follows the provided template before uploading. This will help streamline the process and prevent any issues during import. <span class="text-danger">Duplicate Student-ID will be ignored</span></div>
                             <div class="form-group d-flex justify-content-between align-items-center">
                                 <div>
                                     <a href="" download="" class="btn btn-sm btn-outline-info"><i class="bx bx-download"></i> Sample CSV</a>

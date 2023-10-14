@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StudentRepository extends Repository
@@ -75,6 +76,24 @@ class StudentRepository extends Repository
             'address_line_1' => $request->get('address_line_1'),
             'address_line_2' => $request->get('address_line_2'),
             'is_active' => $request->get('is_active')
+        ]);
+    }
+
+    public function storeByImportData($data)
+    {
+        return $this->query()->create([
+            'student_id' => $data['student_id'],
+            'name' => $data['name'],
+            'father_name' => $data['father_name'],
+            'mother_name' => $data['mother_name'],
+            'contact_no' => $data['contact_no'],
+            'emergency_contact' => $data['emergency_contact'] ?? null,
+            'email' => $data['email'] ?? null,
+            'dob' => $data['dob'] ? Carbon::parse($data['dob'])->format('Y-m-d') : null,
+            'gender' => $data['gender'] ?? null,
+            'blood_group' => $data['blood_group'] ?? null,
+            'address_line_1' => $data['address_line_1'] ?? null,
+            'address_line_2' => $data['address_line_2'] ?? null,
         ]);
     }
 

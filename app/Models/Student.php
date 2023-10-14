@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,5 +39,10 @@ class Student extends Model
     public function transportFee()
     {
         return $this->hasOne(TransportFee::class);
+    }
+
+    public function scopeOfStudentId(Builder $builder, $studentId)
+    {
+        return $builder->where('student_id', $studentId);
     }
 }
