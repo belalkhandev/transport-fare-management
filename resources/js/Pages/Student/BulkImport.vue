@@ -2,6 +2,7 @@
 import {Head, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import InputError from "@/Components/InputError.vue";
+import SpinnerGlow from "@/Components/SpinnerGlow.vue";
 
 
 const form = useForm({
@@ -14,9 +15,18 @@ const formSubmit = () => {
         onSuccess: () => {
             Swal.fire(
                 'Success',
-                'Imported has been changes successfully',
+                "Imported successfully",
                 'success'
             )
+        },
+        onError: (error) => {
+            if (error.message) {
+                Swal.fire(
+                    'Opps!',
+                    error.message,
+                    'error'
+                )
+            }
         }
     })
 }
@@ -31,6 +41,7 @@ const formSubmit = () => {
         <div class="row">
             <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2">
                 <div class="box">
+                    <SpinnerGlow v-if="form.processing"/>
                     <div class="box-header">
                         <h5 class="title">Bulk import</h5>
                     </div>

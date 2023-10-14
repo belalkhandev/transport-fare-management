@@ -142,14 +142,16 @@ class StudentController extends Controller
         try{
             $students = $this->studentImport->importCsv($request->file('import_file'));
         }catch (Exception $e) {
-            dd($e->getMessage().$e->getLine());
-            return to_route('student.import')->with('error', $e->getMessage());
+            return to_route('student.import')
+                ->withErrors(['message' => $e->getMessage()]);
         }
 
         if (count($students) === 0) {
-            return to_route('student.import')->with('error', 'No new student  to be import');
+            return to_route('student.import')
+                ->withErrors(['message' => 'No new student  to be import']);
         }
 
-        return to_route('student.import')->with('message', count($students)." New students imported successfully");
+        return to_route('student.import')
+            ->with('message', count($students)." New students imported successfully");
     }
 }
