@@ -26,6 +26,7 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\TransportPaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

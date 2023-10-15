@@ -1,0 +1,57 @@
+
+    .dashboard-card {
+        padding: 15px;
+        border-radius: 10px;
+        color: $color-white;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+
+        .bx-radio-circle-marked {
+            position: absolute;
+            bottom: 0;
+            right: -35%;
+            font-size: 15rem;
+            line-height: 0;
+            opacity: 0.35;
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+            h5 {
+                color: $color-white;
+                font-weight: 300;
+                font-size: 1rem;
+            }
+        }
+
+        .card-content {
+            padding: 0;
+
+            h2 {
+                color: $color-white;
+            }
+
+            a {
+                color: $color-white;
+                font-size: .75rem;
+                font-weight: 300;
+            }
+        }
+
+        &.card-1 {
+            background-color: #ffbe77;
+        }
+
+        &.card-2 {
+            background-color: #33d29d;
+        }
+
+        &.card-3 {
+            background-color: #42a8d8;
+        }
+
+        &.card-4 {
+            background-color: #ff6a6a;
+        }
+    }

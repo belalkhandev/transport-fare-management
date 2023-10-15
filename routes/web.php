@@ -1,18 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Web\GoverningBodyController;
-use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\NoticeController;
-use App\Http\Controllers\Web\ResultsController;
-use App\Http\Controllers\Web\RoutineController;
-use App\Http\Controllers\Web\StaffController;
-use App\Http\Controllers\Web\StudentController;
-use App\Http\Controllers\Web\TeacherController;
-use App\Http\Controllers\Web\PageController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\TransportPaymentController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +13,6 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/transport-bill/{transactionBillNo}/payment', [TransportPaymentController::class, 'index'])->name('transport-bill.user.payment');
 
 

@@ -1,7 +1,6 @@
 <script setup>
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import NavLink from "../../Components/NavLink.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 

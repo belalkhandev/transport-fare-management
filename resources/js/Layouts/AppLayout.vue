@@ -4,7 +4,7 @@ import {Head} from "@inertiajs/vue3";
 defineProps({
     title: {
         type: String,
-        Default: "School"
+        Default: "Transport-bus billing"
     },
 });
 

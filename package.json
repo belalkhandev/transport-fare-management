@@ -22,9 +22,11 @@
         "@tinymce/tinymce-vue": "^4.0.7",
         "bootstrap": "^5.3.1",
         "boxicons": "^2.1.4",
+        "chart.js": "^4.4.0",
         "moment": "^2.29.4",
         "sass": "^1.64.1",
         "sweetalert2": "^11.7.19",
+        "vue-chartjs": "^5.2.0",
         "vue-i18n": "^9.2.2",
         "vue3-carousel": "^0.3.1"
     }
