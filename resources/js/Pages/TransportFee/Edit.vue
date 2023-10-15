@@ -9,46 +9,30 @@ import Editor from "@tinymce/tinymce-vue";
 const previewImage = ref(null);
 
 const props = defineProps({
-    versions: {
-        type: Array,
-    },
-    academic_years: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_classes: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_groups: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_sections: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_plan: {
+    transport_fee: {
         type: Object
+    },
+    fees: {
+        type: Object,
+        default: () => ({})
     }
 })
 
 const form = useForm({
-    academic_year_id: props.academic_plan.academic_year_id,
-    academic_class_id: props.academic_plan.academic_class_id,
-    academic_group_id: props.academic_plan.academic_group_id,
-    academic_section_id: props.academic_plan.academic_section_id,
-    academic_version: props.academic_plan.academic_version,
+    student_id: props.transport_fee.student_id,
+    fee_id: props.transport_fee.fee_id ?? '',
+    discounted_amount: props.transport_fee.discounted_amount ?? '',
+    remarks:props.transport_fee.remarks ?? ''
 });
 
 const submitForm = () => {
-    form.put(route('academic-plan.edit', props.academic_plan.id), {
+    form.put(route('transport-fee.edit', props.transport_fee.id), {
         preserveScroll: true,
         onSuccess: () => {
             previewImage.value = null;
             Swal.fire(
                 'Congratulation',
-                'Academic plan has been updated successfully',
+                'Transport fee has been updated successfully',
                 'success'
             )
         }
@@ -58,14 +42,14 @@ const submitForm = () => {
 </script>
 
 <template>
-    <Head title="Academic Plan Edit" />
+    <Head title="Transport fee edit" />
     <AdminPanelLayout>
-        <template #header>Academic plan</template>
+        <template #header>Transport fee</template>
         <div class="box">
             <div class="box-header">
-                <h5 class="title">Edit academic plan</h5>
+                <h5 class="title">Edit transport fee</h5>
                 <div class="action">
-                    <NavLink :href="route('academic-plan.index')" class="btn btn-sm btn-outline-primary">Plan list</NavLink>
+                    <NavLink :href="route('transport-fee.index')" class="btn btn-sm btn-outline-primary">Transport fees list</NavLink>
                 </div>
             </div>
             <div class="box-body pb-4">
@@ -73,53 +57,33 @@ const submitForm = () => {
                     <div class="col-xl-8 offset-xl-2 col-md-12 col-lg-10 offset-lg-1">
                         <form @submit.prevent="submitForm">
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label">Academic Year</label>
-                                <div class="col-md-8">
-                                    <select v-model="form.academic_year_id" class="form-control">
-                                        <option value="">Select year</option>
-                                        <option v-for="academic_year in academic_years" :value="academic_year.id">{{ academic_year.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_year_id" />
+                                <label for="" class="col-form-label col-md-4 col-lg-3">Student</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input type="text" :value="transport_fee.student.name +  '- ' + transport_fee.student.student_id" class="form-control" readonly disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Class</label>
-                                <div class="col-md-8">
-                                    <select v-model="form.academic_class_id" class="form-control">
-                                        <option value="">Select class</option>
-                                        <option v-for="academic_class in academic_classes" :value="academic_class.id">{{ academic_class.name }}</option>
+                                <label for="" class="col-form-label col-md-4 col-lg-3">Fee</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <select v-model="form.fee_id" class="form-control">
+                                        <option value="">Select fee</option>
+                                        <option v-for="fee in fees" :value="fee.id">{{ fee.area.name }} - {{ fee.amount }}</option>
                                     </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_class_id" />
+                                    <InputError class="mt-2" :message="form.errors.fee_id" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Group</label>
-                                <div class="col-md-8">
-                                    <select v-model="form.academic_group_id" class="form-control">
-                                        <option value="">Select group</option>
-                                        <option v-for="academic_group in academic_groups" :value="academic_group.id">{{ academic_group.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_group_id" />
+                                <label class="col-form-label  col-md-4 col-lg-3">Discounted Amount</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input type="number" v-model="form.discounted_amount" class="form-control" placeholder="0.00">
+                                    <InputError class="mt-2" :message="form.errors.discounted_amount" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Section</label>
-                                <div class="col-md-8">
-                                    <select v-model="form.academic_section_id" class="form-control">
-                                        <option value="">Select section</option>
-                                        <option v-for="academic_section in academic_sections" :value="academic_section.id">{{ academic_section.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_section_id" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Version</label>
-                                <div class="col-md-8">
-                                    <select v-model="form.academic_version" class="form-control">
-                                        <option value="">Select version</option>
-                                        <option v-for="version in versions" :value="version">{{ version.toUpperCase() }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_version" />
+                                <label class="col-form-label  col-md-4 col-lg-3">Remarks</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <textarea v-model="form.remarks" placeholder="Remarks" class="form-control-textarea form-control"></textarea>
+                                    <InputError class="mt-2" :message="form.errors.remarks" />
                                 </div>
                             </div>
 

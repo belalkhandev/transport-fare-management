@@ -53,7 +53,12 @@ class StudentController extends Controller
             ->latest()
             ->get();
 
-        $fees = $this->feeRepository->query()->with('area')->get();
+        $fees = $this->feeRepository->query()
+            ->select('fees.*')
+            ->with('area')
+            ->leftJoin('areas', 'areas.id', '=', 'fees.area_id')
+            ->orderBy('areas.name')
+            ->get();
 
         return Inertia::render('Student/Create', [
             'academic_plans' => $academicPlans,
@@ -104,7 +109,12 @@ class StudentController extends Controller
             ->latest()
             ->get();
 
-        $fees = $this->feeRepository->query()->with('area')->get();
+        $fees = $this->feeRepository->query()
+            ->select('fees.*')
+            ->with('area')
+            ->leftJoin('areas', 'areas.id', '=', 'fees.area_id')
+            ->orderBy('areas.name')
+            ->get();
 
         return Inertia::render('Student/Edit', [
             'academic_plans' => $academicPlans,

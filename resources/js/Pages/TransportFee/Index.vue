@@ -55,7 +55,6 @@ const deleteAction = (transport_fee_id) => {
                         <tr>
                             <th>#</th>
                             <th>Student ID</th>
-                            <th>Name</th>
                             <th>Area</th>
                             <th>Amount</th>
                             <th>Discounted Amount</th>
@@ -76,18 +75,15 @@ const deleteAction = (transport_fee_id) => {
                             <td>{{ transport_fee.fee.area.name }}</td>
                             <td>{{ transport_fee.fee.amount }}</td>
                             <td>{{ transport_fee.discounted_amount }}</td>
-                            <td>{{ transport_fee.remarks }}</td>
                             <td>
                                 <ActiveStatusLabel :status=transport_fee.student.is_active />
                             </td>
+                            <td>{{ transport_fee.remarks }}</td>
                             <td>
                                 <div class="action">
                                     <ul>
                                         <li>
                                             <Link :href="route('transport-fee.edit', transport_fee.id)" class="btn btn-sm btn-rounded btn-outline-primary"><i class="bx bx-edit"></i></Link>
-                                        </li>
-                                        <li>
-                                            <button @click="deleteAction(transport_fee.id)" class="btn btn-sm btn-rounded btn-outline-danger"><i class="bx bx-trash"></i></button>
                                         </li>
                                     </ul>
                                 </div>
