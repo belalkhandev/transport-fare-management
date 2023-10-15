@@ -91,7 +91,15 @@ class StudentController extends Controller
 
     public function edit($studentId)
     {
-        $student = $this->studentRepository->findOrFail($studentId);
+        $student = $this->studentRepository->query()
+            ->with([
+                'academicPlans' => function ($query) {
+                   $query->latest();
+                },
+                'transportFee'
+            ])
+            ->findOrFail($studentId);
+
         $academicPlans = $this->academicPlanRepository->query()
             ->latest()
             ->get();

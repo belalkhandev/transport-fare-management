@@ -1,0 +1,17 @@
+.status-label {
+    span {
+        border: 1px solid $color-success;
+        padding: 3px 8px;
+        font-weight: 400;
+        border-radius: 5px;
+        &.active {
+            color: $color-success;
+        }
+
+        &.in-active {
+            color: $color-danger;
+            border: 1px solid $color-danger;
+        }
+    }
+
+}

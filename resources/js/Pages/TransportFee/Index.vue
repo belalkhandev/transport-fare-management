@@ -6,7 +6,7 @@ import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 
 const props = defineProps({
-    students: {
+    transport_fees: {
         type: Object,
         default: () => ({})
     }
@@ -14,7 +14,7 @@ const props = defineProps({
 
 const form = useForm({});
 
-const deleteAction = (student_id) => {
+const deleteAction = (transport_fee_id) => {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -25,12 +25,12 @@ const deleteAction = (student_id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('student.delete', student_id), {
+            form.delete(route('transport-fee.delete', transport_fee_id), {
                 onSuccess: () => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Deleted!',
-                        text: "Academic plan has been deleted successfully"
+                        text: "Transport fee has been deleted successfully"
                     });
                 }
             })
@@ -42,51 +42,52 @@ const deleteAction = (student_id) => {
 </script>
 
 <template>
-    <Head title="Student" />
+    <Head title="Transport fee" />
     <AdminPanelLayout>
-        <template #header>Student list</template>
+        <template #header>Transport fee</template>
         <div class="box">
             <div class="box-header">
-                <h5 class="title">Student list</h5>
-                <div class="action">
-                    <NavLink :href="route('student.create')" class="btn btn-sm btn-outline-primary">Add new</NavLink>
-                </div>
+                <h5 class="title">Transport fee</h5>
             </div>
             <div class="box-body">
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Student ID</th>
                             <th>Name</th>
-                            <th>Father name</th>
-                            <th>Mother name</th>
-                            <th>Contact</th>
-                            <th>Academic</th>
+                            <th>Area</th>
+                            <th>Amount</th>
+                            <th>Discounted Amount</th>
                             <th>Status</th>
+                            <th>Remarks</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(student, i) in students.data">
+                        <tr v-for="(transport_fee, i) in transport_fees.data">
+                            <td>{{ transport_fees.from + i }}</td>
                             <td>
-                                <Link :href="route('student.show', 'nothing')">{{ student.student_id }}</Link>
+                                <Link :href="route('student.show', transport_fee.student.id)">{{ transport_fee.student.student_id }}</Link>
+                                <p class="m-0 p-0">
+                                    {{ transport_fee.student.name }}
+                                </p>
                             </td>
-                            <td>{{ student.name }}</td>
-                            <td>{{ student.father_name }}</td>
-                            <td>{{ student.mother_name }}</td>
-                            <td>{{ student.contact_no }}</td>
-                            <td>{{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}</td>
+                            <td>{{ transport_fee.fee.area.name }}</td>
+                            <td>{{ transport_fee.fee.amount }}</td>
+                            <td>{{ transport_fee.discounted_amount }}</td>
+                            <td>{{ transport_fee.remarks }}</td>
                             <td>
-                                <ActiveStatusLabel :status="student.is_active"/>
+                                <ActiveStatusLabel :status=transport_fee.student.is_active />
                             </td>
                             <td>
                                 <div class="action">
                                     <ul>
                                         <li>
-                                            <Link :href="route('student.edit', student.id)" class="btn btn-sm btn-rounded btn-outline-primary"><i class="bx bx-edit"></i></Link>
+                                            <Link :href="route('transport-fee.edit', transport_fee.id)" class="btn btn-sm btn-rounded btn-outline-primary"><i class="bx bx-edit"></i></Link>
                                         </li>
                                         <li>
-                                            <button @click="deleteAction(student.id)" class="btn btn-sm btn-rounded btn-outline-danger"><i class="bx bx-trash"></i></button>
+                                            <button @click="deleteAction(transport_fee.id)" class="btn btn-sm btn-rounded btn-outline-danger"><i class="bx bx-trash"></i></button>
                                         </li>
                                     </ul>
                                 </div>
@@ -96,7 +97,7 @@ const deleteAction = (student_id) => {
                 </table>
             </div>
             <div class="box-footer">
-                <Pagination :data="students"/>
+                <Pagination :data="transport_fees"/>
             </div>
         </div>
     </AdminPanelLayout>

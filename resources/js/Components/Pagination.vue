@@ -11,7 +11,10 @@ defineProps({
 
 <template>
     <div v-if="data.links.length > 3" class="mt-4">
-        <nav aria-label="Page navigation example">
+        <nav class="d-flex justify-between align-items-center">
+            <small v-if="data.to > 0" class="highlighted-text">
+                Showing {{ data.from }} to {{ data.to }} of {{ data.total }} data.
+            </small>
             <ul class="pagination">
                 <li v-for="(link, k) in data.links"
                     :key="k"
@@ -19,7 +22,7 @@ defineProps({
                     <Link
                         class="page-link"
                         :class="{'active': link.active}"
-                        :href="link.url"
+                        :href="link.url ?? '#'"
                         v-html="link.label"
                     />
                 </li>

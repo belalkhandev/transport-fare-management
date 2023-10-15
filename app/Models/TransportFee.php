@@ -15,4 +15,14 @@ class TransportFee extends Model
         'discounted_amount',
         'remarks'
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function fee()
+    {
+        return $this->belongsTo(Fee::class);
+    }
 }

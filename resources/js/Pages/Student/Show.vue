@@ -53,7 +53,7 @@ const props = defineProps({
                         </div>
                         <div class="col-md-3">
                             <h5>Academic Information</h5>
-                            <table v-if="student.academic_plans" class="table table-borderless mt-2">
+                            <table v-if="student.academic_plans && student.academic_plans[0]" class="table table-borderless mt-2">
                                 <tr>
                                     <td>Session :</td>
                                     <td>{{ student.academic_plans[0].academic_year.name }}</td>

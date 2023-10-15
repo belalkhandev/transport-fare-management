@@ -16,6 +16,17 @@ class TransportFeeRepository extends Repository
         return TransportFee::class;
     }
 
+    public function getByPaginate($limit = 15)
+    {
+        return $this->query()
+            ->select('transport_fees.*', 'students.is_active')
+            ->with(['student', 'fee.area'])
+            ->leftJoin('students', 'students.id', '=', 'transport_fees.student_id')
+            ->latest()
+            ->orderByDesc('students.is_active')
+            ->paginate($limit);
+    }
+
     public function storeByRequestAndStudentId(Request $request, $studentId)
     {
         return $this->query()->create([

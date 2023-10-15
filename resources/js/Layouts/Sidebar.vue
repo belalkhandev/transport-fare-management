@@ -60,8 +60,8 @@ const toggleSidebar = () => {
                                 Payments
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('transport-fee.index')) }">
+                            <NavLink :href="route('transport-fee.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Student Transport fees
                             </NavLink>

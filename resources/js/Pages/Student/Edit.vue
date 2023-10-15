@@ -2,53 +2,61 @@
 import {Head, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import NavLink from "../../Components/NavLink.vue";
-import { ref } from 'vue';
+import {ref} from 'vue';
 import InputError from "../../Components/InputError.vue";
-import Editor from "@tinymce/tinymce-vue";
 
 const previewImage = ref(null);
 
 const props = defineProps({
-    versions: {
+    student: {
+        type: Object
+    },
+    gender: {
         type: Array,
     },
-    academic_years: {
+    blood_group: {
+        type: Array,
+    },
+    academic_plans: {
         type: Object,
         default: () => ({})
     },
-    academic_classes: {
+    fees: {
         type: Object,
         default: () => ({})
-    },
-    academic_groups: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_sections: {
-        type: Object,
-        default: () => ({})
-    },
-    academic_plan: {
-        type: Object
     }
 })
 
+
 const form = useForm({
-    academic_year_id: props.academic_plan.academic_year_id,
-    academic_class_id: props.academic_plan.academic_class_id,
-    academic_group_id: props.academic_plan.academic_group_id,
-    academic_section_id: props.academic_plan.academic_section_id,
-    academic_version: props.academic_plan.academic_version,
+    student_id: props.student.student_id,
+    name: props.student.name,
+    father_name: props.student.father_name,
+    mother_name: props.student.mother_name,
+    gender: props.student.gender,
+    blood_group: props.student.blood_group,
+    dob: props.student.dob,
+    contact_no: props.student.contact_no,
+    emergency_contact_no: props.student.emergency_contact_no,
+    email: props.student.email,
+    is_active: !!props.student.is_active,
+    address_line_1: props.student.address_line_1,
+    address_line_2: props.student.address_line_2,
+    academic_plan_id: props.student.academic_plans[0] ? props.student.academic_plans[0].id : '',
+    fee_id: props.student.transport_fee ? props.student.transport_fee.fee_id : '',
+    discounted_amount: props.student.transport_fee ? props.student.transport_fee.discounted_amount : '',
+    remarks: props.student.transport_fee ? props.student.transport_fee.remarks : ''
 });
 
 const submitForm = () => {
-    form.put(route('academic-plan.edit', props.academic_plan.id), {
+    form.post(route('student.edit', props.student.id), {
         preserveScroll: true,
         onSuccess: () => {
+            form.reset();
             previewImage.value = null;
             Swal.fire(
                 'Congratulation',
-                'Academic plan has been updated successfully',
+                'Student has been updated successfully',
                 'success'
             )
         }
@@ -58,77 +66,168 @@ const submitForm = () => {
 </script>
 
 <template>
-    <Head title="Academic Plan Edit" />
+    <Head title="Edit student" />
     <AdminPanelLayout>
-        <template #header>Academic plan</template>
+        <template #header>Student</template>
         <div class="box">
             <div class="box-header">
-                <h5 class="title">Edit academic plan</h5>
+                <h5 class="title">Edit student</h5>
                 <div class="action">
-                    <NavLink :href="route('academic-plan.index')" class="btn btn-sm btn-outline-primary">Plan list</NavLink>
+                    <NavLink :href="route('student.index')" class="btn btn-sm btn-outline-primary">Student list</NavLink>
                 </div>
             </div>
             <div class="box-body pb-4">
-                <div class="row">
-                    <div class="col-xl-8 offset-xl-2 col-md-12 col-lg-10 offset-lg-1">
-                        <form @submit.prevent="submitForm">
+                <form @submit.prevent="submitForm">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-12">
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label">Academic Year</label>
+                                <label for="" class="col-form-label col-md-4">Academic Plan</label>
                                 <div class="col-md-8">
-                                    <select v-model="form.academic_year_id" class="form-control">
-                                        <option value="">Select year</option>
-                                        <option v-for="academic_year in academic_years" :value="academic_year.id">{{ academic_year.name }}</option>
+                                    <select v-model="form.academic_plan_id" class="form-control">
+                                        <option value="">Select academic plan</option>
+                                        <option v-for="academic_plan in academic_plans" :value="academic_plan.id">{{ academic_plan.name }}</option>
                                     </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_year_id" />
+                                    <InputError class="mt-2" :message="form.errors.academic_plan_id" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Class</label>
+                                <label class="col-form-label col-md-4">Student ID</label>
                                 <div class="col-md-8">
-                                    <select v-model="form.academic_class_id" class="form-control">
-                                        <option value="">Select class</option>
-                                        <option v-for="academic_class in academic_classes" :value="academic_class.id">{{ academic_class.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_class_id" />
+                                    <input type="text" v-model="form.student_id" class="form-control" placeholder="Enter student id">
+                                    <InputError class="mt-2" :message="form.errors.student_id" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Group</label>
+                                <label class="col-form-label col-md-4">Name</label>
                                 <div class="col-md-8">
-                                    <select v-model="form.academic_group_id" class="form-control">
-                                        <option value="">Select group</option>
-                                        <option v-for="academic_group in academic_groups" :value="academic_group.id">{{ academic_group.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_group_id" />
+                                    <input type="text" v-model="form.name" class="form-control" placeholder="Enter student name">
+                                    <InputError class="mt-2" :message="form.errors.name" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Academic Section</label>
+                                <label class="col-form-label col-md-4">Father name</label>
                                 <div class="col-md-8">
-                                    <select v-model="form.academic_section_id" class="form-control">
-                                        <option value="">Select section</option>
-                                        <option v-for="academic_section in academic_sections" :value="academic_section.id">{{ academic_section.name }}</option>
-                                    </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_section_id" />
+                                    <input type="text" v-model="form.father_name" class="form-control" placeholder="Enter father name">
+                                    <InputError class="mt-2" :message="form.errors.father_name" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-md-4">Version</label>
+                                <label class="col-form-label col-md-4">Mother name</label>
                                 <div class="col-md-8">
-                                    <select v-model="form.academic_version" class="form-control">
-                                        <option value="">Select version</option>
-                                        <option v-for="version in versions" :value="version">{{ version.toUpperCase() }}</option>
+                                    <input type="text" v-model="form.mother_name" class="form-control" placeholder="Enter mother name">
+                                    <InputError class="mt-2" :message="form.errors.mother_name" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Date of Birth (DOB)</label>
+                                <div class="col-md-8">
+                                    <input type="date" v-model="form.dob" class="form-control">
+                                    <InputError class="mt-2" :message="form.errors.dob" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Gender</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.gender" class="form-control">
+                                        <option value="">Select gender</option>
+                                        <option v-for="item in gender" :value="item">{{ item }}</option>
                                     </select>
-                                    <InputError class="mt-2" :message="form.errors.academic_version" />
+                                    <InputError class="mt-2" :message="form.errors.gender" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Blood Group</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.blood_group" class="form-control">
+                                        <option value="">Select blood group</option>
+                                        <option v-for="item in blood_group" :value="item">{{ item }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.blood_group" />
                                 </div>
                             </div>
 
-                            <div class="form-group mt-4 d-flex justify-content-end align-items-center">
-                                <button type="submit" class="btn-primary btn" :disabled="form.processing">Update</button>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Contact no</label>
+                                <div class="col-md-8">
+                                    <input type="text" v-model="form.contact_no" class="form-control" placeholder="Enter contact no">
+                                    <InputError class="mt-2" :message="form.errors.contact_no" />
+                                </div>
                             </div>
-                        </form>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Emergency contact no</label>
+                                <div class="col-md-8">
+                                    <input type="text" v-model="form.emergency_contact_no" class="form-control" placeholder="Enter emergency contact no">
+                                    <InputError class="mt-2" :message="form.errors.emergency_contact_no" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Email</label>
+                                <div class="col-md-8">
+                                    <input type="email" v-model="form.email" class="form-control" placeholder="Enter email">
+                                    <InputError class="mt-2" :message="form.errors.email" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Address line 1</label>
+                                <div class="col-md-8">
+                                    <input type="text" v-model="form.address_line_1" class="form-control" placeholder="Enter address line 1">
+                                    <InputError class="mt-2" :message="form.errors.address_line_1" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-4">Address line 2</label>
+                                <div class="col-md-8">
+                                    <input type="text" v-model="form.address_line_2" class="form-control" placeholder="Enter  address line 2">
+                                    <InputError class="mt-2" :message="form.errors.address_line_2" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Student Status</label>
+                                <div class="col-md-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input" v-model="form.is_active" type="checkbox" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <span v-if="form.is_active" class="text-success">Active</span>
+                                            <span v-else class="text-danger">Inactive</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-12">
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4 col-lg-3">Fee</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <select v-model="form.fee_id" class="form-control">
+                                        <option value="">Select fee</option>
+                                        <option v-for="fee in fees" :value="fee.id">{{ fee.area.name }} - {{ fee.amount }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.fee_id" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label  col-md-4 col-lg-3">Discounted Amount</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input type="number" v-model="form.discounted_amount" class="form-control" placeholder="0.00">
+                                    <InputError class="mt-2" :message="form.errors.discounted_amount" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label  col-md-4 col-lg-3">Remarks</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <textarea v-model="form.remarks" placeholder="Remarks" class="form-control-textarea form-control"></textarea>
+                                    <InputError class="mt-2" :message="form.errors.remarks" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group mt-4 d-flex justify-content-end align-items-center">
+                        <button type="submit" class="btn-primary btn" :disabled="form.processing">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </AdminPanelLayout>

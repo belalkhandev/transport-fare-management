@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\TransportBillingController;
+use App\Http\Controllers\Admin\TransportFeeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -116,6 +118,16 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{studentId}', [StudentController::class, 'destroy'])->name('student.delete');
         Route::get('/bulk-import', [StudentController::class, 'bulkImport'])->name('student.import');
         Route::post('/bulk-import', [StudentController::class, 'storeBulkImport']);
+    });
+
+    Route::prefix('transport-fees')->group(function() {
+        Route::get('/', [TransportFeeController::class, 'index'])->name('transport-fee.index');
+        Route::get('{transportFeeId}/', [TransportFeeController::class, 'edit'])->name('transport-fee.edit');
+        Route::put('{transportFeeId}/', [TransportFeeController::class, 'update']);
+    });
+
+    Route::prefix('transport-bills')->group(function() {
+        Route::get('/generate', [TransportBillingController::class, 'index'])->name('transport-bill.index');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');
