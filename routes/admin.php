@@ -128,7 +128,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('transport-bills')->group(function() {
-        Route::get('/generate', [TransportBillingController::class, 'index'])->name('transport-bill.index');
+        Route::get('/', [TransportBillingController::class, 'index'])->name('transport-bill.index');
+        Route::get('/generate', [TransportBillingController::class, 'generateBills'])->name('transport-bill.generate');
+        Route::post('/generate', [TransportBillingController::class, 'storeGeneratedBills']);
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

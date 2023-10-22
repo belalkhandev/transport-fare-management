@@ -77,6 +77,7 @@ const props = defineProps({
                 </div>
             </div>
         </div>
+
         <div class="box">
             <div class="box-header no-border">
                 Bill Collections
@@ -86,5 +87,29 @@ const props = defineProps({
                 <MonthlyBillCollectionChart/>
             </div>
         </div>
+
+        <div class="box">
+            <div class="box-header">
+                <h5 class="title">Latest 10 transactions</h5>
+                <div class="box-action">
+                    <Link :href="route('student.index')" class="btn btn-sm btn-primary">View All</Link>
+                </div>
+            </div>
+            <div class="box-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Transaction No</th>
+                        <th>Student</th>
+                        <th>Month/Year</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Paid At</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
     </AdminPanelLayout>
 </template>

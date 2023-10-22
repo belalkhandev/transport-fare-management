@@ -42,8 +42,8 @@ const toggleSidebar = () => {
                 </div>
                 <div class="sidebar-item-body">
                     <ul>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('transport-bill.generate')) }">
+                            <NavLink :href="route('transport-bill.generate')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Generate Transport Fee
                             </NavLink>
