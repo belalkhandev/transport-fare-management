@@ -22,7 +22,6 @@ class TransportBillingRepository extends Repository
         ]);
     }
 
-
     public function updateByRequest(Request $request, $transportBillingId)
     {
         return $this->query()->findOrFail($transportBillingId)->update([
@@ -33,6 +32,29 @@ class TransportBillingRepository extends Repository
     public function deleteByRequest($transportBillingId)
     {
         return $this->query()->findOrFail($transportBillingId)->delete();
+    }
+
+    public function generateMonthlyBill($request, $students)
+    {
+        foreach ($students as $student)
+        {
+            $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year);
+
+            //sendSMS
+        }
+    }
+
+    private function storeTransportBillForStudent($student, $month, $year, $dueDate)
+    {
+        return $this->query()->createOrUpdate([
+            'student_id' => $student->id,
+            'academic_plan_id' => $student->academicPlans->first()->id,
+            'month' => $month,
+            'year' => $year,
+            'due_date' => $dueDate,
+            'amount' => $student->transportFee->discounted_amount ?? $student->transportFee->amount,
+            'is_paid' => 0,
+        ]);
     }
 
 }

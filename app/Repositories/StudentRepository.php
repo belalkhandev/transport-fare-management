@@ -102,4 +102,12 @@ class StudentRepository extends Repository
         return $this->query()->findOrFail($studentId)?->delete();
     }
 
+    public function getActiveStudents()
+    {
+        return $this->query()
+            ->with(['academicPlans', 'transportFee'])
+            ->active()
+            ->get();
+    }
+
 }

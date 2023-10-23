@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('academic_plan_id')->constrained('academic_plans')->cascadeOnDelete();
-            $table->date('payment_for')->nullable();
+            $table->integer('month')->nullable();
+            $table->string('year')->nullable();
             $table->date('due_date')->nullable();
             $table->decimal('amount', 8, 2)->nullable();
             $table->boolean('is_paid')->default(false);

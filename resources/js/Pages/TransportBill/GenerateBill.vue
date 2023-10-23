@@ -7,6 +7,9 @@ import SpinnerGlow from "@/Components/SpinnerGlow.vue";
 const props = defineProps({
     months: {
         type: Object
+    },
+    years: {
+        type: Object
     }
 });
 
@@ -17,7 +20,7 @@ const form = useForm({
 
 
 const formSubmit = () => {
-    form.post(route('student.import'), {
+    form.post(route('transport-bill.generate'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire(
@@ -67,7 +70,9 @@ const formSubmit = () => {
                                 <div class="col-md-6">
                                     <div class="form-group mt-2">
                                         <label for="monthYear">Year</label>
-                                        <input type="text" v-model="form.year" class="form-control" readonly disabled>
+                                        <select v-model="form.year" id="monthYear" class="form-select">
+                                            <option v-for="year in years" :value=year.value>{{ year.name }}</option>
+                                        </select>
                                         <InputError class="mt-2" :message="form.errors.month" />
                                     </div>
                                 </div>
