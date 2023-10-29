@@ -25,6 +25,25 @@
         left: 0;
         transition: 250ms;
 
+        &::-webkit-scrollbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: $color-primary-bg-light;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $color-primary-light2;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: $color-primary;
+        }
+
         &.toggle-sidebar {
             left: -270px;
         }

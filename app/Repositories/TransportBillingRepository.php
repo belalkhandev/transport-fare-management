@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\PaymentGateway;
 use App\Models\TransportBilling;
+use App\Services\SMS\SMS;
 use App\Services\UrlSortener\URLShortener;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class TransportBillingRepository extends Repository
 {
     protected SettingRepository $settingRepository;
     protected PaymentRepository $paymentRepository;
+
+    protected SMS $sms;
     /**
      * @inheritDoc
      */
@@ -44,6 +47,7 @@ class TransportBillingRepository extends Repository
     {
         $this->settingRepository = app(SettingRepository::class);
         $this->paymentRepository = app(PaymentRepository::class);
+        $this->sms = app(SMS::class);
 
         $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
         $smsFormat = $this->settingRepository->getValueByName('bill_generate_send_sms_format');
@@ -53,45 +57,28 @@ class TransportBillingRepository extends Repository
 
         $bulkSms = [];
 
-
         foreach ($students as $student)
         {
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate->format('Y-m-d'));
 
-            $payment = $this->paymentRepository->query()
-                ->where('transport_billing_id', $transportBill->id)
-                ->first();
-
             $paymentLink = $this->generatePaymentLink($student->student_id, $transportBill->trans_id);
+            $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
 
-            if(!$payment) {
-                $transId = Str::random(10);
-                $this->paymentRepository->query()->create([
-                    'trans_id' => $transId,
-                    'transport_billing_id' => $transportBill->id,
-                    'gateway' => PaymentGateway::BKASH->value,
-                    'amount' => $transportBill->amount
-                ]);
-            } else {
-                $payment->update([
-                    'amount' => $transportBill->amount
-                ]);
-            }
-
-            $smsMessage = str_replace([':month_year', ':due_date', ':payment_link'], [$monthYear, $dueDate, $paymentLink], $smsFormat);
+            $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
+            $phone = '88' . $phone;
 
             $bulkSms[] = [
-                'to' => $student->contact,
+                'to' => $phone,
                 'message' => $smsMessage
             ];
         }
 
-        //send bulk sms
+        $this->sms->sendBulk(json_encode($bulkSms));
     }
 
     private function storeTransportBillForStudent($student, $month, $year, $dueDate)
     {
-        return  $this->query()->updateOrCreate(
+        $transportBill = $this->query()->updateOrCreate(
             [
                 'student_id' => $student->id,
                 'month' => $month,
@@ -100,10 +87,23 @@ class TransportBillingRepository extends Repository
             [
                 'academic_plan_id' => $student->academicPlans->first()?->id,
                 'due_date' => $dueDate,
-                'amount' => $student->transportFee->discounted_amount ?? $student->transportFee->amount,
+                'amount' => $student->transportFee->discounted_amount ?? $student->transportFee->fee->amount,
                 'is_paid' => 0
             ]
         );
+
+        $this->paymentRepository->query()->updateOrCreate(
+            [
+                'transport_billing_id' => $transportBill->id,
+                'gateway' => PaymentGateway::BKASH->value
+            ],
+            [
+                'trans_id' => Str::random(10),
+                'amount' => $transportBill->amount
+            ]
+        );
+
+        return $transportBill;
     }
 
     private function generatePaymentLink($studentId, $transId)
