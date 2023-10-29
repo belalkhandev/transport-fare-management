@@ -48,16 +48,16 @@ const toggleSidebar = () => {
                                 Generate Transport Fee
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('transport-bill.index')) }">
+                            <NavLink :href="route('transport-bill.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
-                                Transport bill lists
+                                Transport bills
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('payment.index')) }">
+                            <NavLink :href="route('payment.index')">
                                 <i class='bx bx-radio-circle-marked' ></i>
-                                Payments
+                                Payment Transaction
                             </NavLink>
                         </li>
                         <li :class="{ 'active': $page.url === getActivePath(route('transport-fee.index')) }">

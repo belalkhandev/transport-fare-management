@@ -112,8 +112,7 @@ class StudentRepository extends Repository
         return $this->query()
             ->with(['academicPlans' => function($query) { return $query->latest(); }, 'transportFee'])
             ->active()
-            ->get()
-            ->take(10);
+            ->get();
     }
 
 }

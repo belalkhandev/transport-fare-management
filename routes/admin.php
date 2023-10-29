@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TransportBillingController;
 use App\Http\Controllers\Admin\TransportFeeController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -139,8 +140,13 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('transport-bills')->group(function() {
         Route::get('/', [TransportBillingController::class, 'index'])->name('transport-bill.index');
+        Route::get('/{transportBillId}/edit', [TransportBillingController::class, 'index'])->name('transport-bill.edit');
         Route::get('/generate', [TransportBillingController::class, 'generateBills'])->name('transport-bill.generate');
         Route::post('/generate', [TransportBillingController::class, 'storeGeneratedBills']);
+    });
+
+    Route::prefix('payments')->group(function() {
+        Route::get('/', [TransportBillingController::class, 'paymentList'])->name('payment.index');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

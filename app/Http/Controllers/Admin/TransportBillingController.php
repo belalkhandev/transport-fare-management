@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\PaymentRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
 use Exception;
@@ -13,9 +14,39 @@ class TransportBillingController extends Controller
 {
     public function __construct(
         protected TransportBillingRepository $transportBillRepository,
+        protected PaymentRepository $paymentRepository,
         protected StudentRepository $studentRepository
     )
     {
+    }
+
+    public function index()
+    {
+        $bills = $this->transportBillRepository->query()
+            ->with([
+                'student',
+                'payment'
+            ])
+            ->latest()
+            ->paginate();
+
+        return Inertia::render('TransportBill/Index', [
+            'bills' => $bills
+        ]);
+    }
+
+    public function paymentList()
+    {
+        $payments = $this->paymentRepository->query()
+            ->with([
+                'transportBill.student'
+            ])
+            ->latest()
+            ->paginate();
+
+        return Inertia::render('TransportBill/Payments', [
+            'payments' => $payments
+        ]);
     }
 
     public function generateBills()

@@ -20,4 +20,9 @@ class Payment extends Model
         'transaction_date',
         'status',
     ];
+
+    public function transportBill()
+    {
+        return $this->belongsTo(TransportBilling::class, 'transport_billing_id');
+    }
 }
