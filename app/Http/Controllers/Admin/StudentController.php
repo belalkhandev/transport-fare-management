@@ -76,14 +76,12 @@ class StudentController extends Controller
             'gender' => ['required'],
             'father_name' => ['required'],
             'mother_name' => ['required'],
-            'contact_no' => ['required'],
-            'address_line_1' => ['required'],
-            'academic_plan_id' => ['required'],
+            'contact_no' => ['required']
         ]);
 
         $student = $this->studentRepository->storeByRequest($request);
 
-        if ($student && $request->has('academic_plan_id')) {
+        if ($student && $request->filled('academic_plan_id')) {
             $student->academicPlans()->attach([$request->get('academic_plan_id')]);
         }
 
@@ -133,9 +131,7 @@ class StudentController extends Controller
             'gender' => ['required'],
             'father_name' => ['required'],
             'mother_name' => ['required'],
-            'contact_no' => ['required'],
-            'address_line_1' => ['required'],
-            'academic_plan_id' => ['required'],
+            'contact_no' => ['required']
         ]);
 
         $this->studentRepository->updateByRequest($request, $studentId);

@@ -45,4 +45,9 @@ class Student extends Model
     {
         return $builder->where('student_id', $studentId);
     }
+
+    public function scopeActive(Builder $builder)
+    {
+        return $builder->where('is_active', 1);
+    }
 }

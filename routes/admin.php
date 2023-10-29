@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TransportBillingController;
@@ -80,6 +81,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{academicSectionId}/edit', [AcademicSectionController::class, 'edit'])->name('academic-section.edit');
         Route::put('/{academicSectionId}/edit', [AcademicSectionController::class, 'update']);
         Route::delete('/{academicSectionId}', [AcademicSectionController::class, 'destroy'])->name('academic-section.delete');
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
+        Route::get('/create', [SettingsController::class, 'create'])->name('settings.create');
+        Route::post('/create', [SettingsController::class, 'store']);
+        Route::get('/{settingId}/edit', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/{settingId}/edit', [SettingsController::class, 'update']);
+        Route::delete('/{settingId}', [SettingsController::class, 'destroy'])->name('settings.delete');
     });
 
     Route::prefix('areas')->group(function () {

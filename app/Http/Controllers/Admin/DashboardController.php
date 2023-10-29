@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $totalStudents = $this->studentRepository->query()->count();
 
         return Inertia::render('Dashboard', [
-            'total_student' => $totalStudents,
+            'total_students' => $totalStudents,
             'total_bills' => 0,
             'total_collections' => 0,
             'total_due' => 0

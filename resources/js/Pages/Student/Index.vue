@@ -56,12 +56,11 @@ const deleteAction = (student_id) => {
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Father name</th>
-                            <th>Mother name</th>
+                            <th>Student</th>
+                            <th>Parents</th>
                             <th>Contact</th>
-                            <th>Academic</th>
+                            <th>Area - Fee</th>
+                            <th>Academic Plan</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -69,13 +68,17 @@ const deleteAction = (student_id) => {
                     <tbody>
                         <tr v-for="(student, i) in students.data">
                             <td>
-                                <Link :href="route('student.show', 'nothing')">{{ student.student_id }}</Link>
+                                <Link :href="route('student.show', student.id)">{{ student.student_id }}</Link>
+                                <p>{{ student.name }}</p>
                             </td>
-                            <td>{{ student.name }}</td>
-                            <td>{{ student.father_name }}</td>
-                            <td>{{ student.mother_name }}</td>
+                            <td>
+                                <p><i class='bx bx-male text-violet-300'></i> {{ student.father_name }}</p>
+                                <p><i class='bx bx-female text-purple-300'></i> {{ student.mother_name }}</p>
+                            </td>
                             <td>{{ student.contact_no }}</td>
-                            <td>{{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}</td>
+                            <td>{{ student.transport_fee ? student.transport_fee.fee.area.name + ' - ' +student.transport_fee.fee.amount : '' }}</td>
+                            <td>
+                                {{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}</td>
                             <td>
                                 <ActiveStatusLabel :status="student.is_active"/>
                             </td>

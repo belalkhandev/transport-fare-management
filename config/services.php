@@ -31,4 +31,20 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sms' => [
+        'api_url' => env('SMS_API_URL'),
+        'api_key' => env('SMS_API_KEY'),
+        'sender_id' => env('SMS_API_SENDER_ID')
+    ],
+
+    'bkash_pgw' => [
+        'api_url' => env('BKASH_PGW_API_URL'),
+        'app_key' => env('BKASH_PGW_APP_KEY'),
+        'app_secret' => env('BKASH_PGW_APP_SECRET'),
+        'username' => env('BKASH_PGW_USERNAME'),
+        'password' => env('BKASH_PGW_PASSWORD'),
+        'token_lifetime' => 3600,
+        'callback_url' => env('BKASH_PGW_CALLBACK_URL', 'https://bafskbus.ideasolutionbd.com'),
+    ],
+
 ];

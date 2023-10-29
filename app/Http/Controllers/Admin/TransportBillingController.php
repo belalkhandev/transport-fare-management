@@ -66,7 +66,8 @@ class TransportBillingController extends Controller
             $students = $this->studentRepository->getActiveStudents();
             $this->transportBillRepository->generateMonthlyBill($request, $students);
         }catch (Exception $e) {
-
+            dd($e->getMessage());
+            return $e->getMessage();
         }
     }
 }

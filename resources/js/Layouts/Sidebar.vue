@@ -184,6 +184,12 @@ const toggleSidebar = () => {
                                 Academic Section
                             </NavLink>
                         </li>
+                        <li :class="{ 'active': $page.url === getActivePath(route('settings.index')) }">
+                            <NavLink :href="route('settings.index')">
+                                <i class='bx bx-radio-circle-marked' ></i>
+                                Settings
+                            </NavLink>
+                        </li>
                     </ul>
                 </div>
             </div>

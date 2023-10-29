@@ -1,7 +1,7 @@
     .table {
         overflow: hidden;
         thead {
-            
+
             tr {
                 border-bottom: 1px solid $color-primary-bg-light;
                 th {
@@ -9,7 +9,7 @@
                     font-weight: 500;
                     padding: 7px 10px;
                     border-bottom: none;
-                    
+
                 }
             }
         }
@@ -37,6 +37,11 @@
                             flex-wrap: wrap;
                         }
                     }
+
+                    p {
+                        margin: 0;
+                        padding: 0;
+                    }
                 }
 
                 &::after {
@@ -59,7 +64,7 @@
                         transition: 250ms;
                     }
                 }
-                
+
             }
         }
 

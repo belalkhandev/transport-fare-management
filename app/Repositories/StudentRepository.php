@@ -19,9 +19,14 @@ class StudentRepository extends Repository
     public function getByPaginate($limit = 15)
     {
         return $this->query()
-            ->with(['academicPlans' => function ($query) {
-                $query->latest();
-            }])
+            ->with([
+                    'academicPlans' => function ($query) {
+                            $query->latest();
+                        },
+                    'transportFee.fee.area'
+                ]
+            )
+            ->orderBy('is_active')
             ->latest()
             ->paginate($limit);
     }
@@ -86,12 +91,12 @@ class StudentRepository extends Repository
             'name' => $data['name'],
             'father_name' => $data['father_name'],
             'mother_name' => $data['mother_name'],
+            'dob' => isset($data['dob']) && $data['dob'] ? Carbon::parse($data['dob'])->format('Y-m-d') : null,
+            'gender' => $data['gender'] ?? null,
+            'blood_group' => $data['blood_group'] ?? null,
             'contact_no' => $data['contact_no'],
             'emergency_contact' => $data['emergency_contact'] ?? null,
             'email' => $data['email'] ?? null,
-            'dob' => $data['dob'] ? Carbon::parse($data['dob'])->format('Y-m-d') : null,
-            'gender' => $data['gender'] ?? null,
-            'blood_group' => $data['blood_group'] ?? null,
             'address_line_1' => $data['address_line_1'] ?? null,
             'address_line_2' => $data['address_line_2'] ?? null,
         ]);
@@ -105,7 +110,7 @@ class StudentRepository extends Repository
     public function getActiveStudents()
     {
         return $this->query()
-            ->with(['academicPlans', 'transportFee'])
+            ->with(['transportFee'])
             ->active()
             ->get();
     }
