@@ -110,7 +110,7 @@ class StudentRepository extends Repository
     public function getActiveStudents()
     {
         return $this->query()
-            ->with(['transportFee'])
+            ->with(['academicPlans' => function($query) { return $query->latest(); }, 'transportFee'])
             ->active()
             ->get();
     }

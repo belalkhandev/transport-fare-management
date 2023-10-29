@@ -15,24 +15,4 @@ class PaymentRepository extends Repository
         return Payment::class;
     }
 
-    public function storeByRequest(Request $request)
-    {
-        return $this->query()->create([
-
-        ]);
-    }
-
-
-    public function updateByRequest(Request $request, $paymentId)
-    {
-        return $this->query()->findOrFail($paymentId)->update([
-
-            ]);
-    }
-
-    public function deleteByRequest($paymentId)
-    {
-        return $this->query()->findOrFail($paymentId)->delete();
-    }
-
 }

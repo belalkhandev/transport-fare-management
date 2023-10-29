@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 class SettingTableSeeder extends Seeder
@@ -14,6 +14,16 @@ class SettingTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $settings = [
+            'due_config' => json_encode([
+                'due_date_after_generate_bill' => 7,
+                'fine_after_due_date' => 100
+            ]),
+            'bill_generate_send_sms_format' => 'Dear Guardian, You are requested to pay the Transport bill for the month of :month_year within :due_date via link :payment_link. Thank you,  - BAFSKBUS'
+        ];
+
+        foreach ($settings as $name => $value) {
+            Setting::create(compact('name', 'value'));
+        }
     }
 }

@@ -17,7 +17,6 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('transport_billing_id')->constrained('transport_billings')->cascadeOnDelete();
             $table->string('trans_id')->unique();
             $table->enum('gateway', PaymentGateway::values())->default(PaymentGateway::BKASH->value);

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\UrlSortener\URLShortener;
+use App\Services\UrlSortener\UrlShortenerManager;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(URLShortener::class, UrlShortenerManager::class);
     }
 
     /**

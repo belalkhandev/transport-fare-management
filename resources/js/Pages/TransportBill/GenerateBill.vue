@@ -15,7 +15,8 @@ const props = defineProps({
 
 const form = useForm({
     month: new Date().getMonth() + 1,
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
+    send_sms: true
 });
 
 
@@ -76,6 +77,14 @@ const formSubmit = () => {
                                         <InputError class="mt-2" :message="form.errors.month" />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" v-model="form.send_sms" type="checkbox" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Send SMS?
+                                    <span v-if="form.send_sms" class="text-success">Yes</span>
+                                    <span v-else class="text-danger">No</span>
+                                </label>
                             </div>
 
                             <div class="mb-4 text-warning bg-gray-50 p-1 font-sans">If any bill already generated for any student then that will be updated with new configuration</div>

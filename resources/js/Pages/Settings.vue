@@ -28,6 +28,14 @@ const form = useForm({
     value: ''
 })
 
+const editAction = (setting) => {
+    form.setting_id = setting.id;
+    form.name = setting.name;
+    form.value = setting.value;
+
+    displayFormModal.value = true
+}
+
 const submitForm = () => {
     if (!form.setting_id) {
         form.transform(data => ({
@@ -48,7 +56,7 @@ const submitForm = () => {
             onSuccess: () => {
                 Toast.fire({
                     icon: 'success',
-                    title: 'Academic section update successfully'
+                    title: 'Settings update successfully'
                 });
 
                 displayFormModal.value = false
@@ -56,15 +64,6 @@ const submitForm = () => {
         });
     }
 }
-
-const editAction = (setting) => {
-    form.setting_id = setting.id;
-    form.name = setting.name;
-    form.is_active = !!setting.is_active;
-
-    displayFormModal.value = true
-}
-
 
 const deleteAction = (setting_id) => {
     Swal.fire({
@@ -77,11 +76,11 @@ const deleteAction = (setting_id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('academic-section.delete', setting_id), {
+            form.delete(route('settings.delete', setting_id), {
                 onSuccess: () => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Academic section has been deleted successfully'
+                        title: 'Deleted successfully'
                     });
                 }
             })
@@ -152,7 +151,7 @@ const deleteAction = (setting_id) => {
                     </div>
                     <div class="form-group">
                         <label>Value</label>
-                        <textarea v-model="form.value" class="form-control"></textarea>
+                            <textarea v-model="form.value" class="form-control form-control-textarea" rows="5"></textarea>
                         <InputError class="mt-2" :message="form.errors.value" />
                     </div>
                 </form>

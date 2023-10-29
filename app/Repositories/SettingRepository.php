@@ -23,8 +23,7 @@ class SettingRepository extends Repository
 
     public function updateByRequest(Request $request, $settingId)
     {
-        return $this->query()->findOrFail($settingId)
-            ?->updateOrCreate([
+        return $this->query()->findOrFail($settingId)->update([
                 'name' => $request->name,
                 'value' => $request->value
             ]);
@@ -33,13 +32,15 @@ class SettingRepository extends Repository
     public function deleteByRequest($settingId)
     {
         return $this->query()
-            ->findOrFail($settingId)
-            ?->delete();
+            ->findOrFail($settingId)->delete();
     }
 
     public function getValueByName($name)
     {
-        return $this->query()->where('name', $name)->first();
+        return $this->query()
+            ->where('name', $name)
+            ->first()
+            ?->value;
     }
 
 }

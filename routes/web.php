@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/transport-bill/{transactionBillNo}/payment', [TransportPaymentController::class, 'index'])->name('transport-bill.user.payment');
+Route::get('/transport-bill/{studentId}/payment/{transactionBillNo}', [TransportPaymentController::class, 'index'])->name('student.transport-bill.payment');
 
 
