@@ -20,18 +20,37 @@ class TransportBillingController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $bills = $this->transportBillRepository->query()
+            ->select('transport_billings.*')
             ->with([
                 'student',
                 'payment'
             ])
-            ->latest()
+            ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
+            ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
+            ->when($search = $request->search, function ($query) use ($search) {
+                $query->where('students.student_id', 'LIKE', '%'.$search.'%')
+                    ->orWhere('students.contact_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('payments.trans_id', 'LIKE', '%'.$search.'%');
+            })
+            ->when($month = $request->month, function ($query) use ($month) {
+                $query->where('transport_billings.month', $month);
+            })
+            ->when($year = $request->year, function ($query) use ($year) {
+                $query->where('transport_billings.year', $year);
+            })
+            ->latest('transport_billings.created_at')
             ->paginate();
 
+        $monthYear = $this->preparedMonthYear();
+
         return Inertia::render('TransportBill/Index', [
-            'bills' => $bills
+            'bills' => $bills,
+            'months' => $monthYear['months'],
+            'years' => $monthYear['years'],
+            'filterData' => $request->all()
         ]);
     }
 
@@ -50,6 +69,31 @@ class TransportBillingController extends Controller
     }
 
     public function generateBills()
+    {
+        $monthYear = $this->preparedMonthYear();
+
+        return Inertia::render('TransportBill/GenerateBill', [
+            'months' => $monthYear['months'],
+            'years' => $monthYear['years']
+        ]);
+    }
+
+    public function storeGeneratedBills(Request $request)
+    {
+        $request->validate([
+            'month' => ['required'],
+            'year' => 'required'
+        ]);
+
+        try {
+            $students = $this->studentRepository->getActiveStudents();
+            $this->transportBillRepository->generateMonthlyBill($request, $students);
+        }catch (Exception $e) {
+            return $this->json($e->getMessage(), null, 400);
+        }
+    }
+
+    private function preparedMonthYear(): array
     {
         $months = [];
 
@@ -80,25 +124,9 @@ class TransportBillingController extends Controller
             'name' => $nextYear
         ];
 
-        return Inertia::render('TransportBill/GenerateBill', [
+        return [
             'months' => $months,
             'years' => $years
-        ]);
-    }
-
-    public function storeGeneratedBills(Request $request)
-    {
-        $request->validate([
-            'month' => ['required'],
-            'year' => 'required'
-        ]);
-
-        try {
-            $students = $this->studentRepository->getActiveStudents();
-            $this->transportBillRepository->generateMonthlyBill($request, $students);
-        }catch (Exception $e) {
-            dd($e->getMessage());
-            return $e->getMessage();
-        }
+        ];
     }
 }

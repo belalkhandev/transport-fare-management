@@ -8,6 +8,16 @@ const props = defineProps({
     bills: {
         type: Object,
         default: () => ({})
+    },
+    months: {
+        type: Object
+    },
+    years: {
+        type: Object
+    },
+    filterData: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -38,6 +48,18 @@ const deleteAction = (bill_id) => {
     })
 }
 
+const filteringForm = useForm({
+    search: props.filterData.search ? props.filterData.search : '',
+    month: props.filterData.month ? props.filterData.month : '',
+    year: props.filterData.year ? props.filterData.year : '',
+});
+
+const submitSearchForm = () => {
+    filteringForm.get(route('transport-bill.index'), {
+        preserveScroll: true,
+    })
+}
+
 </script>
 
 <template>
@@ -47,6 +69,33 @@ const deleteAction = (bill_id) => {
         <div class="box">
             <div class="box-header">
                 <h5 class="title">Transport bills</h5>
+            </div>
+            <div class="box-filter pt-2">
+                <form @submit.prevent="submitSearchForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" v-model="filteringForm.search" class="form-control" placeholder="Contact no, Transaction ID">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group d-flex">
+                                <select v-model="filteringForm.month" id="monthYear" class="mr-2 form-select">
+                                    <option value="">All Month</option>
+                                    <option v-for="month in months" :value=month.value>{{ month.name }}</option>
+                                </select>
+                                <select v-model="filteringForm.year" id="monthYear" class="ml-2 form-select">
+                                    <option value="">All Year</option>
+                                    <option v-for="year in years" :value=year.value>{{ year.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-outline-primary">Search</button>
+                            <Link :href="route('transport-bill.index')" class="ml-2 btn btn-outline-warning">Reset</Link>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="box-body">
                 <table class="table">

@@ -61,19 +61,22 @@ class TransportBillingRepository extends Repository
         {
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate->format('Y-m-d'));
 
-            $paymentLink = $this->generatePaymentLink($student->student_id, $transportBill->trans_id);
-            $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
+            if ($request->send_sms) {
+                $paymentLink = $this->generatePaymentLink($student->student_id, $transportBill->trans_id);
+                $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
 
-            $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
-            $phone = '88' . $phone;
+                $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
+                $phone = '88' . $phone;
 
-            $bulkSms[] = [
-                'to' => $phone,
-                'message' => $smsMessage
-            ];
+                $bulkSms[] = [
+                    'to' => $phone,
+                    'message' => $smsMessage
+                ];
+            }
         }
 
-        $this->sms->sendBulk(json_encode($bulkSms));
+        if($request->send_sms)
+            $this->sms->sendBulk(json_encode($bulkSms));
     }
 
     private function storeTransportBillForStudent($student, $month, $year, $dueDate)
