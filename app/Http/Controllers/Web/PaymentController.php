@@ -110,7 +110,7 @@ class PaymentController extends Controller
         if ($status === 'failure') {
             return redirect()->route('payment.failed', $transportBill->payment->trans_id);
         } elseif ($status === 'cancel') {
-            return redirect()->route('payment.cancel', $transportBill->payment->trans_id);
+            return redirect()->route('payment.canceled', $transportBill->payment->trans_id);
         }
 
         $paymentID = $request->input('paymentID');

@@ -1,5 +1,6 @@
 <script setup>
 import {useForm} from "@inertiajs/vue3";
+import StudentProfile from "@/Components/StudentProfile.vue";
 
 const props = defineProps({
     transport_bill: {
@@ -36,27 +37,7 @@ const createBkashPayment = () => {
                         </div>
                     </div>
                     <div class="payment-box-content">
-                        <div class="student">
-                            <div class="student-avatar">
-                                <img v-if="student.gender === 'male'" src="@/assets/images/male.png" alt="">
-                                <img v-if="student.gender === 'female'" src="@/assets/images/female.png" alt="">
-                            </div>
-                            <div class="student-container">
-                                <div class="student-container-top d-flex justify-content-between">
-                                    <h4>{{ student.name }}</h4>
-                                    <h4><span>Student ID: </span> {{ student.student_id }}</h4>
-                                </div>
-                                <div class="student-container-bottom">
-                                    <div class="items">
-                                        <ul>
-                                            <li>Academic Year: 2023-24</li>
-                                            <li>Class/Section: Nine/Science</li>
-                                            <li>Group: Science</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <StudentProfile :student="student"></StudentProfile>
                         <div class="invoice-summary" v-if="transport_bill.payment.status === 'pending'">
                             <div class="row">
                                 <div class="col-md-8">
