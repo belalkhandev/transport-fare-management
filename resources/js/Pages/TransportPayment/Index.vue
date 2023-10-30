@@ -75,20 +75,11 @@ const createBkashPayment = () => {
                                 </div>
                             </div>
                         </div>
-<!--                        <div class="payment-list">
-                            <h3>Billing History</h3>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Trans ID</th>
-                                    <th>Date</th>
-                                    <th>Payment ID</th>
-                                    <th>Amount</th>
-                                    <th>Paid at</th>
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>-->
+                        <div v-else-if="transport_bill.payment.status === 'completed'" class="payment-status text-center">
+                            <img src="@/assets/images/payment-success.png" alt="">
+                            <h2 class="text-success">Payment Already Completed</h2>
+                            <p>This stage has been successfully completed. We acknowledge your progress and thank you for your dedication. If you have any further steps or inquiries, please feel free to reach out.</p>
+                        </div>
                     </div>
                     <div class="payment-box-footer pt-4">
                         <div class="text-center">

@@ -3,6 +3,7 @@ import {Head, Link, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
+import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
 
 const props = defineProps({
     bills: {
@@ -123,7 +124,7 @@ const submitSearchForm = () => {
                             <td>{{ bill.formatted_month_year }}</td>
                             <td>{{ bill.amount }}</td>
                             <td>{{ bill.due_date }}</td>
-                            <td>{{ bill.payment.status }}</td>
+                            <td><PaymentStatusLabel :status="bill.payment.status"/></td>
                             <td>
                                 <Link :href="route('transport-bill.edit', bill.id)" class="btn btn-sm btn-outline-warning">Refund</Link>
                             </td>
