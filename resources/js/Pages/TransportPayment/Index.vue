@@ -2,8 +2,14 @@
 import {useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
-    transport_bill_id: {
-        type: String,
+    transport_bill: {
+        type: Object,
+    },
+    student: {
+        type: Object,
+    },
+    due_amount: {
+        type: Number
     }
 });
 
@@ -22,49 +28,94 @@ const submitForm = () => {
 </script>
 
 <template>
-    <div class="row">
-        <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3">
-            <div class="payment-box">
-                <div class="payment-box-header">
-                    <img src="@/assets/images/bafsk-logo.png" alt="">
-                    <div class="text-right">
-                        <h3 class="text-center">BAFSK BUS Payment</h3>
-                        <h5>Payment ID: {{ transport_bill_id }}</h5>
-                    </div>
-                </div>
-                <div class="payment-box-content">
-                    <h5 class="title">Student Information</h5>
-                    <table class="table table-borderless">
-                        <tr>
-                            <td>Student ID</td>
-                            <th>123456</th>
-                        </tr>
-                        <tr>
-                            <td>Name</td>
-                            <th>Md. Bellal Hossain</th>
-                        </tr>
-                        <tr>
-                            <td>Academic Status</td>
-                            <td>Class 9, Session: 2023-24, Section: B</td>
-                        </tr>
-                    </table>
-                    <div class="payment-info pt-2">
-                        <h5 class="title">Transport Payment</h5>
-                        <div class="d-flex justify-between">
-                            <h4>Month: <span>October - 2023</span></h4>
-                            <h4>Amount: <span>1500 BDT</span></h4>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="payment-box">
+                    <div class="payment-box-header">
+                        <img src="@/assets/images/bafsk-logo.png" alt="">
+                        <div class="text-right">
+                            <h3 class="text-center">BAFSK-Bus Payment</h3>
                         </div>
-                        <h6>Pay with</h6>
-                        <form @submit.prevent="submitForm"  method="POST">
-                            <button type="submit" id="bKashButton" class="button">
-                                <img src="@/assets/images/bkash.svg" alt="">
-                            </button>
-                        </form>
                     </div>
-                </div>
-                <div class="payment-box-footer pt-4">
-                    <div class="text-center">
-                        <p>Developed By <a href="http://ideasolutionbd.com/">Idea solutionsBd</a></p>
+                    <div class="payment-box-content">
+                        <div class="student">
+                            <div class="student-avatar">
+                                <img v-if="student.gender == 'male'" src="@/assets/images/male.png" alt="">
+                                <img v-if="student.gender == 'female'" src="@/assets/images/female.png" alt="">
+                            </div>
+                            <div class="student-container">
+                                <div class="student-container-top d-flex justify-content-between">
+                                    <h4>{{ student.name }}</h4>
+                                    <h4><span>Student ID: </span> {{ student.student_id }}</h4>
+                                </div>
+                                <div class="student-container-bottom">
+                                    <div class="items">
+                                        <ul>
+                                            <li>Academic Year: 2023-24</li>
+                                            <li>Class/Section: Nine/Science</li>
+                                            <li>Group: Science</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-summary">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h4>Payment Invoice: {{ transport_bill.payment.trans_id }}</h4>
+                                    <div class="invoice-summary-items">
+                                        <div class="item">
+                                            <span>Payment For</span>
+                                            <h5>{{ transport_bill.formatted_month_year }}</h5>
+                                        </div>
+                                        <div class="item">
+                                            <span>Amount</span>
+                                            <h5>{{ transport_bill.amount }}</h5>
+                                        </div>
+                                        <div v-if="transport_bill.due_amount" class="item">
+                                            <span>Due Amount</span>
+                                            <h5>{{ transport_bill.due_amount  }}</h5>
+                                        </div>
+                                        <div class="item">
+                                            <span>Due Date</span>
+                                            <h5>{{ transport_bill.due_date }}</h5>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-danger-emphasis mt-4">A penalty of {{ due_amount }} TK will be applicable for payments made after the due date.</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4 class="text-right">Total: {{ transport_bill.payment.amount }}</h4>
+                                    <div class="gateway">
+                                        <span>Pay now</span>
+                                        <form @submit.prevent="submitForm"  method="POST">
+                                            <button type="submit" id="bKashButton" class="button">
+                                                <img src="@/assets/images/bkash.svg" alt="">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<!--                        <div class="payment-list">
+                            <h3>Billing History</h3>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Trans ID</th>
+                                    <th>Date</th>
+                                    <th>Payment ID</th>
+                                    <th>Amount</th>
+                                    <th>Paid at</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>-->
+                    </div>
+                    <div class="payment-box-footer pt-4">
+                        <div class="text-center">
+                            <p>Developed By <a href="http://ideasolutionbd.com/">Idea solutionsBd</a></p>
+                        </div>
                     </div>
                 </div>
             </div>

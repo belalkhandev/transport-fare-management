@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('month')->nullable();
             $table->string('year')->nullable();
             $table->date('due_date')->nullable();
-            $table->decimal('amount', 8, 2)->nullable();
-            $table->decimal('due_amount', 8, 2)->nullable();
+            $table->double('amount', 8, 2)->nullable();
+            $table->double('due_amount', 8, 2)->nullable();
             $table->boolean('is_paid')->default(false);
             $table->timestamps();
         });

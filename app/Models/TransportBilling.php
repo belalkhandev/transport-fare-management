@@ -19,6 +19,7 @@ class TransportBilling extends Model
         'year',
         'due_date',
         'amount',
+        'due_amount',
         'is_paid',
     ];
 

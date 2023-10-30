@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('fee_id')->constrained('fees')->cascadeOnDelete();
             $table->enum('discount_type', DiscountType::values())->nullable();
-            $table->decimal('discount', 8, 2)->nullable();
-            $table->decimal('discounted_amount', 8, 2)->nullable();
+            $table->double('discount', 8, 2)->nullable();
+            $table->double('discounted_amount', 8, 2)->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

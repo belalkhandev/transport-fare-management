@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('gateway_payment_id')->nullable();
             $table->string('gateway_trans_id')->nullable();
             $table->string('currency')->nullable();
-            $table->decimal('amount', 8, 2)->nullable();
+            $table->double('amount', 8, 2)->nullable();
             $table->date('transaction_date')->nullable();
             $table->enum('status', PaymentStatus::values())->default(PaymentStatus::PENDING->value);
             $table->timestamps();

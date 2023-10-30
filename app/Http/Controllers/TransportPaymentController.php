@@ -2,20 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\PaymentRepository;
+use App\Repositories\SettingRepository;
+use App\Repositories\StudentRepository;
+use App\Repositories\TransportBillingRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TransportPaymentController extends Controller
 {
-    public function __construct()
+    public function __construct(
+        protected TransportBillingRepository $transportBillingRepository,
+        protected PaymentRepository $paymentRepository,
+        protected StudentRepository $studentRepository,
+        protected SettingRepository $settingRepository
+    )
     {
     }
 
 
-    public function index($transportBillId)
+    public function index($transId)
     {
+        $transportBill = $this->transportBillingRepository->query()
+            ->select('transport_billings.*')
+            ->with([
+                'student',
+                'payment'
+            ])
+            ->leftJoin('payments', 'payments.transport_billing_id', '=', 'transport_billings.id')
+            ->where('payments.trans_id', $transId)
+            ->firstOrFail();
+
+        $student = $this->studentRepository->query()
+            ->with(['academicPlans' => function ($query) {
+                $query->latest();
+            }])
+            ->findOrFail($transportBill->student_id);
+
+        $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
+
+        $currentDate = now()->format('Y-m-d');
+
+        if ($currentDate < $transportBill) {
+            $transportBill->update([
+                'due_amount' => $dueConfig['fine_after_due_date']
+            ]);
+
+            $transportBill->payment->update([
+                'amount' => $transportBill->amount + $dueConfig['fine_after_due_date']
+            ]);
+        }
+
+
         return Inertia::render('TransportPayment/Index', [
-            'transport_bill_id' => $transportBillId
+            'transport_bill' => $transportBill,
+            'student' => $student,
+            'due_amount' => $dueConfig['fine_after_due_date'] ?? 100
         ]);
     }
 }

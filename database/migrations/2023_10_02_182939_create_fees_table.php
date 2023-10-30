@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->decimal('amount', 8, 2);
+            $table->double('amount', 8, 2);
             $table->timestamps();
         });
     }
