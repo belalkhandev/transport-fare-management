@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\LeaderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SiteSettingsController;
@@ -147,6 +148,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('payments')->group(function() {
         Route::get('/', [TransportBillingController::class, 'paymentList'])->name('payment.index');
+        Route::post('/refund', [RefundController::class, 'refund'])->name('payment.refund');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

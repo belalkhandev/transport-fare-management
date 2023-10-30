@@ -84,11 +84,15 @@ class BkashGateway extends PaymentGateway implements Refundable
     {
         $headers = $this->getBkashHeaders();
 
-        $endpoint = "{$this->url}/payment/status/{$paymentId}";
+        $endpoint = "{$this->url}/payment/status";
 
         $refNumber = Str::random(8);
         $this->logRequest(request(), $refNumber, $headers);
-        $response = Http::withHeaders($headers)->get($endpoint);
+
+        $response = Http::withHeaders($headers)->timeout(30)->post($endpoint, [
+            'paymentID' => $paymentId,
+        ]);
+
         $this->logResponse($endpoint, $refNumber, request(), $response);
 
         return $response;
@@ -97,11 +101,11 @@ class BkashGateway extends PaymentGateway implements Refundable
     public function initiateRefundProcess(Payment $payment, Refund $refund): ?array
     {
         $data = [
-            'amount' => $payment->paid_amount,
+            'amount' => $payment->amount,
             'paymentID' => $payment->gateway_payment_id,
-            'trxID' => $payment->gateway_trx_id,
-            'sku' => $payment->trx_id,
-            'reason' => $refund->note ?? 'Service canceled',
+            'trxID' => $payment->gateway_trans_id,
+            'sku' => $payment->trans_id,
+            'reason' => $refund->note ?? 'Bill canceled',
         ];
 
         $headers = $this->getBkashHeaders();
@@ -127,6 +131,7 @@ class BkashGateway extends PaymentGateway implements Refundable
 
             $response = $this->queryPayment($payment->gateway_payment_id);
             $queryResponseArr = $response->json() ?: [];
+
 
             $contactNo = Arr::get($queryResponseArr, 'customerMsisdn');
             if ($contactNo) {

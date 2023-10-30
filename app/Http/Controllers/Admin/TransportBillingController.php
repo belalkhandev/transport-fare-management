@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\PaymentRepository;
 use App\Repositories\StudentRepository;
@@ -26,7 +27,7 @@ class TransportBillingController extends Controller
             ->select('transport_billings.*')
             ->with([
                 'student',
-                'payment'
+                'payment.refund'
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
@@ -60,6 +61,7 @@ class TransportBillingController extends Controller
             ->with([
                 'transportBill.student'
             ])
+            ->where('status', PaymentStatus::COMPLETED->value)
             ->latest()
             ->paginate();
 
@@ -128,5 +130,10 @@ class TransportBillingController extends Controller
             'months' => $months,
             'years' => $years
         ];
+    }
+
+    public function paymentRefund(Request $request)
+    {
+
     }
 }

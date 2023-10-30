@@ -25,4 +25,9 @@ class Payment extends Model
     {
         return $this->belongsTo(TransportBilling::class, 'transport_billing_id');
     }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'payment_id');
+    }
 }

@@ -61,6 +61,35 @@ const submitSearchForm = () => {
     })
 }
 
+const refundForm = useForm({
+    trans_id: ''
+});
+
+const paymentRefundAction = (trans_id) => {
+    refundForm.trans_id=trans_id
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this refund!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4B87F4',
+        cancelButtonColor: '#DC2626',
+        confirmButtonText: 'Yes, Refund!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            refundForm.post(route('payment.refund'), {
+                onSuccess: () => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Refunded!',
+                        text: "Refunded successfully"
+                    });
+                }
+            })
+        }
+    })
+}
+
 </script>
 
 <template>
@@ -102,7 +131,7 @@ const submitSearchForm = () => {
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Trans No</th>
+                            <th>Trans. No</th>
                             <th>Student</th>
                             <th>Month-Year</th>
                             <th>Amount</th>
@@ -126,7 +155,8 @@ const submitSearchForm = () => {
                             <td>{{ bill.due_date }}</td>
                             <td><PaymentStatusLabel :status="bill.payment.status"/></td>
                             <td>
-                                <Link :href="route('transport-bill.edit', bill.id)" class="btn btn-sm btn-outline-warning">Refund</Link>
+                                <button  v-if="bill.payment.refund && bill.payment.refund.status === 'processing'" class="btn btn-sm btn-outline-secondary">Refund Requested</button>
+                                <button  v-else-if="bill.payment.status === 'completed'" @click="paymentRefundAction(bill.payment.trans_id)" class="btn btn-sm btn-outline-danger">Refund</button>
                             </td>
                             <td>
                                 <div class="action">

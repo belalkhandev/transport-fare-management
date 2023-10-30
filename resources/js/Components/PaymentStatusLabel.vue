@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
     status: {
-        type: Boolean,
+        type: String,
         default: true,
     },
 });

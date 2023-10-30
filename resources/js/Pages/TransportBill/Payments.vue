@@ -3,6 +3,7 @@ import {Head, Link, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
+import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
 
 const props = defineProps({
     payments: {
@@ -13,7 +14,7 @@ const props = defineProps({
 
 const form = useForm({});
 
-const deleteAction = (payemnt_id) => {
+const deleteAction = (payment_id) => {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -24,7 +25,7 @@ const deleteAction = (payemnt_id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('transport-payemnt.delete', payemnt_id), {
+            form.delete(route('transport-payment.delete', payment_id), {
                 onSuccess: () => {
                     Toast.fire({
                         icon: 'success',
@@ -62,19 +63,19 @@ const deleteAction = (payemnt_id) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(payemnt, i) in payments.data">
-                            <td>{{ payemnt.trans_id }}</td>
+                        <tr v-for="(payment, i) in payments.data">
+                            <td>{{ payment.trans_id }}</td>
                             <td>
-                                <Link :href="route('student.show', payemnt.transport_bill.student.id)">{{ payemnt.transport_bill.student.student_id }}</Link>
+                                <Link :href="route('student.show', payment.transport_bill.student.id)">{{ payment.transport_bill.student.student_id }}</Link>
                                 <p class="m-0 p-0">
-                                    {{ payemnt.transport_bill.student.name }}
+                                    {{ payment.transport_bill.student.name }}
                                 </p>
                             </td>
-                            <td>{{ payemnt.amount }}</td>
-                            <td>{{ payemnt.gateway }}</td>
-                            <td>{{ payemnt.gateway_payment_id }}</td>
-                            <td>{{ payemnt.gateway_trans_id }}</td>
-                            <td>{{ payemnt.status }}</td>
+                            <td>{{ payment.amount }}</td>
+                            <td>{{ payment.gateway }}</td>
+                            <td>{{ payment.gateway_payment_id }}</td>
+                            <td>{{ payment.gateway_trans_id }}</td>
+                            <td><PaymentStatusLabel :status="payment.status"/></td>
                         </tr>
                     </tbody>
                 </table>

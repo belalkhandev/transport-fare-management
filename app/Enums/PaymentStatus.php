@@ -11,5 +11,5 @@ enum PaymentStatus: string
     case PENDING = 'pending';
     case COMPLETED = 'completed';
     case CANCELED = 'canceled';
-
+    case REFUNDED = 'refunded';
 }
