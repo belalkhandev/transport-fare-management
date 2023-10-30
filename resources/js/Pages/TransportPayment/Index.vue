@@ -14,17 +14,14 @@ const props = defineProps({
 });
 
 const form = useForm({
-    transport_bill_id: props.transport_bill_id
+    trans_id: props.transport_bill.payment.trans_id,
+    amount: props.transport_bill.payment.amount
 })
-const submitForm = () => {
-    Swal.fire(
-        'Not acceptable',
-        'No payment method is available right now',
-        'warning'
-    )
+const createBkashPayment = () => {
+    form.post(route('create.payment'), {
+        preserveScroll: true,
+    })
 }
-
-
 </script>
 
 <template>
@@ -41,8 +38,8 @@ const submitForm = () => {
                     <div class="payment-box-content">
                         <div class="student">
                             <div class="student-avatar">
-                                <img v-if="student.gender == 'male'" src="@/assets/images/male.png" alt="">
-                                <img v-if="student.gender == 'female'" src="@/assets/images/female.png" alt="">
+                                <img v-if="student.gender === 'male'" src="@/assets/images/male.png" alt="">
+                                <img v-if="student.gender === 'female'" src="@/assets/images/female.png" alt="">
                             </div>
                             <div class="student-container">
                                 <div class="student-container-top d-flex justify-content-between">
@@ -60,7 +57,7 @@ const submitForm = () => {
                                 </div>
                             </div>
                         </div>
-                        <div class="invoice-summary">
+                        <div class="invoice-summary" v-if="transport_bill.payment.status === 'pending'">
                             <div class="row">
                                 <div class="col-md-8">
                                     <h4>Payment Invoice: {{ transport_bill.payment.trans_id }}</h4>
@@ -88,8 +85,8 @@ const submitForm = () => {
                                     <h4 class="text-right">Total: {{ transport_bill.payment.amount }}</h4>
                                     <div class="gateway">
                                         <span>Pay now</span>
-                                        <form @submit.prevent="submitForm"  method="POST">
-                                            <button type="submit" id="bKashButton" class="button">
+                                        <form @submit.prevent="createBkashPayment"  method="POST">
+                                            <button type="submit" id="bKashButton" :disabled="form.processing" class="button">
                                                 <img src="@/assets/images/bkash.svg" alt="">
                                             </button>
                                         </form>

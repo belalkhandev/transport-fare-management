@@ -26,7 +26,6 @@ class TransportPaymentController extends Controller
         $transportBill = $this->transportBillingRepository->query()
             ->select('transport_billings.*')
             ->with([
-                'student',
                 'payment'
             ])
             ->leftJoin('payments', 'payments.transport_billing_id', '=', 'transport_billings.id')
@@ -34,16 +33,18 @@ class TransportPaymentController extends Controller
             ->firstOrFail();
 
         $student = $this->studentRepository->query()
-            ->with(['academicPlans' => function ($query) {
-                $query->latest();
-            }])
+            ->with([
+                'academicPlans' => function($query) {
+                    return $query->with('academicYear', 'academicClass', 'academicGroup', 'academicSection')->latest();
+                }
+            ])
             ->findOrFail($transportBill->student_id);
 
         $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
 
         $currentDate = now()->format('Y-m-d');
 
-        if ($currentDate < $transportBill) {
+        if ($currentDate > $transportBill) {
             $transportBill->update([
                 'due_amount' => $dueConfig['fine_after_due_date']
             ]);

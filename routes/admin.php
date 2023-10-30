@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TransportBillingController;
 use App\Http\Controllers\Admin\TransportFeeController;
-use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\Web\PaymentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;

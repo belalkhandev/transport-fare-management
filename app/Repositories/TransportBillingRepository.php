@@ -114,4 +114,14 @@ class TransportBillingRepository extends Repository
         return app(URLShortener::class)->shorten(route('student.transport-bill.payment', ['studentId' => $studentId, 'transactionBillNo', $transId]), false);
     }
 
+    public function getByTransId($transId)
+    {
+        return $this->query()
+            ->select('transport_billings.*')
+            ->with(['payment'])
+            ->leftJoin('payments', 'payments.transport_billing_id', '=', 'transport_billings.id')
+            ->where('payments.trans_id', $transId)
+            ->firstOrFail();
+    }
+
 }

@@ -17,16 +17,14 @@ use Illuminate\Support\Str;
 class BkashGateway extends PaymentGateway implements Refundable
 {
     protected $url;
-
     protected $appKey;
-
     protected $appSecret;
 
     public function __construct()
     {
-        $this->url = rtrim(config('services.bkash_pgw_v2.api_url'), '/');
-        $this->appKey = config('services.bkash_pgw_v2.app_key');
-        $this->appSecret = config('services.bkash_pgw_v2.app_secret');
+        $this->url = rtrim(config('services.bkash_pgw.api_url'), '/');
+        $this->appKey = config('services.bkash_pgw.app_key');
+        $this->appSecret = config('services.bkash_pgw.app_secret');
     }
 
     public function getServiceCharge(float $amount, $store_amount = 0): float
@@ -179,7 +177,7 @@ class BkashGateway extends PaymentGateway implements Refundable
 
     private function getAccessToken()
     {
-        return Cache::remember('bkash_tokenized_access_token', config('services.bkash_pgw_v2.token_lifetime'), function () {
+        return Cache::remember('bkash_access_token', config('services.bkash_pgw.token_lifetime'), function () {
             $accessToken = null;
 
             $data = [
@@ -189,8 +187,8 @@ class BkashGateway extends PaymentGateway implements Refundable
 
             $headers = [
                 'Accept' => 'application/json',
-                'username' => config('services.bkash_pgw_v2.username'),
-                'password' => config('services.bkash_pgw_v2.password'),
+                'username' => config('services.bkash_pgw.username'),
+                'password' => config('services.bkash_pgw.password'),
             ];
 
             $endpoint = $this->url . '/token/grant';
