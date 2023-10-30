@@ -16,9 +16,10 @@ class StudentRepository extends Repository
         return Student::class;
     }
 
-    public function getByPaginate($limit = 15)
+    public function getByPaginate($searchKey = null, $limit = 15)
     {
         return $this->query()
+            ->select('students.*')
             ->with([
                     'academicPlans' => function ($query) {
                             $query->latest();
@@ -26,6 +27,9 @@ class StudentRepository extends Repository
                     'transportFee.fee.area'
                 ]
             )
+            ->when($searchKey, function ($query) use ($searchKey) {
+                $query->where('student_id', 'LIKE', '%'.$searchKey.'%')->orWhere('contact_no', 'LIKE', '%'.$searchKey.'%')->orWhere('name', 'LIKE', '%'.$searchKey.'%');
+            })
             ->orderBy('is_active')
             ->latest()
             ->paginate($limit);

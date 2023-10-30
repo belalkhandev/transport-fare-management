@@ -5,8 +5,13 @@ import NavLink from "../../Components/NavLink.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 
+
 const props = defineProps({
     students: {
+        type: Object,
+        default: () => ({})
+    },
+    filterData: {
         type: Object,
         default: () => ({})
     }
@@ -34,8 +39,17 @@ const deleteAction = (student_id) => {
                     });
                 }
             })
-
         }
+    })
+}
+
+const filteringForm = useForm({
+    search: props.filterData.search ? props.filterData.search : ''
+});
+
+const submitForm = () => {
+    filteringForm.get(route('student.index'), {
+        preserveScroll: true,
     })
 }
 
@@ -51,6 +65,21 @@ const deleteAction = (student_id) => {
                 <div class="action">
                     <NavLink :href="route('student.create')" class="btn btn-sm btn-outline-primary">Add new</NavLink>
                 </div>
+            </div>
+            <div class="box-filter pt-2">
+                <form @submit.prevent="submitForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" v-model="filteringForm.search" class="form-control" placeholder="Name, student id, contact no">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-outline-primary">Search</button>
+                            <Link :href="route('student.index')" class="ml-2 btn btn-outline-warning">Reset</Link>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="box-body">
                 <table class="table">

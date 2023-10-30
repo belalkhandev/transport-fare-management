@@ -29,12 +29,13 @@ class StudentController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $students = $this->studentRepository->getByPaginate();
+        $students = $this->studentRepository->getByPaginate(searchKey: $request->search ?? null);
 
         return Inertia::render('Student/Index', [
-            'students' => $students
+            'students' => $students,
+            'filterData' => $request->all()
         ]);
     }
 
