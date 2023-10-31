@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SiteSettingsController;
+use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TransportBillingController;
 use App\Http\Controllers\Admin\TransportFeeController;
@@ -149,6 +150,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('payments')->group(function() {
         Route::get('/', [TransportBillingController::class, 'paymentList'])->name('payment.index');
         Route::post('/refund', [RefundController::class, 'refund'])->name('payment.refund');
+    });
+
+    Route::prefix('sms')->group(function() {
+        Route::get('/send', [SmsController::class, 'sendSms'])->name('sms.send-sms');
+        Route::post('/send', [SmsController::class, 'send']);
+        Route::get('/send/group-sms', [SmsController::class, 'groupSms'])->name('sms.group-sms');
+        Route::post('/send/group-sms', [SmsController::class, 'groupSmsSend']);
+        Route::get('/logs', [SmsController::class, 'smsLogs'])->name('sms.logs');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');

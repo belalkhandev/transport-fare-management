@@ -110,22 +110,22 @@ const toggleSidebar = () => {
                 </div>
                 <div class="sidebar-item-body">
                     <ul>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('sms.send-sms')) }">
+                            <NavLink :href="route('sms.send-sms')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 Send SMS
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('sms.group-sms')) }">
+                            <NavLink :href="route('sms.group-sms')">
                                 <i class='bx bx-radio-circle-marked' ></i>
-                                Send Bulk SMS
+                                Send Group SMS
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('sms.logs')) }">
+                            <NavLink :href="route('sms.logs')">
                                 <i class='bx bx-radio-circle-marked' ></i>
-                                SMS history
+                                SMS Logs
                             </NavLink>
                         </li>
                     </ul>

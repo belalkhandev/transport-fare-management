@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
             if ($this->app->environment('production')) {
                 return new BulkSMSBD();
             }
-
-            return new DummySms();
+            return new BulkSMSBD();
+            //return new DummySms();
         });
     }
 
