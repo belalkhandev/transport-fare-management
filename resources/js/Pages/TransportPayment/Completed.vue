@@ -34,7 +34,7 @@ const props = defineProps({
                     </div>
                     <div class="payment-box-footer pt-4">
                         <div class="text-center">
-                            <p>Developed By <a href="http://ideasolutionbd.com/">Idea solutionsBd</a></p>
+                            <p>Developed By <a href="https://ideasolutionbd.com/">Idea Solution</a></p>
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ class TransportBillingRepository extends Repository
 {
     protected SettingRepository $settingRepository;
     protected PaymentRepository $paymentRepository;
+    protected SmsLogRepository $smsLogRepository;
 
     protected SMS $sms;
     /**
@@ -52,14 +53,14 @@ class TransportBillingRepository extends Repository
         $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
         $smsFormat = $this->settingRepository->getValueByName('bill_generate_send_sms_format');
         $dueDuration = $dueConfig['consider_due_in_days'] ?? 7;
-        $dueDate = now()->addDays($dueDuration);
+        $dueDate = now()->addDays($dueDuration)->format('Y-m-d');
         $monthYear = Carbon::createFromDate($request->year, $request->month, 1)->format('F y');
 
         $bulkSms = [];
 
         foreach ($students as $student)
         {
-            $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate->format('Y-m-d'));
+            $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate);
 
             if ($request->send_sms) {
                 $paymentLink = $this->generatePaymentLink($student->student_id, $transportBill->trans_id);
@@ -72,6 +73,8 @@ class TransportBillingRepository extends Repository
                     'to' => $phone,
                     'message' => $smsMessage
                 ];
+
+                $this->smsLogRepository->storeByRequest($student->contact_no, $smsMessage);
             }
         }
 
