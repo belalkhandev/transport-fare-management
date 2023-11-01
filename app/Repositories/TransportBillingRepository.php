@@ -48,6 +48,7 @@ class TransportBillingRepository extends Repository
     {
         $this->settingRepository = app(SettingRepository::class);
         $this->paymentRepository = app(PaymentRepository::class);
+        $this->smsLogRepository = app(SmsLogRepository::class);
         $this->sms = app(SMS::class);
 
         $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);

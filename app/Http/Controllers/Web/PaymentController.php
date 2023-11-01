@@ -8,10 +8,13 @@ use App\Events\PaymentReceived;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Repositories\PaymentRepository;
+use App\Repositories\SettingRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
 use App\Services\Payment\Gateway\BkashGateway;
 use App\Services\Payment\PaymentCalculator;
+use App\Services\SMS\SMS;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,7 +25,8 @@ class PaymentController extends Controller
     public function __construct(
         protected TransportBillingRepository $transportBillingRepository,
         protected PaymentRepository $paymentRepository,
-        protected StudentRepository $studentRepository
+        protected StudentRepository $studentRepository,
+        protected SettingRepository $settingRepository
     )
     {
     }
@@ -97,7 +101,7 @@ class PaymentController extends Controller
         return response($responseArr, $response->status());
     }
 
-    public function callback(Request $request, BkashGateway $paymentGateway)
+    public function callback(Request $request, BkashGateway $paymentGateway, SMS $sms)
     {
         $transportBill = $this->transportBillingRepository->query()
             ->select('transport_billings.*')
@@ -125,6 +129,16 @@ class PaymentController extends Controller
             'status' => PaymentStatus::COMPLETED->value,
             'gateway_trans_id' => $responseArr['trxID'] ?? null,
         ]);
+
+        $student = $transportBill->student;
+        $monthYear = Carbon::createFromDate($transportBill->year, $transportBill->month, 1)->format('F y');
+        $smsFormat = $this->settingRepository->getValueByName('payment_confirmation_sms');
+        $smsMessage = str_replace([':amount', ':month_year', ':student_id'], [$transportBill->payment->amount, $monthYear, $student->student_id], $smsFormat);
+
+        $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
+        $phone = '88' . $phone;
+
+        $sms->send($phone, $smsMessage);
 
         if (isset($responseArr['message'])) {
             sleep(1);
