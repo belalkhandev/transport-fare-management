@@ -30,6 +30,7 @@ const props = defineProps({
                             <th>#</th>
                             <th>Phone</th>
                             <th>Message</th>
+                            <th style="min-width: 120px;">SMS Count</th>
                             <th>Created at</th>
                             <th></th>
                         </tr>
@@ -39,6 +40,7 @@ const props = defineProps({
                             <td>{{ logs.from + i }}</td>
                             <td>{{ sms.phone }}</td>
                             <td>{{ sms.message }}</td>
+                            <td>{{ Math.ceil(sms.message.length/160) }}</td>
                             <td>{{ moment(sms.created_at).format('LLL') }}</td>
                             <td>
                                 <div class="action">

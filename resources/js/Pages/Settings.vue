@@ -122,9 +122,6 @@ const deleteAction = (setting_id) => {
                                     <li>
                                         <button @click="editAction(setting)" class="btn btn-sm btn-rounded btn-outline-warning"><i class="bx bx-edit"></i></button>
                                     </li>
-                                    <li>
-                                        <button @click="deleteAction(setting.id)" class="btn btn-sm btn-rounded btn-outline-danger"><i class="bx bx-trash"></i></button>
-                                    </li>
                                 </ul>
                             </div>
                         </td>
@@ -139,14 +136,14 @@ const deleteAction = (setting_id) => {
 
         <DialogModal :show="displayFormModal"  @close="displayFormModal = false">
             <template #title>
-                {{ form.setting_id ? 'Edit' : 'Add' }} Academic Section
+                {{ form.setting_id ? 'Edit' : 'Add' }} Settings
             </template>
 
             <template #content>
                 <form @submit.prevent="submitForm">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" v-model="form.name">
+                        <input type="text" class="form-control" v-model="form.name" :readonly="form.setting_id !== ''" :disabled="form.setting_id !== ''">
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
                     <div class="form-group">
@@ -159,7 +156,7 @@ const deleteAction = (setting_id) => {
 
             <template #footer>
                 <SecondaryButton @click="displayFormModal = false">Cancel</SecondaryButton>
-                <PrimaryButton @click="submitForm" class="ml-3">{{ form.setting_id ? 'Update' : 'Save' }}</PrimaryButton>
+                <PrimaryButton @click="submitForm" class="ml-3">{{ form.setting_id && form.setting_id !== '' ? 'Update' : 'Save' }}</PrimaryButton>
             </template>
         </DialogModal>
 

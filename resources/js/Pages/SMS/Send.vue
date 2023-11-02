@@ -24,6 +24,11 @@ const submitForm = () => {
     })
 }
 
+const smsCount = () => {
+    const messageLength = form.message.length;
+    return Math.ceil(messageLength / 160);
+};
+
 </script>
 
 <template>
@@ -52,6 +57,7 @@ const submitForm = () => {
                                 <label class="col-form-label  col-md-4 col-lg-3">Message</label>
                                 <div class="col-md-8 col-lg-9">
                                     <textarea v-model="form.message" placeholder="Message" rows="5" class="form-control-textarea form-control"></textarea>
+                                    <small>Character Count: {{ form.message.length }}, SMS Count: {{ smsCount() }}</small>
                                     <InputError class="mt-2" :message="form.errors.message" />
                                 </div>
                             </div>

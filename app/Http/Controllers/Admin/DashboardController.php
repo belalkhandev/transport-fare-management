@@ -33,9 +33,7 @@ class DashboardController extends Controller
             return $query->amount + $query->due_amount;
         });
 
-        $totalCollection = $totalBills->where('is_paid', 1)->sum(function ($query) {
-            return $query->amount + $query->due_amount;
-        });
+        $totalCollection = $this->paymentRepository->query()->where('status', PaymentStatus::COMPLETED->value)->get()->sum('amount');
 
         $totalDue = $totalBillAmount - $totalCollection;
 
