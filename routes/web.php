@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/transport-bills/payments/{transId}', [TransportPaymentController::class, 'index'])->name('transport-bill.user.payment');
-Route::get('/transport-bill/{studentId}/payment/{transId}', [TransportPaymentController::class, 'index'])->name('student.transport-bill.payment');
+Route::get('/transport-bill/{studentId}/payment/{transId}', [TransportPaymentController::class, 'alternative'])->name('student.transport-bill.payment');
 
 //Bkash Payment Gateway
 Route::post('/transport-bills/payment/createBkashPayment', [PaymentController::class, 'create'])->name('create.payment');
