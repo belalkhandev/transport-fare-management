@@ -4,6 +4,7 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
+import moment from "moment";
 
 const props = defineProps({
     payments: {
@@ -59,6 +60,7 @@ const deleteAction = (payment_id) => {
                             <th>Gateway</th>
                             <th>Payment ID</th>
                             <th>Gateway Trans. ID</th>
+                            <th>Paid at</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -75,6 +77,7 @@ const deleteAction = (payment_id) => {
                             <td>{{ payment.gateway }}</td>
                             <td>{{ payment.gateway_payment_id }}</td>
                             <td>{{ payment.gateway_trans_id }}</td>
+                            <td>{{ moment(payment.transaction_date).format('LL') }}</td>
                             <td><PaymentStatusLabel :status="payment.status"/></td>
                         </tr>
                     </tbody>

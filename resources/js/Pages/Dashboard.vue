@@ -2,6 +2,7 @@
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import MonthlyBillCollectionChart from "@/Components/Charts/MonthlyBillCollectionChart.vue";
 import {Link} from "@inertiajs/vue3";
+import moment from "moment";
 
 const props = defineProps({
     total_students: {
@@ -19,6 +20,9 @@ const props = defineProps({
     total_dues: {
         type: Number,
         default: 0
+    },
+    chart_data: {
+        type: Object
     }
 });
 
@@ -48,7 +52,7 @@ const props = defineProps({
                     </div>
                     <div class="card-content">
                         <h2>{{ total_bills }}</h2>
-                        <Link :href="route('student.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
+                        <Link :href="route('transport-bill.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
                     </div>
                 </div>
             </div>
@@ -60,7 +64,7 @@ const props = defineProps({
                     </div>
                     <div class="card-content">
                         <h2>{{ total_collections }}</h2>
-                        <Link :href="route('student.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
+                        <Link :href="route('payment.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
                     </div>
                 </div>
             </div>
@@ -72,7 +76,7 @@ const props = defineProps({
                     </div>
                     <div class="card-content">
                         <h2>{{ total_dues }}</h2>
-                        <Link :href="route('student.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
+                        <Link :href="route('transport-bill.index')">View details <i class='bx bx-right-arrow-alt'></i></Link>
                     </div>
                 </div>
             </div>
@@ -81,10 +85,10 @@ const props = defineProps({
         <div class="box">
             <div class="box-header no-border">
                 Bill Collections
-                <div class="action">October - 2023</div>
+                <div class="action">November 2023</div>
             </div>
             <div class="box-body pb-4">
-                <MonthlyBillCollectionChart/>
+                <MonthlyBillCollectionChart :chart_data="chart_data"/>
             </div>
         </div>
 

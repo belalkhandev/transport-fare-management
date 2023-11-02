@@ -128,6 +128,7 @@ class PaymentController extends Controller
         $transportBill->payment->update([
             'status' => PaymentStatus::COMPLETED->value,
             'gateway_trans_id' => $responseArr['trxID'] ?? null,
+            'transaction_date' => now()->format('Y-m-d')
         ]);
 
         $student = $transportBill->student;

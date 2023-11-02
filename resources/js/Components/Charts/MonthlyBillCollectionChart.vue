@@ -21,15 +21,20 @@
         components: {
             Bar
         },
+        props: {
+            chart_data: {
+                type: Object
+            }
+        },
         data() {
             return {
                 chartData:{
-                    labels: this.generalLabelsForMonth(),
+                    labels: this.chart_data.labels,
                     datasets: [
                         {
                             label: 'Bill',
                             backgroundColor:'#4b87f4',
-                            data: [400, 750, 120, 309, 2100, 440, 39, 810, 540, 200, 102, 740, 1000, 2300, 250, 150, 102, 309, 1400],
+                            data: this.chart_data.data,
                         },
                     ]
                 },
