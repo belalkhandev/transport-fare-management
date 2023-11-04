@@ -62,7 +62,7 @@ class TransportBillingController extends Controller
                 'transportBill.student'
             ])
             ->where('status', PaymentStatus::COMPLETED->value)
-            ->latest()
+            ->orderByDesc('transaction_date')
             ->paginate();
 
         return Inertia::render('TransportBill/Payments', [

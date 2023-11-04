@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Enums\PaymentGateway;
 use App\Models\TransportBilling;
 use App\Services\SMS\SMS;
-use App\Services\UrlSortener\URLShortener;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -64,7 +63,7 @@ class TransportBillingRepository extends Repository
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate);
 
             if ($request->send_sms) {
-                $paymentLink = $this->generatePaymentLink($student->student_id, $transportBill->trans_id);
+                $paymentLink = $this->generatePaymentLink($student->student_id);
                 $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
 
                 $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
@@ -113,9 +112,9 @@ class TransportBillingRepository extends Repository
         return $transportBill;
     }
 
-    private function generatePaymentLink($studentId, $transId)
+    private function generatePaymentLink($studentId):string
     {
-        return app(URLShortener::class)->shorten(route('student.transport-bill.payment', ['studentId' => $studentId, 'transactionBillNo', $transId]), false);
+        return route('transport-payment.student', $studentId);
     }
 
     public function getByTransId($transId)

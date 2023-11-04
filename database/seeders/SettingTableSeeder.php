@@ -19,7 +19,7 @@ class SettingTableSeeder extends Seeder
                 'due_date_after_generate_bill' => 7,
                 'fine_after_due_date' => 100
             ]),
-            'bill_generate_send_sms_format' => 'Dear Guardian, You are requested to pay the Transport bill :amount BDT for the month of :month_year within :due_date via link :payment_link. Thank you,  - BAFSKBUS',
+            'bill_generate_send_sms_format' => 'Dear Guardian, You are request to pay transport bill :amount BDT for  :month_year, The payment deadline is  :due_date. Use payment link :payment_link or you may use the Merchant number: 01912123456, Thank you.  - BAFSKBUS',
             'payment_confirmation_sms' => ":month_year Transport Bill, Student ID: :student_id, Amount :amount BDT has been paid. Thank you. - BAFSK BUS",
         ];
 

@@ -30,7 +30,6 @@ class TransportPaymentController extends Controller
             ])
             ->leftJoin('payments', 'payments.transport_billing_id', '=', 'transport_billings.id')
             ->where('payments.trans_id', $transId)
-            ->orWhere
             ->firstOrFail();
 
         $student = $this->studentRepository->query()
@@ -103,5 +102,10 @@ class TransportPaymentController extends Controller
             'student' => $student,
             'due_amount' => $dueConfig['fine_after_due_date'] ?? 100
         ]);
+    }
+
+    public function studentPayments($studentId)
+    {
+
     }
 }
