@@ -49,6 +49,21 @@ class StudentRepository extends Repository
             ->findOrFail($studentId);
     }
 
+    public function getByStudentId($studentId)
+    {
+        return $this->query()
+            ->with([
+                'transportFee.fee.area',
+                'academicPlans' => function ($query) { $query->latest(); },
+                'academicPlans.academicYear',
+                'academicPlans.academicClass',
+                'academicPlans.academicGroup',
+                'academicPlans.academicSection',
+            ])
+            ->ofStudentId($studentId)
+            ->firstOrFail();
+    }
+
     public function storeByRequest(Request $request)
     {
         return $this->query()->create([

@@ -135,7 +135,17 @@ class StudentController extends Controller
             'contact_no' => ['required']
         ]);
 
+        $student = $this->studentRepository->query()->findOrFail($studentId);
+
         $this->studentRepository->updateByRequest($request, $studentId);
+
+        if ($student && $request->filled('academic_plan_id')) {
+            $student->academicPlans()->attach([$request->get('academic_plan_id')]);
+        }
+
+        if ($student && $request->fee_id) {
+            $this->transportFeeRepository->storeByRequestAndStudentId($request, $student->id);
+        }
 
         return to_route('student.edit', $studentId);
     }

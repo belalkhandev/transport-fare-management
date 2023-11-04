@@ -6,8 +6,6 @@
 <template>
     <header>
         <div class="apps">
-            <div class="app-icon">
-            </div>
             <div class="app-brand">
                 <h2 class="text-white">BAFSK BUS</h2>
             </div>

@@ -127,4 +127,40 @@ class TransportBillingRepository extends Repository
             ->firstOrFail();
     }
 
+    public function getByStudentId($studentId)
+    {
+        $settingsRepo = app(SettingRepository::class);
+        $dueConfig = json_decode($settingsRepo->getValueByName('due_config'), true);
+
+        $bills = $this->query()
+            ->with('payment')
+            ->where('student_id', $studentId)
+            ->latest()
+            ->get();
+
+        $currentDate = now()->format('Y-m-d');
+
+        $bills->map(function ($bill) use ($currentDate, $dueConfig) {
+            if ($currentDate > $bill->due_date) {
+                $bill->update([
+                    'due_amount' => $dueConfig['fine_after_due_date']
+                ]);
+
+                $bill->payment->update([
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                ]);
+            }
+        });
+
+        return $bills;
+    }
+    public function getUnpaidBillByStudentId($studentId)
+    {
+        return $this->query()
+            ->with('payment')
+            ->where('student_id', $studentId)
+            ->where('is_paid', 0)
+            ->first();
+    }
+
 }

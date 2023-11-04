@@ -128,7 +128,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [StudentController::class, 'create'])->name('student.create');
         Route::post('/create', [StudentController::class, 'store']);
         Route::get('/{studentId}/edit', [StudentController::class, 'edit'])->name('student.edit');
-        Route::put('/{studentId}/edit', [StudentController::class, 'update']);
+        Route::post('/{studentId}/edit', [StudentController::class, 'update']);
         Route::delete('/{studentId}', [StudentController::class, 'destroy'])->name('student.delete');
         Route::get('/bulk-import', [StudentController::class, 'bulkImport'])->name('student.import');
         Route::post('/bulk-import', [StudentController::class, 'storeBulkImport']);

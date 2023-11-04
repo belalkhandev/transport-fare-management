@@ -44,7 +44,7 @@ class TransportPaymentController extends Controller
 
         $currentDate = now()->format('Y-m-d');
 
-        if ($currentDate > $transportBill) {
+        if ($currentDate > $transportBill->due_date) {
             $transportBill->update([
                 'due_amount' => $dueConfig['fine_after_due_date']
             ]);
@@ -86,7 +86,7 @@ class TransportPaymentController extends Controller
 
         $currentDate = now()->format('Y-m-d');
 
-        if ($currentDate > $transportBill) {
+        if ($currentDate > $transportBill->due_date) {
             $transportBill->update([
                 'due_amount' => $dueConfig['fine_after_due_date']
             ]);
@@ -106,6 +106,28 @@ class TransportPaymentController extends Controller
 
     public function studentPayments($studentId)
     {
+        $student = $this->studentRepository->getByStudentId($studentId);
+        $transportBills = $this->transportBillingRepository->getByStudentId($student->id);
+        $unpaidBill = $this->transportBillingRepository->getUnpaidBillByStudentId($student->id);
 
+        $totalBillAmount = $transportBills->sum(function ($bill) {
+            return $bill->payment->amount;
+        });
+
+        $totalPaidAmount = $transportBills->where('is_paid', 1)->sum(function ($bill) {
+           return $bill->payment->amount;
+        });
+
+        $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
+
+        return Inertia::render('Payment/Index', [
+            'student' => $student,
+            'transportBills' => $transportBills,
+            'total_bill_amount' => number_format($totalBillAmount, 2),
+            'total_paid_amount' => number_format($totalPaidAmount, 2),
+            'total_due_amount' => number_format(($totalBillAmount - $totalPaidAmount) ?? 0, 2),
+            'unpaid_bill' => $unpaidBill,
+            'penalty_on_due' => $dueConfig['fine_after_due_date'] ?? 100
+        ]);
     }
 }

@@ -35,7 +35,6 @@ class PaymentController extends Controller
     {
         $transportBill = $this->getTransportBillByTransId($request->trans_id);
 
-        $amount = $transportBill->amount + ($transportBill->due_amount ?? 0);
         $transportBillPayment = $transportBill->payment;
 
         if ($transportBillPayment->status == PaymentStatus::COMPLETED) {
@@ -46,7 +45,7 @@ class PaymentController extends Controller
             'mode' => '0011',
             'payerReference' => '01',
             'callbackURL' => config('services.bkash_pgw.callback_url') . '/payment/callback',
-            'amount' => (string) $amount,
+            'amount' => (string)  $transportBillPayment->amount,
             'currency' => 'BDT',
             'intent' => 'sale',
             'merchantInvoiceNumber' => $transportBillPayment->trans_id,
