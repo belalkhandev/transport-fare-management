@@ -145,7 +145,7 @@ const payNow = (bill) => {
                         <p>{{ bill.payment.gateway_trans_id }}</p>
                     </td>
                     <td>
-                        <span v-if="bill.is_paid === 1">bill.payment.gateway</span>
+                        <span v-if="bill.is_paid === 1">{{ bill.payment.gateway.toUpperCase() }}</span>
                         <span v-else>-</span>
                     </td>
                     <td class="text-right">

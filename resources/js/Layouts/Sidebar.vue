@@ -122,6 +122,12 @@ const toggleSidebar = () => {
                                 Send Group SMS
                             </NavLink>
                         </li>
+                        <li :class="{ 'active': $page.url === getActivePath(route('sms.due-alert')) }">
+                            <NavLink :href="route('sms.due-alert')">
+                                <i class='bx bx-radio-circle-marked' ></i>
+                                Send Bulk Due Alert
+                            </NavLink>
+                        </li>
                         <li :class="{ 'active': $page.url === getActivePath(route('sms.logs')) }">
                             <NavLink :href="route('sms.logs')">
                                 <i class='bx bx-radio-circle-marked' ></i>

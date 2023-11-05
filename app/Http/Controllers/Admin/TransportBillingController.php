@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\PaymentRepository;
+use App\Repositories\SettingRepository;
+use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
+use App\Services\SMS\SMS;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,7 +20,8 @@ class TransportBillingController extends Controller
     public function __construct(
         protected TransportBillingRepository $transportBillRepository,
         protected PaymentRepository $paymentRepository,
-        protected StudentRepository $studentRepository
+        protected StudentRepository $studentRepository,
+        protected SettingRepository $settingRepository
     )
     {
     }
@@ -44,6 +49,10 @@ class TransportBillingController extends Controller
             })
             ->latest('transport_billings.created_at')
             ->paginate();
+
+        $bills->map(function($bill) {
+           $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
+        });
 
         $monthYear = $this->preparedMonthYear();
 
@@ -132,8 +141,50 @@ class TransportBillingController extends Controller
         ];
     }
 
-    public function paymentRefund(Request $request)
+    public function paymentReceiveManually($transId)
     {
+        $transportBill = $this->transportBillRepository->getByTransId($transId);
+        $student = $this->studentRepository->getById($transportBill->student_id);
 
+        return Inertia::render('TransportBill/PaymentReceiveManually', [
+            'transport_bill' => $transportBill,
+            'student' => $student
+        ]);
+    }
+
+    public function storeManualPayment(Request $request, $transId, SMS $sms)
+    {
+        $smsLogRepo = app(SmsLogRepository::class);
+
+        $request->validate([
+            'payment_trans_id' => 'required',
+            'gateway' => 'required',
+        ]);
+
+        $transportBill = $this->transportBillRepository->getByTransId($transId);
+
+        $transportBill->payment->update([
+            'gateway_trans_id' => $request->payment_trans_id,
+            'gateway' => $request->gateway,
+            'transaction_date' => $request->transaction_date ? Carbon::parse($request->transaction_date)->format('Y-m-d') : now()->format('Y-m-d'),
+            'status' => PaymentStatus::COMPLETED->value
+        ]);
+
+        $transportBill->update([
+            'is_paid' => 1
+        ]);
+
+        if ($request->send_sms) {
+            $smsFormat = $this->settingRepository->getValueByName('payment_confirmation_sms');
+            $smsMessage = str_replace([':amount', ':month_year', ':student_id'], [$transportBill->payment->amount, $transportBill->formatted_month_year, $transportBill->student->student_id], $smsFormat);
+
+            $phone = mb_substr($transportBill->student->contact_no, mb_strpos($transportBill->student->contact_no, '01'));
+            $phone = '88' . $phone;
+
+            $sms->send($phone, $smsMessage);
+            $smsLogRepo->storeByRequest($phone, $smsMessage);
+        }
+
+        return to_route('payment.index');
     }
 }

@@ -135,7 +135,7 @@ class TransportBillingRepository extends Repository
         $bills = $this->query()
             ->with('payment')
             ->where('student_id', $studentId)
-            ->latest()
+            ->latest('month')
             ->get();
 
         $currentDate = now()->format('Y-m-d');
@@ -161,6 +161,35 @@ class TransportBillingRepository extends Repository
             ->where('student_id', $studentId)
             ->where('is_paid', 0)
             ->first();
+    }
+
+    public function getDueBillsByMonthYear($month, $year)
+    {
+        $settingsRepo = app(SettingRepository::class);
+        $dueConfig = json_decode($settingsRepo->getValueByName('due_config'), true);
+
+        $bills = $this->query()
+            ->with('payment', 'student')
+            ->where('is_paid', 0)
+            ->where('month', $month)
+            ->where('year', $year)
+            ->get();
+
+        $currentDate = now()->format('Y-m-d');
+
+        $bills->map(function ($bill) use ($currentDate, $dueConfig) {
+            if ($currentDate > $bill->due_date) {
+                $bill->update([
+                    'due_amount' => $dueConfig['fine_after_due_date']
+                ]);
+
+                $bill->payment->update([
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                ]);
+            }
+        });
+
+        return $bills;
     }
 
 }

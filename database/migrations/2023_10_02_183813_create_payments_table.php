@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transport_billing_id')->constrained('transport_billings')->cascadeOnDelete();
             $table->string('trans_id')->unique();
-            $table->enum('gateway', PaymentGateway::values())->default(PaymentGateway::BKASH->value);
+            $table->string('gateway')->nullable();
             $table->string('gateway_payment_id')->nullable();
             $table->string('gateway_trans_id')->nullable();
             $table->string('currency')->nullable();

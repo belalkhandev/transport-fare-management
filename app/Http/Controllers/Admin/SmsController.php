@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\SettingRepository;
 use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
+use App\Repositories\TransportBillingRepository;
 use App\Services\SMS\SMS;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +16,9 @@ class SmsController extends Controller
 {
     public function __construct(
         protected SmsLogRepository $smsLogRepository,
-        protected StudentRepository $studentRepository
+        protected StudentRepository $studentRepository,
+        protected SettingRepository $settingRepository,
+        protected TransportBillingRepository $transportBillingRepository,
     )
     {
     }
@@ -77,6 +82,50 @@ class SmsController extends Controller
         $sms->sendBulk(json_encode($bulkSms));
     }
 
+    public function dueAlert()
+    {
+        $monthYear = $this->preparedMonthYear();
+        $smsFormat = $this->settingRepository->getValueByName('due_alert_sms_format');
+
+        return Inertia::render('SMS/SendDueAlert', [
+            'months' => $monthYear['months'],
+            'years' => $monthYear['years'],
+            'sms_format' => $smsFormat
+        ]);
+    }
+
+    public function dueAlertSend(Request $request, SMS $sms)
+    {
+        $request->validate([
+            'month' => ['required'],
+            'year' => ['required'],
+            'sms_format' => ['required']
+        ]);
+
+        $dueBills = $this->transportBillingRepository->getDueBillsByMonthYear($request->month, $request->year);
+
+        $bulkSms = [];
+        foreach ($dueBills as $bill)
+        {
+            $phone = mb_substr($bill->student->contact_no, mb_strpos($bill->student->contact_no, '01'));
+            $phone = '88' . $phone;
+            $monthYear = Carbon::createFromDate($request->year, $request->month, 1)->format('F y');
+            $paymentLink = route('transport-payment.student', $bill->student->student_id);
+            $smsMessage = str_replace([':amount', ':month_year', ':payment_link'], [$bill->payment->amount, $monthYear, $paymentLink], $request->sms_format);
+
+            $bulkSms[] = [
+                'to' => $phone,
+                'message' => $smsMessage
+            ];
+
+            $this->smsLogRepository->storeByRequest($phone, $smsMessage);
+        }
+
+        $sms->sendBulk(json_encode($bulkSms));
+
+        return to_route('sms.due-alert');
+    }
+
     public function smsLogs()
     {
         $logs = $this->smsLogRepository->getLatestByPaginate();
@@ -84,5 +133,42 @@ class SmsController extends Controller
         return Inertia::render('SMS/Logs', [
             'logs' => $logs
         ]);
+    }
+
+    private function preparedMonthYear(): array
+    {
+        $months = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $timestamp = mktime(0, 0, 0, $i, 1);
+            $months[] = [
+                'value' => date('n', $timestamp),
+                'name' => date('F', $timestamp)
+            ];
+        }
+
+        $currentYear =  date('Y');
+        $lastYear = $currentYear - 1;
+        $nextYear = $currentYear + 1;
+
+        $years[] = [
+            'value' => $lastYear,
+            'name' => $lastYear
+        ];
+
+        $years[] = [
+            'value' => $currentYear,
+            'name' => $currentYear
+        ];
+
+        $years[] = [
+            'value' => $nextYear,
+            'name' => $nextYear
+        ];
+
+        return [
+            'months' => $months,
+            'years' => $years
+        ];
     }
 }

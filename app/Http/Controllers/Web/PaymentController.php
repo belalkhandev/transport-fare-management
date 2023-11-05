@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use App\Repositories\SettingRepository;
+use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
 use App\Services\Payment\Gateway\BkashGateway;
@@ -26,7 +27,8 @@ class PaymentController extends Controller
         protected TransportBillingRepository $transportBillingRepository,
         protected PaymentRepository $paymentRepository,
         protected StudentRepository $studentRepository,
-        protected SettingRepository $settingRepository
+        protected SettingRepository $settingRepository,
+        protected SmsLogRepository $smsLogRepository
     )
     {
     }
@@ -110,9 +112,7 @@ class PaymentController extends Controller
 
         $status = $request->input('status');
 
-        if ($status === 'failure') {
-            return redirect()->route('payment.failed', $transportBill->payment->trans_id);
-        } elseif ($status === 'cancel') {
+        if ($status === 'cancel') {
             return redirect()->route('payment.canceled', $transportBill->payment->trans_id);
         }
 
@@ -121,8 +121,18 @@ class PaymentController extends Controller
         $responseArr = json_decode($response, true);
 
         if (isset($responseArr['statusCode']) && $responseArr['statusCode'] !== '0000') {
-            return redirect()->route('payment.failed', $transportBill->payment->trans_id)->withErrors(['bkash_failed_message' => $responseArr['statusMessage'] ?? null]);
+            $student = $this->studentRepository->getByStudentId($transportBill->student->student_id);
+
+            return Inertia::render('Payment/Callback/Failed', [
+                'transport_bill' => $transportBill,
+                'student' => $student,
+                'status_message' => $responseArr['statusMessage'] ?? 'Payment failed'
+            ]);
         }
+
+        $transportBill->update([
+            'is_paid' => 1
+        ]);
 
         $transportBill->payment->update([
             'status' => PaymentStatus::COMPLETED->value,
@@ -137,8 +147,12 @@ class PaymentController extends Controller
 
         $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
         $phone = '88' . $phone;
+        $sendSms = $sms->send($phone, $smsMessage);
 
-        $sms->send($phone, $smsMessage);
+        if ($sendSms) {
+            $this->smsLogRepository->storeByRequest($phone, $smsMessage);
+        }
+
 
         if (isset($responseArr['message'])) {
             sleep(1);
@@ -153,9 +167,9 @@ class PaymentController extends Controller
     public function paymentSuccess($transId)
     {
         $transportBill = $this->getTransportBillByTransId($transId);
-        $student = $this->getStudentById($transportBill->student_id);
+        $student = $this->studentRepository->getByStudentId($transportBill->student->student_id);
 
-        return Inertia::render('TransportPayment/Success', [
+        return Inertia::render('Payment/Callback/Success', [
             'transport_bill' => $transportBill,
             'student' => $student
         ]);
@@ -164,9 +178,9 @@ class PaymentController extends Controller
     public function paymentCompleted($transId)
     {
         $transportBill = $this->getTransportBillByTransId($transId);
-        $student = $this->getStudentById($transportBill->student_id);
+        $student = $this->studentRepository->getByStudentId($transportBill->student->student_id);
 
-        return Inertia::render('TransportPayment/Completed', [
+        return Inertia::render('Payment/Callback/Completed', [
             'transport_bill' => $transportBill,
             'student' => $student
         ]);
@@ -175,9 +189,9 @@ class PaymentController extends Controller
     public function paymentCanceled($transId)
     {
         $transportBill = $this->getTransportBillByTransId($transId);
-        $student = $this->getStudentById($transportBill->student_id);
+        $student = $this->studentRepository->getByStudentId($transportBill->student->student_id);
 
-        return Inertia::render('TransportPayment/Canceled', [
+        return Inertia::render('Payment/Callback/Canceled', [
             'transport_bill' => $transportBill,
             'student' => $student
         ]);
@@ -186,27 +200,16 @@ class PaymentController extends Controller
     public function paymentFailed($transId)
     {
         $transportBill = $this->getTransportBillByTransId($transId);
-        $student = $this->getStudentById($transportBill->student_id);
+        $student = $this->studentRepository->getByStudentId($transportBill->student->student_id);
 
-        return Inertia::render('TransportPayment/Failed', [
+        return Inertia::render('Payment/Callback/Failed', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
     private function getTransportBillByTransId($transId)
     {
         return $this->transportBillingRepository->getByTransId($transId);
-    }
-
-    private function getStudentById($studentId)
-    {
-        return $this->studentRepository->query()
-            ->with([
-                'academicPlans' => function($query) {
-                    return $query->with('academicYear', 'academicClass', 'academicGroup', 'academicSection')->latest();
-                }
-            ])
-            ->findOrFail($studentId);
     }
 }

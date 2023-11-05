@@ -55,7 +55,6 @@ class BulkSMSBD implements SMS
 
         if (isset($responseArr['status']) && $responseArr['status'] === 'SUCCESS') {
             info('[' . __METHOD__ . "] SMS sent to: $phone, Message: {$message}, Response: {$responseStr}");
-
             return true;
         }
 

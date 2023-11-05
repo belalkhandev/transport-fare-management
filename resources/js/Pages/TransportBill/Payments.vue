@@ -35,7 +35,6 @@ const deleteAction = (payment_id) => {
                     });
                 }
             })
-
         }
     })
 }
@@ -58,7 +57,6 @@ const deleteAction = (payment_id) => {
                             <th>Student</th>
                             <th>Amount</th>
                             <th>Gateway</th>
-                            <th>Payment ID</th>
                             <th>Gateway Trans. ID</th>
                             <th>Paid at</th>
                             <th>Status</th>
@@ -75,7 +73,6 @@ const deleteAction = (payment_id) => {
                             </td>
                             <td>{{ payment.amount }}</td>
                             <td>{{ payment.gateway }}</td>
-                            <td>{{ payment.gateway_payment_id }}</td>
                             <td>{{ payment.gateway_trans_id }}</td>
                             <td>{{ moment(payment.transaction_date).format('LL') }}</td>
                             <td><PaymentStatusLabel :status="payment.status"/></td>

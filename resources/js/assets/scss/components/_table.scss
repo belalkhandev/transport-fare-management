@@ -31,10 +31,19 @@
                     .action {
                         ul {
                             display: flex;
-                            justify-content: center;
+                            justify-content: flex-end;
                             align-items: center;
                             column-gap: 5px;
                             flex-wrap: wrap;
+
+                            .btn-hand-money {
+                                img {
+                                    width: 16px;
+                                }
+                                &:hover {
+                                    background-color: $color-gray-light;
+                                }
+                            }
                         }
                     }
 

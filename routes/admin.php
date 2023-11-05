@@ -145,6 +145,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/{transportBillId}/edit', [TransportBillingController::class, 'index'])->name('transport-bill.edit');
         Route::get('/generate', [TransportBillingController::class, 'generateBills'])->name('transport-bill.generate');
         Route::post('/generate', [TransportBillingController::class, 'storeGeneratedBills']);
+        Route::get('/payment-manually/{transId}', [TransportBillingController::class, 'paymentReceiveManually'])->name('transport-bill.payment-manually');
+        Route::post('/payment-manually/{transId}', [TransportBillingController::class, 'storeManualPayment']);
     });
 
     Route::prefix('payments')->group(function() {
@@ -157,6 +159,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/send', [SmsController::class, 'send']);
         Route::get('/send/group-sms', [SmsController::class, 'groupSms'])->name('sms.group-sms');
         Route::post('/send/group-sms', [SmsController::class, 'groupSmsSend']);
+        Route::get('/send/due-alert', [SmsController::class, 'dueAlert'])->name('sms.due-alert');
+        Route::post('/send/due-alert', [SmsController::class, 'dueAlertSend']);
         Route::get('/logs', [SmsController::class, 'smsLogs'])->name('sms.logs');
     });
 

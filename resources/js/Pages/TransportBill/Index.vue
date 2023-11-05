@@ -4,6 +4,8 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
+import RefundStatusLabel from "@/Components/RefundStatusLabel.vue";
+import moment from "moment";
 
 const props = defineProps({
     bills: {
@@ -143,7 +145,12 @@ const paymentRefundAction = (trans_id) => {
                     </thead>
                     <tbody>
                         <tr v-for="(bill, i) in bills.data">
-                            <td>{{ bill.payment.trans_id }}</td>
+                            <td>
+                                {{ moment(bill.created_at).format('DD MMM, Y') }}
+                                <p class="text-black">
+                                    {{ bill.payment.trans_id }}
+                                </p>
+                            </td>
                             <td>
                                 <Link :href="route('student.show', bill.student.id)">{{ bill.student.student_id }}</Link>
                                 <p class="m-0 p-0">
@@ -152,17 +159,25 @@ const paymentRefundAction = (trans_id) => {
                             </td>
                             <td>{{ bill.formatted_month_year }}</td>
                             <td>{{ bill.amount }}</td>
-                            <td>{{ bill.due_date }}</td>
-                            <td><PaymentStatusLabel :status="bill.payment.status"/></td>
+                            <td>{{ moment(bill.due_date).format('DD MMM, Y') }}</td>
                             <td>
-                                <button  v-if="bill.payment.refund && bill.payment.refund.status === 'processing'" class="btn btn-sm btn-outline-secondary">Refund Requested</button>
+                                <PaymentStatusLabel :status="bill.payment.status"/>
+                            </td>
+                            <td>
+                                <!-- TODO: refund status should changed into refunded from processing -->
+                                <button  v-if="bill.payment.refund && bill.payment.refund.status === 'processing'" class="btn btn-sm btn-outline-success">Refunded</button>
                                 <button  v-else-if="bill.payment.status === 'completed'" @click="paymentRefundAction(bill.payment.trans_id)" class="btn btn-sm btn-outline-danger">Refund</button>
                             </td>
                             <td>
                                 <div class="action">
                                     <ul>
                                         <li>
-                                            <Link :href="route('transport-bill.edit', bill.id)" class="btn btn-sm btn-rounded btn-outline-primary"><i class="bx bx-edit"></i></Link>
+                                            <Link v-if="bill.payment.status === 'pending'" :href="route('transport-bill.payment-manually', bill.payment.trans_id)" class="btn btn-sm btn-rounded btn-hand-money btn-outline-warning">
+                                                <img src="@/assets/images/icons/hand-money.svg" alt="">
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link v-if="bill.payment.status === 'pending'"  :href="route('transport-bill.edit', bill.id)" class="btn btn-sm btn-rounded btn-outline-primary"><i class="bx bx-edit"></i></Link>
                                         </li>
                                     </ul>
                                 </div>
