@@ -61,9 +61,9 @@ const payNow = (bill) => {
                             <span>Amount</span>
                             <h5>{{ unpaid_bill.amount }}</h5>
                         </div>
-                        <div v-if="!unpaid_bill.due_amount" class="item">
+                        <div v-if="unpaid_bill.due_amount" class="item">
                             <span>Due Amount</span>
-                            <h5>{{ unpaid_bill.due_amount ?? 150  }}</h5>
+                            <h5>{{ unpaid_bill.due_amount  }}</h5>
                         </div>
                         <div class="item">
                             <span>Due Date</span>
