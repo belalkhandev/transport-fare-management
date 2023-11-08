@@ -28,8 +28,8 @@ const props = defineProps({
 })
 
 const form = useForm({
-    trans_id: props.unpaid_bill.payment.trans_id,
-    amount: props.unpaid_bill.payment.amount
+    trans_id: props.unpaid_bill ? props.unpaid_bill.payment.trans_id : '',
+    amount: props.unpaid_bill ? props.unpaid_bill.payment.amount : ''
 })
 const createBkashPayment = () => {
     form.post(route('create.payment'), {
@@ -63,7 +63,7 @@ const payNow = (bill) => {
                         </div>
                         <div v-if="unpaid_bill.due_amount" class="item">
                             <span>Due Amount</span>
-                            <h5>{{ unpaid_bill.due_amount  }}</h5>
+                            <h5>{{ unpaid_bill.due_amount }}</h5>
                         </div>
                         <div class="item">
                             <span>Due Date</span>

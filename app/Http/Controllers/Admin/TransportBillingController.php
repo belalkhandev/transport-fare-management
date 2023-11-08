@@ -28,6 +28,8 @@ class TransportBillingController extends Controller
 
     public function index(Request $request)
     {
+        // due bill check
+        $this->checkDueBill();
         $bills = $this->transportBillRepository->query()
             ->select('transport_billings.*')
             ->with([
@@ -186,5 +188,32 @@ class TransportBillingController extends Controller
         }
 
         return to_route('payment.index');
+    }
+
+    private function checkDueBill()
+    {
+        $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
+
+        $bills = $this->transportBillRepository->query()
+            ->with('payment')
+            ->whereMonth('month', now())
+            ->whereYear('year', now())
+            ->where('is_paid', 0)
+            ->whereNull('due_date')
+            ->get();
+
+        $currentDate = now()->format('Y-m-d');
+
+        $bills->map(function ($bill) use ($currentDate, $dueConfig) {
+            if ($currentDate > $bill->due_date) {
+                $bill->update([
+                    'due_amount' => $dueConfig['fine_after_due_date']
+                ]);
+
+                $bill->payment->update([
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                ]);
+            }
+        });
     }
 }

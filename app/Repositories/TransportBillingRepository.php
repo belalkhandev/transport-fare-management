@@ -141,7 +141,7 @@ class TransportBillingRepository extends Repository
         $currentDate = now()->format('Y-m-d');
 
         $bills->map(function ($bill) use ($currentDate, $dueConfig) {
-            if ($currentDate > $bill->due_date) {
+            if (!$bill->is_paid && $currentDate > $bill->due_date) {
                 $bill->update([
                     'due_amount' => $dueConfig['fine_after_due_date']
                 ]);
