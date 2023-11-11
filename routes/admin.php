@@ -147,11 +147,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/generate', [TransportBillingController::class, 'storeGeneratedBills']);
         Route::get('/payment-manually/{transId}', [TransportBillingController::class, 'paymentReceiveManually'])->name('transport-bill.payment-manually');
         Route::post('/payment-manually/{transId}', [TransportBillingController::class, 'storeManualPayment']);
+        Route::get('/{transId}/refund', [RefundController::class, 'getRefund'])->name('payment.refund');
+        Route::post('/{transId}/refund', [RefundController::class, 'refund']);
     });
 
     Route::prefix('payments')->group(function() {
         Route::get('/', [TransportBillingController::class, 'paymentList'])->name('payment.index');
-        Route::post('/refund', [RefundController::class, 'refund'])->name('payment.refund');
     });
 
     Route::prefix('sms')->group(function() {

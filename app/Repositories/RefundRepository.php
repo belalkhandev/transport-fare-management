@@ -13,33 +13,14 @@ class RefundRepository extends Repository
         return Refund::class;
     }
 
-    public function createRefundByPayment(Payment $payment)
+    public function createRefundByPayment(Payment $payment, $note = null)
     {
         return $this->query()->create([
             'payment_id' => $payment->id,
             'gateway_payment_id' => $payment->gateway_payment_id,
             'status' => 'processing',
-            'note' => 'Bill canceled'
+            'note' => $note ?? 'Bill canceled'
         ]);
-    }
-
-    public function storeByRequest(Request $request)
-    {
-        return $this->query()->create([
-
-        ]);
-    }
-
-    public function updateByRequest(Request $request, $refundId)
-    {
-        return $this->query()->findOrFail($refundId)?->update([
-
-        ]);
-    }
-
-    public function deleteByRequest($refundId)
-    {
-        return $this->query()->findOrFail($refundId)?->delete();
     }
 
 }

@@ -28,7 +28,6 @@ class TransportBillingController extends Controller
 
     public function index(Request $request)
     {
-        // due bill check
         $this->checkDueBill();
         $bills = $this->transportBillRepository->query()
             ->select('transport_billings.*')
@@ -48,6 +47,13 @@ class TransportBillingController extends Controller
             })
             ->when($year = $request->year, function ($query) use ($year) {
                 $query->where('transport_billings.year', $year);
+            })
+            ->when($paymentStatus = $request->payment_status, function ($query) use ($paymentStatus) {
+                if ($paymentStatus === 'paid') {
+                    $query->where('is_paid', 1);
+                } else {
+                    $query->where('is_paid', 0);
+                }
             })
             ->latest('transport_billings.created_at')
             ->paginate();

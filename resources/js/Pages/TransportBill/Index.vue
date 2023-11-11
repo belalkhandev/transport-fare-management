@@ -55,40 +55,12 @@ const filteringForm = useForm({
     search: props.filterData.search ? props.filterData.search : '',
     month: props.filterData.month ? props.filterData.month : '',
     year: props.filterData.year ? props.filterData.year : '',
+    payment_status: props.filterData.payment_status ? props.filterData.payment_status : '',
 });
 
 const submitSearchForm = () => {
     filteringForm.get(route('transport-bill.index'), {
         preserveScroll: true,
-    })
-}
-
-const refundForm = useForm({
-    trans_id: ''
-});
-
-const paymentRefundAction = (trans_id) => {
-    refundForm.trans_id=trans_id
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this refund!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#4B87F4',
-        cancelButtonColor: '#DC2626',
-        confirmButtonText: 'Yes, Refund!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            refundForm.post(route('payment.refund'), {
-                onSuccess: () => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Refunded!',
-                        text: "Refunded successfully"
-                    });
-                }
-            })
-        }
     })
 }
 
@@ -105,13 +77,18 @@ const paymentRefundAction = (trans_id) => {
             <div class="box-filter pt-2">
                 <form @submit.prevent="submitSearchForm">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <input type="text" v-model="filteringForm.search" class="form-control" placeholder="Contact no, Transaction ID">
+                                <input type="text" v-model="filteringForm.search" class="form-control" placeholder="Search key">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group d-flex">
+                                <select v-model="filteringForm.payment_status" class="mr-2 form-select">
+                                    <option value="">Status</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="unpaid">Unpaid</option>
+                                </select>
                                 <select v-model="filteringForm.month" id="monthYear" class="mr-2 form-select">
                                     <option value="">All Month</option>
                                     <option v-for="month in months" :value=month.value>{{ month.name }}</option>
@@ -123,8 +100,8 @@ const paymentRefundAction = (trans_id) => {
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-primary">Search</button>
-                            <Link :href="route('transport-bill.index')" class="ml-2 btn btn-outline-warning">Reset</Link>
+                            <Link :href="route('transport-bill.index')" class="btn btn-outline-warning">Reset</Link>
+                            <button type="submit" class="ml-2 btn btn-outline-primary">Search</button>
                         </div>
                     </div>
                 </form>
@@ -164,9 +141,8 @@ const paymentRefundAction = (trans_id) => {
                                 <PaymentStatusLabel :status="bill.payment.status"/>
                             </td>
                             <td>
-                                <!-- TODO: refund status should changed into refunded from processing -->
-                                <button  v-if="bill.payment.refund && bill.payment.refund.status === 'processing'" class="btn btn-sm btn-outline-success">Refunded</button>
-                                <button  v-else-if="bill.payment.status === 'completed'" @click="paymentRefundAction(bill.payment.trans_id)" class="btn btn-sm btn-outline-danger">Refund</button>
+                                <button  v-if="bill.payment.refund && bill.payment.refund.status === 'refunded'" class="btn btn-sm btn-outline-success">Refunded</button>
+                                <Link  v-else-if="bill.payment.status === 'completed'" :href="route('payment.refund', bill.payment.trans_id)" class="btn btn-sm btn-outline-danger">Refund</Link>
                             </td>
                             <td>
                                 <div class="action">

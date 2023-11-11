@@ -115,14 +115,14 @@ class BkashGateway extends PaymentGateway implements Refundable
         $refNumber = Str::random(8);
         $this->logRequest(request(), $refNumber, $headers, $data);
         $response = Http::withHeaders($headers)->post($endpoint, $data);
-        $this->logResponse($endpoint, $refNumber, request(), $response);
 
+        $this->logResponse($endpoint, $refNumber, request(), $response);
         $responseArr = $response->json() ?: [];
         $refundTrxId = Arr::get($responseArr, 'refundTrxID');
 
         if ($refundTrxId) {
             $data = [
-                'status' => 'processing',
+                'status' => 'refunded',
                 'amount' => $responseArr['amount'],
                 'charge' => $responseArr['charge'],
                 'trx_id' => $refundTrxId,
