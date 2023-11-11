@@ -227,8 +227,8 @@ const toggleSidebar = () => {
                                 Due Reports
                             </NavLink>
                         </li>
-                        <li :class="{ 'active': $page.url === getActivePath(route('site.settings')) }">
-                            <NavLink :href="route('site.settings')">
+                        <li :class="{ 'active': $page.url === getActivePath(route('reports.sms')) }">
+                            <NavLink :href="route('reports.sms')">
                                 <i class='bx bx-radio-circle-marked' ></i>
                                 SMS Reports
                             </NavLink>

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\RefundController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SiteSettingsController;
@@ -163,6 +164,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/send/due-alert', [SmsController::class, 'dueAlert'])->name('sms.due-alert');
         Route::post('/send/due-alert', [SmsController::class, 'dueAlertSend']);
         Route::get('/logs', [SmsController::class, 'smsLogs'])->name('sms.logs');
+    });
+
+    Route::prefix('reports')->group(function() {
+        Route::get('/sms', [ReportController::class, 'smsReports'])->name('reports.sms');
     });
 
     Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site.settings');
