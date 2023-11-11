@@ -126,8 +126,10 @@ class StudentController extends Controller
 
     public function update(Request $request, $studentId)
     {
+        $student = $this->studentRepository->query()->findOrFail($studentId);
+
         $request->validate([
-            'student_id' => ['required', 'unique:students,student_id,'.$studentId],
+            'student_id' => ['required'],
             'name' => ['required'],
             'gender' => ['required'],
             'father_name' => ['required'],
@@ -135,12 +137,11 @@ class StudentController extends Controller
             'contact_no' => ['required']
         ]);
 
-        $student = $this->studentRepository->query()->findOrFail($studentId);
 
         $this->studentRepository->updateByRequest($request, $studentId);
 
         if ($student && $request->filled('academic_plan_id')) {
-            $student->academicPlans()->attach([$request->get('academic_plan_id')]);
+            $student->academicPlans()->sync([$request->get('academic_plan_id')]);
         }
 
         if ($student && $request->fee_id) {

@@ -66,12 +66,23 @@ class DashboardController extends Controller
             'data' => array_values($data)
         ];
 
+        $latestPayments = $this->paymentRepository->query()
+            ->with([
+                'transportBill.student'
+            ])
+            ->where('status', PaymentStatus::COMPLETED->value)
+            ->orderByDesc('transaction_date')
+            ->latest('updated_at')
+            ->take(10)
+            ->get();
+
         return Inertia::render('Dashboard', [
             'total_students' => $totalStudents,
             'total_bills' => $totalBillAmount ?? 0,
             'total_collections' => $totalCollection ?? 0,
             'total_dues' => $totalDue ?? 0,
-            'chart_data' => $chartData
+            'chart_data' => $chartData,
+            'latest_payments' => $latestPayments
         ]);
     }
 }

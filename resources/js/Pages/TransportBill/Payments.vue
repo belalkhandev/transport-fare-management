@@ -13,32 +13,6 @@ const props = defineProps({
     }
 });
 
-const form = useForm({});
-
-const deleteAction = (payment_id) => {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#0284c7',
-        cancelButtonColor: '#DC2626',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            form.delete(route('transport-payment.delete', payment_id), {
-                onSuccess: () => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Deleted!',
-                        text: "Transport fee has been deleted successfully"
-                    });
-                }
-            })
-        }
-    })
-}
-
 </script>
 
 <template>

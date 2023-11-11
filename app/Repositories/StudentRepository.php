@@ -134,4 +134,16 @@ class StudentRepository extends Repository
             ->get();
     }
 
+    public function getStudentByArea(string $area)
+    {
+        return $this->query()
+            ->select('students.id', 'students.student_id', 'students.contact_no')
+            ->leftJoin('transport_fees', 'transport_fees.student_id', '=', 'students.id')
+            ->leftJoin('fees', 'fees.id', '=', 'transport_fees.fee_id')
+            ->leftJoin('areas', 'areas.id', '=', 'fees.area_id')
+            ->where('areas.name', $area)
+            ->groupBy('students.id')
+            ->get();
+    }
+
 }

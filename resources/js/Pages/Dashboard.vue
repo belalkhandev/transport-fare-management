@@ -3,6 +3,7 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import MonthlyBillCollectionChart from "@/Components/Charts/MonthlyBillCollectionChart.vue";
 import {Link} from "@inertiajs/vue3";
 import moment from "moment";
+import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
 
 const props = defineProps({
     total_students: {
@@ -23,6 +24,12 @@ const props = defineProps({
     },
     chart_data: {
         type: Object
+    },
+    latest_payments: {
+        type: Object
+    },
+    data_month_year: {
+        type: String
     }
 });
 
@@ -85,32 +92,87 @@ const props = defineProps({
         <div class="box">
             <div class="box-header no-border">
                 Bill Collections
-                <div class="action">November 2023</div>
+                <div class="action">
+                    <span v-if="false" class="btn btn-sm py-0 px-1  btn-outline-secondary">
+                        <i class="bx bx-chevron-left"></i>
+                    </span>
+                    <span class="mx-2">{{ data_month_year ?? moment().format('MMMM Y') }}</span>
+                    <span v-if="false" class="btn btn-sm py-0 px-1 btn-outline-secondary">
+                        <i class="bx bx-chevron-right"></i>
+                    </span>
+                </div>
             </div>
             <div class="box-body pb-4">
-                <MonthlyBillCollectionChart :chart_data="chart_data"/>
+                <MonthlyBillCollectionChart :chart_data="chart_data"></MonthlyBillCollectionChart>
+            </div>
+            <div class="box-footer" v-if="false">
+                <div class="cards">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-primary mb-3" style="max-width: 18rem;">
+                                <div class="card-header">Total bills</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ total_bills }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-success mb-3" style="max-width: 18rem;">
+                                <div class="card-header">Collected</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ total_bills }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-danger mb-3" style="max-width: 18rem;">
+                                <div class="card-header">Due</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ total_bills }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="box">
             <div class="box-header">
-                <h5 class="title">Latest 10 transactions</h5>
+                <h5 class="title">Latest completed payments</h5>
                 <div class="box-action">
-                    <Link :href="route('student.index')" class="btn btn-sm btn-primary">View All</Link>
+                    <Link :href="route('payment.index')" class="btn btn-sm btn-primary">View All</Link>
                 </div>
             </div>
             <div class="box-body">
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Transaction No</th>
+                        <th>Trans No/Paid at</th>
                         <th>Student</th>
-                        <th>Month/Year</th>
                         <th>Amount</th>
-                        <th>Status</th>
-                        <th>Paid At</th>
+                        <th>Payment ID</th>
                     </tr>
                     </thead>
+                    <tbody>
+                    <tr v-for="(payment, i) in latest_payments">
+                        <td>
+                            {{ payment.trans_id }}
+                            <p>{{ moment(payment.transaction_date).format('LL') }}</p>
+                        </td>
+                        <td>
+                            <Link :href="route('student.show', payment.transport_bill.student.id)">{{ payment.transport_bill.student.student_id }}</Link>
+                            <p class="m-0 p-0">
+                                {{ payment.transport_bill.student.name }}
+                            </p>
+                        </td>
+                        <td>
+                            {{ payment.amount }}
+                            <p>{{ payment.gateway }}</p>
+                        </td>
+                        <td>{{ payment.gateway_trans_id }}</td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

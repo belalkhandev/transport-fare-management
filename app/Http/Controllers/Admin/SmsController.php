@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\AreaRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
@@ -19,6 +20,7 @@ class SmsController extends Controller
         protected StudentRepository $studentRepository,
         protected SettingRepository $settingRepository,
         protected TransportBillingRepository $transportBillingRepository,
+        protected AreaRepository $areaRepository
     )
     {
     }
@@ -48,7 +50,10 @@ class SmsController extends Controller
 
     public function groupSms()
     {
-        return Inertia::render('SMS/SendGroup');
+        $areas = $this->areaRepository->query()->orderBy('name')->get();
+        return Inertia::render('SMS/SendGroup', [
+            'areas' => $areas
+        ]);
     }
 
     public function groupSmsSend(Request $request, SMS $sms)
@@ -63,6 +68,10 @@ class SmsController extends Controller
 
         if ($request->receiver == 'only_active') {
             $students = $this->studentRepository->query()->select('id', 'student_id', 'contact_no')->active()->get();
+        }
+
+        if ($request->receiver == 'area') {
+            $students = $this->studentRepository->getStudentByArea($request->area);
         }
 
         $bulkSms = [];

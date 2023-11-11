@@ -43,7 +43,7 @@ const formSubmit = () => {
 </script>
 
 <template>
-    <AdminPanelLayout :title="'Generate transport bill'">
+    <AdminPanelLayout :title="'Refund payments'">
         <template #header>Payment Refund</template>
 
         <div class="row">

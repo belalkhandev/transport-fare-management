@@ -88,7 +88,7 @@ const formSubmit = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-4 text-danger p-1">Replace :due_date using a date (e.g: {{ moment().format('L') }}). But don't change :amount, :month_year, :payment_link. Or if you want to send a common sms to all you can change</div>
+                            <div class="mb-4 text-danger p-1">Don't change :amount, :month_year, :payment_link. Or if you want to send a common sms to all you can change</div>
                             <div class="mb-4 text-warning bg-gray-50 p-1 font-sans">Only receive those who has due for the criteria</div>
                             <div class="form-group d-flex justify-end align-items-center">
                                 <button type="submit" class="btn-primary btn" :disabled="form.processing">Submit</button>

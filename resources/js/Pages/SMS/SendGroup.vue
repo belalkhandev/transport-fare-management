@@ -2,12 +2,19 @@
 import {Head, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import NavLink from "../../Components/NavLink.vue";
-import { ref } from 'vue';
 import InputError from "../../Components/InputError.vue";
-import Editor from "@tinymce/tinymce-vue";
+import Multiselect from "@vueform/multiselect";
+import '@vueform/multiselect/themes/default.css'
+
+const props = defineProps({
+    areas: {
+        type: Object
+    }
+});
 
 const form = useForm({
     receiver: 'only_active',
+    area: null,
     message: ''
 });
 
@@ -29,6 +36,9 @@ const smsCount = () => {
     return Math.ceil(messageLength / 160);
 };
 
+const preparedAreas = props.areas.map(area => area.name);
+
+
 </script>
 
 <template>
@@ -49,14 +59,37 @@ const smsCount = () => {
                             <div class="form-group row">
                                 <label class="col-form-label  col-md-4 col-lg-3">Audience</label>
                                 <div class="col-md-8 col-lg-9">
-                                    <label>
-                                        <input type="radio" v-model="form.receiver" value="all">
-                                         All Students
-                                    </label>
-                                    <label class="ml-4">
-                                        <input type="radio" v-model="form.receiver" value="only_active">
-                                        Only Active Students
-                                    </label>
+                                    <ul>
+                                        <li>
+                                            <label>
+                                                <input type="radio" v-model="form.receiver" value="all">
+                                                All Students
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" v-model="form.receiver" value="only_active">
+                                                Only Active Students
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" v-model="form.receiver" value="area">
+                                                Area (Active student)
+                                            </label>
+                                        </li>
+                                    </ul>
+                                    <div class="form-group mt-2" v-if="form.receiver === 'area'">
+                                        <Multiselect
+                                            v-model="form.area"
+                                            :options="preparedAreas"
+                                            :mode="'single'"
+                                            :searchable="true"
+                                            :placeholder="'Select area'"
+                                        >
+
+                                        </Multiselect>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">

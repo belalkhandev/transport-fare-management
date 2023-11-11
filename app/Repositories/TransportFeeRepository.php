@@ -29,12 +29,16 @@ class TransportFeeRepository extends Repository
 
     public function storeByRequestAndStudentId(Request $request, $studentId)
     {
-        return $this->query()->create([
-            'student_id' => $studentId,
-            'fee_id' => $request->get('fee_id'),
-            'discounted_amount' => $request->get('discounted_amount'),
-            'remarks' => $request->get('remarks')
-        ]);
+        return $this->query()->updateOrCreate(
+            [
+                'student_id' => $studentId,
+            ],
+            [
+                'fee_id' => $request->get('fee_id'),
+                'discounted_amount' => $request->get('discounted_amount'),
+                'remarks' => $request->get('remarks')
+            ]
+        );
     }
 
     public function updateByRequest(Request $request, $transportFeeId)
