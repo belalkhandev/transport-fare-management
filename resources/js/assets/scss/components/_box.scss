@@ -26,14 +26,12 @@
         }
 
         .box-action {
+            display: flex;
+            column-gap: 10px;
+
             ul {
                 display: flex;
                 column-gap: 10px;
-                li {
-                    a {
-
-                    }
-                }
             }
 
             .collapse-btn {

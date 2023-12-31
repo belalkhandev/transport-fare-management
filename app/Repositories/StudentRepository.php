@@ -126,10 +126,16 @@ class StudentRepository extends Repository
         return $this->query()->findOrFail($studentId)?->delete();
     }
 
-    public function getActiveStudents()
+    public function getActiveStudents(array $withoutStudentIds = [])
     {
         return $this->query()
-            ->with(['academicPlans' => function($query) { return $query->latest(); }, 'transportFee'])
+            ->with([
+                'academicPlans' => function($query) {
+                    return $query->latest();
+                },
+                'transportFee'
+            ])
+            ->whereNotIn('id', $withoutStudentIds)
             ->active()
             ->get();
     }

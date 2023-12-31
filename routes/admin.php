@@ -125,6 +125,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('students')->group(function () {
         Route::get('/', [StudentController::class, 'index'])->name('student.index');
+        Route::get('/search', [StudentController::class, 'searchStudent'])->name('student.search');
         Route::get('/{studentId}/show', [StudentController::class, 'show'])->name('student.show');
         Route::get('/create', [StudentController::class, 'create'])->name('student.create');
         Route::post('/create', [StudentController::class, 'store']);
@@ -143,6 +144,9 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('transport-bills')->group(function() {
         Route::get('/', [TransportBillingController::class, 'index'])->name('transport-bill.index');
+        Route::get('/create', [TransportBillingController::class, 'create'])->name('transport-bill.create');
+        Route::post('/create', [TransportBillingController::class, 'store']);
+        Route::get('/{transportBillId}/edit', [TransportBillingController::class, 'index']);
         Route::get('/{transportBillId}/edit', [TransportBillingController::class, 'index'])->name('transport-bill.edit');
         Route::get('/generate', [TransportBillingController::class, 'generateBills'])->name('transport-bill.generate');
         Route::post('/generate', [TransportBillingController::class, 'storeGeneratedBills']);
@@ -150,6 +154,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/payment-manually/{transId}', [TransportBillingController::class, 'storeManualPayment']);
         Route::get('/{transId}/refund', [RefundController::class, 'getRefund'])->name('payment.refund');
         Route::post('/{transId}/refund', [RefundController::class, 'refund']);
+        Route::get('/exports', [TransportBillingController::class, 'export'])->name('transport-bill.export');
     });
 
     Route::prefix('payments')->group(function() {

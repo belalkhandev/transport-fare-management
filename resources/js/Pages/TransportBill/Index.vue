@@ -6,6 +6,7 @@ import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
 import RefundStatusLabel from "@/Components/RefundStatusLabel.vue";
 import moment from "moment";
+import NavLink from "@/Components/NavLink.vue";
 
 const props = defineProps({
     bills: {
@@ -18,7 +19,7 @@ const props = defineProps({
     years: {
         type: Object
     },
-    filterData: {
+    filtering_data: {
         type: Object,
         default: () => ({})
     }
@@ -51,15 +52,15 @@ const deleteAction = (bill_id) => {
     })
 }
 
-const filteringForm = useForm({
-    search: props.filterData.search ? props.filterData.search : '',
-    month: props.filterData.month ? props.filterData.month : '',
-    year: props.filterData.year ? props.filterData.year : '',
-    payment_status: props.filterData.payment_status ? props.filterData.payment_status : '',
+const filtering_form = useForm({
+    search: props.filtering_data.search ? props.filtering_data.search : '',
+    month: props.filtering_data.month ? props.filtering_data.month : '',
+    year: props.filtering_data.year ? props.filtering_data.year : '',
+    payment_status: props.filtering_data.payment_status ? props.filtering_data.payment_status : '',
 });
 
 const submitSearchForm = () => {
-    filteringForm.get(route('transport-bill.index'), {
+    filtering_form.get(route('transport-bill.index'), {
         preserveScroll: true,
     })
 }
@@ -73,27 +74,36 @@ const submitSearchForm = () => {
         <div class="box">
             <div class="box-header">
                 <h5 class="title">Transport bills</h5>
+                <div class="box-action">
+                    <NavLink :href="route('transport-bill.create')" class="btn btn-sm btn-outline-primary">Add new</NavLink>
+                    <a :href="route('transport-bill.export', {
+                        search: filtering_form.search,
+                        month: filtering_form.month,
+                        year: filtering_form.year,
+                        payment_status: filtering_form.payment_status
+                    })" class="btn btn-sm btn-outline-danger">Export</a>
+                </div>
             </div>
             <div class="box-filter pt-2">
                 <form @submit.prevent="submitSearchForm">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <input type="text" v-model="filteringForm.search" class="form-control" placeholder="Search key">
+                                <input type="text" v-model="filtering_form.search" class="form-control" placeholder="Search key">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group d-flex">
-                                <select v-model="filteringForm.payment_status" class="mr-2 form-select">
+                                <select v-model="filtering_form.payment_status" class="mr-2 form-select">
                                     <option value="">Status</option>
                                     <option value="paid">Paid</option>
                                     <option value="unpaid">Unpaid</option>
                                 </select>
-                                <select v-model="filteringForm.month" id="monthYear" class="mr-2 form-select">
+                                <select v-model="filtering_form.month" id="monthYear" class="mr-2 form-select">
                                     <option value="">All Month</option>
                                     <option v-for="month in months" :value=month.value>{{ month.name }}</option>
                                 </select>
-                                <select v-model="filteringForm.year" id="monthYear" class="ml-2 form-select">
+                                <select v-model="filtering_form.year" id="monthYear" class="ml-2 form-select">
                                     <option value="">All Year</option>
                                     <option v-for="year in years" :value=year.value>{{ year.name }}</option>
                                 </select>

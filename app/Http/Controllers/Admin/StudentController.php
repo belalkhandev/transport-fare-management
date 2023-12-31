@@ -39,6 +39,17 @@ class StudentController extends Controller
         ]);
     }
 
+    public function searchStudent(Request $request)
+    {
+        $student = $this->studentRepository->query()
+            ->where('student_id', $request->student_id)
+            ->first();
+
+        return response()->json([
+            'student' => $student
+        ]);
+    }
+
     public function show($studentId)
     {
         $student = $this->studentRepository->getById($studentId);

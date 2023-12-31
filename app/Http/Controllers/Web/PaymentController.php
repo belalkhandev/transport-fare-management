@@ -147,12 +147,8 @@ class PaymentController extends Controller
 
         $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
         $phone = '88' . $phone;
-        $sendSms = $sms->send($phone, $smsMessage);
-
-        if ($sendSms) {
-            $this->smsLogRepository->storeByRequest($phone, $smsMessage);
-        }
-
+        $sms->send($phone, $smsMessage);
+        $this->smsLogRepository->storeByRequest($phone, $smsMessage);
 
         if (isset($responseArr['message'])) {
             sleep(1);

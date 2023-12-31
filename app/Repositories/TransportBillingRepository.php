@@ -15,6 +15,8 @@ class TransportBillingRepository extends Repository
     protected PaymentRepository $paymentRepository;
     protected SmsLogRepository $smsLogRepository;
 
+    protected StudentRepository $studentRepository;
+
     protected SMS $sms;
     /**
      * @inheritDoc
@@ -43,7 +45,7 @@ class TransportBillingRepository extends Repository
         return $this->query()->findOrFail($transportBillingId)->delete();
     }
 
-    public function generateMonthlyBill($request, $students)
+    public function generateMonthlyBill($request)
     {
         $this->settingRepository = app(SettingRepository::class);
         $this->paymentRepository = app(PaymentRepository::class);
@@ -58,8 +60,11 @@ class TransportBillingRepository extends Repository
 
         $bulkSms = [];
 
+        $students = $this->getApplicableStudents($request->month, $request->year);
+
         foreach ($students as $student)
         {
+
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate);
 
             if ($request->send_sms) {
@@ -80,6 +85,20 @@ class TransportBillingRepository extends Repository
 
         if($request->send_sms)
             $this->sms->sendBulk(json_encode($bulkSms));
+    }
+
+    private function getApplicableStudents($month, $year)
+    {
+        $this->studentRepository = app(StudentRepository::class);
+
+        $studentsIds = $this->query()
+            ->where('month', $month)
+            ->where('year', $year)
+            ->get()
+            ->pluck('student_id')
+            ->toArray();
+
+        return $this->studentRepository->getActiveStudents($studentsIds);
     }
 
     private function storeTransportBillForStudent($student, $month, $year, $dueDate)

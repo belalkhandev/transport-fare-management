@@ -9,6 +9,7 @@ use App\Repositories\SettingRepository;
 use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
+use App\Services\Exporter\TransportBillsExport;
 use App\Services\SMS\SMS;
 use Carbon\Carbon;
 use Exception;
@@ -37,18 +38,18 @@ class TransportBillingController extends Controller
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
-            ->when($search = $request->search, function ($query) use ($search) {
+            ->when($search = $request->search, function ($query) use ($search, &$limit) {
                 $query->where('students.student_id', 'LIKE', '%'.$search.'%')
                     ->orWhere('students.contact_no', 'LIKE', '%'.$search.'%')
                     ->orWhere('payments.trans_id', 'LIKE', '%'.$search.'%');
             })
-            ->when($month = $request->month, function ($query) use ($month) {
+            ->when($month = $request->month, function ($query) use ($month, &$limit) {
                 $query->where('transport_billings.month', $month);
             })
-            ->when($year = $request->year, function ($query) use ($year) {
+            ->when($year = $request->year, function ($query) use ($year, &$limit) {
                 $query->where('transport_billings.year', $year);
             })
-            ->when($paymentStatus = $request->payment_status, function ($query) use ($paymentStatus) {
+            ->when($paymentStatus = $request->payment_status, function ($query) use ($paymentStatus, &$limit) {
                 if ($paymentStatus === 'paid') {
                     $query->where('is_paid', 1);
                 } else {
@@ -56,7 +57,8 @@ class TransportBillingController extends Controller
                 }
             })
             ->latest('transport_billings.created_at')
-            ->paginate();
+            ->paginate()
+            ->withQueryString();
 
         $bills->map(function($bill) {
            $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
@@ -68,8 +70,19 @@ class TransportBillingController extends Controller
             'bills' => $bills,
             'months' => $monthYear['months'],
             'years' => $monthYear['years'],
-            'filterData' => $request->all()
+            'filtering_data' => $request->all()
         ]);
+    }
+
+    public function create()
+    {
+        $monthYear = $this->preparedMonthYear();
+
+        return Inertia::render('TransportBill/Create', [
+            'months' => $monthYear['months'],
+            'years' => $monthYear['years']
+        ]);
+
     }
 
     public function paymentList()
@@ -105,8 +118,7 @@ class TransportBillingController extends Controller
         ]);
 
         try {
-            $students = $this->studentRepository->getActiveStudents();
-            $this->transportBillRepository->generateMonthlyBill($request, $students);
+            $this->transportBillRepository->generateMonthlyBill($request);
         }catch (Exception $e) {
             return $this->json($e->getMessage(), null, 400);
         }
@@ -221,5 +233,46 @@ class TransportBillingController extends Controller
                 ]);
             }
         });
+    }
+
+    public function export(Request $request, TransportBillsExport $billsExport)
+    {
+        $bills = $this->transportBillRepository->query()
+            ->select('transport_billings.*')
+            ->with([
+                'student',
+                'payment.refund'
+            ])
+            ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
+            ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
+            ->when($search = $request->search, function ($query) use ($search, &$limit) {
+                $query->where('students.student_id', 'LIKE', '%'.$search.'%')
+                    ->orWhere('students.contact_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('payments.trans_id', 'LIKE', '%'.$search.'%');
+            })
+            ->when($month = $request->month, function ($query) use ($month, &$limit) {
+                $query->where('transport_billings.month', $month);
+            })
+            ->when($year = $request->year, function ($query) use ($year, &$limit) {
+                $query->where('transport_billings.year', $year);
+            })
+            ->when($paymentStatus = $request->payment_status, function ($query) use ($paymentStatus, &$limit) {
+                if ($paymentStatus === 'paid') {
+                    $query->where('is_paid', 1);
+                } else {
+                    $query->where('is_paid', 0);
+                }
+            })
+            ->get();
+
+        $totalAmount = $bills->sum(function ($bill) {
+            return $bill->amount + $bill->due_amount;
+        });
+
+        $bills->map(function($bill) {
+            $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
+        });
+
+        return $billsExport->exportPDF($bills, $totalAmount, $request->all());
     }
 }
