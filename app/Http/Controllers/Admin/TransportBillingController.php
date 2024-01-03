@@ -214,10 +214,10 @@ class TransportBillingController extends Controller
 
         $bills = $this->transportBillRepository->query()
             ->with('payment')
-            ->whereMonth('month', now())
-            ->whereYear('year', now())
+            ->where('month', now()->format('m'))
+            ->where('year', now()->year)
             ->where('is_paid', 0)
-            ->whereNull('due_date')
+            ->whereNull('due_amount')
             ->get();
 
         $currentDate = now()->format('Y-m-d');
