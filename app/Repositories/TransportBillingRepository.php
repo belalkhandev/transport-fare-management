@@ -61,11 +61,12 @@ class TransportBillingRepository extends Repository
         $bulkSms = [];
 
         $students = $this->getApplicableStudents($request->month, $request->year);
+        $discount = $this->settingRepository->getValueByName('billing_monthly_discount');
 
         foreach ($students as $student)
         {
 
-            $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate);
+            $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate, $discount);
 
             if ($request->send_sms) {
                 $paymentLink = $this->generatePaymentLink($student->student_id);
@@ -101,8 +102,11 @@ class TransportBillingRepository extends Repository
         return $this->studentRepository->getActiveStudents($studentsIds);
     }
 
-    private function storeTransportBillForStudent($student, $month, $year, $dueDate)
+    private function storeTransportBillForStudent($student, $month, $year, $dueDate, $discount)
     {
+        $originalAmount = $student->transportFee->discounted_amount ?? $student->transportFee->fee->amount;
+        $payableAmount = $this->calculateDiscountedAmount($originalAmount, $discount, $month, $year);
+
         $transportBill = $this->query()->updateOrCreate(
             [
                 'student_id' => $student->id,
@@ -112,7 +116,7 @@ class TransportBillingRepository extends Repository
             [
                 'academic_plan_id' => $student->academicPlans->first()?->id,
                 'due_date' => $dueDate,
-                'amount' => $student->transportFee->discounted_amount ?? $student->transportFee->fee->amount,
+                'amount' => $payableAmount,
                 'is_paid' => 0
             ]
         );
@@ -211,4 +215,29 @@ class TransportBillingRepository extends Repository
         return $bills;
     }
 
+    private function calculateDiscountedAmount($amount, $discount, $month, $year): float
+    {
+        if (!$discount) {
+            return $amount;
+        }
+
+        $discountArr = json_decode($discount, true);
+
+        $discountPercentage = $discountArr['discount_in_percentage'] ?? 0;
+        $discountInAmount = $discountArr['discount_in_amount'] ?? 0;
+        $discountYear = $discountArr['year'] ?? null;
+        $discountMonth = $discountArr['month'] ?? null;
+
+        if (!($discountYear == $year && $discountMonth == $month)) {
+            return $amount;
+        }
+
+        if ($discountInAmount && $discountInAmount != 0) {
+            return round($amount - $discountInAmount);
+        }
+
+        $discountAmount = $amount * ($discountPercentage / 100);
+
+        return max(round($amount - $discountAmount), 0);
+    }
 }
