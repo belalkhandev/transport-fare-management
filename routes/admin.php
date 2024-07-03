@@ -6,41 +6,26 @@ use App\Http\Controllers\Admin\AcademicPlanController;
 use App\Http\Controllers\Admin\AcademicSectionController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\AreaController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ContactController;
-use App\Http\Controllers\Admin\ContactSettingController;
-use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FeeController;
-use App\Http\Controllers\Admin\LeaderController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\PartnerController;
-use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\ReportController;
-use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TransportBillingController;
 use App\Http\Controllers\Admin\TransportFeeController;
-use App\Http\Controllers\Web\PaymentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\TransportPaymentController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('login', function (){
-   return redirect(route('login'));
+Route::get('login', function () {
+    return redirect(route('login'));
 });
 
-Route::get('register', function (){
-   return redirect(route('login'));
+Route::get('register', function () {
+    return redirect(route('login'));
 });
 
 Route::middleware('guest')->group(function () {
@@ -136,13 +121,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/bulk-import', [StudentController::class, 'storeBulkImport']);
     });
 
-    Route::prefix('transport-fees')->group(function() {
+    Route::prefix('transport-fees')->group(function () {
         Route::get('/', [TransportFeeController::class, 'index'])->name('transport-fee.index');
         Route::get('{transportFeeId}/', [TransportFeeController::class, 'edit'])->name('transport-fee.edit');
         Route::put('{transportFeeId}/', [TransportFeeController::class, 'update']);
     });
 
-    Route::prefix('transport-bills')->group(function() {
+    Route::prefix('transport-bills')->group(function () {
         Route::get('/', [TransportBillingController::class, 'index'])->name('transport-bill.index');
         Route::get('/create', [TransportBillingController::class, 'create'])->name('transport-bill.create');
         Route::post('/create', [TransportBillingController::class, 'store']);
@@ -157,11 +142,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/exports', [TransportBillingController::class, 'export'])->name('transport-bill.export');
     });
 
-    Route::prefix('payments')->group(function() {
+    Route::prefix('payments')->group(function () {
         Route::get('/', [TransportBillingController::class, 'paymentList'])->name('payment.index');
     });
 
-    Route::prefix('sms')->group(function() {
+    Route::prefix('sms')->group(function () {
         Route::get('/send', [SmsController::class, 'sendSms'])->name('sms.send-sms');
         Route::post('/send', [SmsController::class, 'send']);
         Route::get('/send/group-sms', [SmsController::class, 'groupSms'])->name('sms.group-sms');
@@ -171,7 +156,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [SmsController::class, 'smsLogs'])->name('sms.logs');
     });
 
-    Route::prefix('reports')->group(function() {
+    Route::prefix('reports')->group(function () {
         Route::get('/sms', [ReportController::class, 'smsReports'])->name('reports.sms');
     });
 

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class StudentRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -21,11 +21,11 @@ class StudentRepository extends Repository
         return $this->query()
             ->select('students.*')
             ->with([
-                    'academicPlans' => function ($query) {
-                            $query->latest();
-                        },
-                    'transportFee.fee.area'
-                ]
+                'academicPlans' => function ($query) {
+                    $query->latest();
+                },
+                'transportFee.fee.area',
+            ]
             )
             ->when($searchKey, function ($query) use ($searchKey) {
                 $query->where('student_id', 'LIKE', '%'.$searchKey.'%')->orWhere('contact_no', 'LIKE', '%'.$searchKey.'%')->orWhere('name', 'LIKE', '%'.$searchKey.'%');
@@ -40,7 +40,9 @@ class StudentRepository extends Repository
         return $this->query()
             ->with([
                 'transportFee',
-                'academicPlans' => function ($query) { $query->latest(); },
+                'academicPlans' => function ($query) {
+                    $query->latest();
+                },
                 'academicPlans.academicYear',
                 'academicPlans.academicClass',
                 'academicPlans.academicGroup',
@@ -54,7 +56,9 @@ class StudentRepository extends Repository
         return $this->query()
             ->with([
                 'transportFee.fee.area',
-                'academicPlans' => function ($query) { $query->latest(); },
+                'academicPlans' => function ($query) {
+                    $query->latest();
+                },
                 'academicPlans.academicYear',
                 'academicPlans.academicClass',
                 'academicPlans.academicGroup',
@@ -79,10 +83,9 @@ class StudentRepository extends Repository
             'blood_group' => $request->get('blood_group'),
             'address_line_1' => $request->get('address_line_1'),
             'address_line_2' => $request->get('address_line_2'),
-            'is_active' => $request->get('is_active')
+            'is_active' => $request->get('is_active'),
         ]);
     }
-
 
     public function updateByRequest(Request $request, $studentId)
     {
@@ -99,7 +102,7 @@ class StudentRepository extends Repository
             'blood_group' => $request->get('blood_group'),
             'address_line_1' => $request->get('address_line_1'),
             'address_line_2' => $request->get('address_line_2'),
-            'is_active' => $request->get('is_active')
+            'is_active' => $request->get('is_active'),
         ]);
     }
 
@@ -130,10 +133,10 @@ class StudentRepository extends Repository
     {
         return $this->query()
             ->with([
-                'academicPlans' => function($query) {
+                'academicPlans' => function ($query) {
                     return $query->latest();
                 },
-                'transportFee'
+                'transportFee',
             ])
             ->whereNotIn('id', $withoutStudentIds)
             ->active()
@@ -151,5 +154,4 @@ class StudentRepository extends Repository
             ->groupBy('students.id')
             ->get();
     }
-
 }

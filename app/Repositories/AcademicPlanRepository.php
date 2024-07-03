@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AcademicPlanRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -34,7 +34,6 @@ class AcademicPlanRepository extends Repository
         ]);
     }
 
-
     public function updateByRequest(Request $request, $academicPlanId)
     {
         return $this->query()->findOrFail($academicPlanId)?->update([
@@ -50,5 +49,4 @@ class AcademicPlanRepository extends Repository
     {
         return $this->query()->findOrFail($academicPlanId)?->delete();
     }
-
 }

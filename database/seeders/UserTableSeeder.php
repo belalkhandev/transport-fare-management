@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserRoles;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,13 +18,13 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@bafskbus.com',
-            'password' => Hash::make('!@#SecRet23')
+            'password' => Hash::make('!@#SecRet23'),
         ]);
 
         User::create([
             'name' => 'Admin',
             'email' => 'admin@bafskbus.com',
-            'password' => Hash::make('!@#SecRet23')
+            'password' => Hash::make('!@#SecRet23'),
         ]);
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Student;
 use App\Models\TransportFee;
 use Illuminate\Http\Request;
 
 class TransportFeeRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -36,7 +35,7 @@ class TransportFeeRepository extends Repository
             [
                 'fee_id' => $request->get('fee_id'),
                 'discounted_amount' => $request->get('discounted_amount'),
-                'remarks' => $request->get('remarks')
+                'remarks' => $request->get('remarks'),
             ]
         );
     }
@@ -46,7 +45,7 @@ class TransportFeeRepository extends Repository
         return $this->query()->findOrFail($transportFeeId)?->update([
             'fee_id' => $request->get('fee_id'),
             'discounted_amount' => $request->get('discounted_amount'),
-            'remarks' => $request->get('remarks')
+            'remarks' => $request->get('remarks'),
         ]);
     }
 }

@@ -11,7 +11,7 @@ class Fee extends Model
 
     protected $fillable = [
         'area_id',
-        'amount'
+        'amount',
     ];
 
     public function area()

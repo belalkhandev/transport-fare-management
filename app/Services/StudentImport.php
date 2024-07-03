@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\AcademicPlanRepository;
 use App\Repositories\AreaRepository;
 use App\Repositories\FeeRepository;
 use App\Repositories\StudentRepository;
@@ -15,7 +14,9 @@ class StudentImport
     protected StudentRepository $studentRepository;
 
     protected AreaRepository $areaRepository;
+
     protected FeeRepository $feeRepository;
+
     protected TransportFeeRepository $transportFeeRepository;
 
     public function importCsv(UploadedFile $file)
@@ -42,7 +43,7 @@ class StudentImport
 
     public function storeStudentInfo($studentInfo)
     {
-        if (!$studentInfo['student_id']) {
+        if (! $studentInfo['student_id']) {
             return null;
         }
 
@@ -51,12 +52,11 @@ class StudentImport
         $this->feeRepository = app(FeeRepository::class);
         $this->transportFeeRepository = app(TransportFeeRepository::class);
 
-
         $student = $this->studentRepository->query()
             ->ofStudentId($studentInfo['student_id'])
             ->first();
 
-        if (!$student) {
+        if (! $student) {
             $student = $this->studentRepository->storeByImportData($studentInfo);
 
             if (isset($studentInfo['academic_plan_id']) && $studentInfo['academic_plan_id']) {
@@ -65,18 +65,18 @@ class StudentImport
 
             if (isset($studentInfo['area'], $studentInfo['fee']) && $studentInfo['area'] && $studentInfo['fee']) {
                 $area = $this->areaRepository->query()->firstOrCreate([
-                    'name' => $studentInfo['area']
+                    'name' => $studentInfo['area'],
                 ]);
 
                 $fee = $this->feeRepository->query()->firstOrCreate([
                     'area_id' => $area->id,
-                    'amount' => $studentInfo['fee']
+                    'amount' => $studentInfo['fee'],
                 ]);
 
                 $this->transportFeeRepository->create([
                     'fee_id' => $fee->id,
                     'student_id' => $student->id,
-                    'discounted_amount' => $studentInfo['discounted_amount'] ?? null
+                    'discounted_amount' => $studentInfo['discounted_amount'] ?? null,
                 ]);
             }
         }
@@ -86,7 +86,7 @@ class StudentImport
 
     private function csvToArray($filename = '', $delimiter = ',')
     {
-        if (!file_exists($filename) || !is_readable($filename)) {
+        if (! file_exists($filename) || ! is_readable($filename)) {
             return false;
         }
 
@@ -94,7 +94,7 @@ class StudentImport
         $data = [];
         if (($handle = fopen($filename, 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
-                if (!$header) {
+                if (! $header) {
                     $header = $row;
                 } else {
                     $data[] = array_combine($header, $row);

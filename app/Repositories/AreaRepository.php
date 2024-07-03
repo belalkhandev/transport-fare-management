@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AreaRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -19,16 +19,15 @@ class AreaRepository extends Repository
     {
         return $this->query()->create([
             'name' => $request->get('name'),
-            'is_active' => $request->is_active ? 1 : 0
+            'is_active' => $request->is_active ? 1 : 0,
         ]);
     }
-
 
     public function updateByRequest(Request $request, $areaId)
     {
         return $this->query()->findOrFail($areaId)?->update([
             'name' => $request->get('name'),
-            'is_active' => $request->is_active ? 1 : 0
+            'is_active' => $request->is_active ? 1 : 0,
         ]);
     }
 
@@ -36,5 +35,4 @@ class AreaRepository extends Repository
     {
         return $this->query()->findOrFail($areaId)?->delete();
     }
-
 }

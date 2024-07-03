@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Actions\StorePayment;
 use App\Enums\PaymentStatus;
-use App\Events\PaymentReceived;
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\SmsLogRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
 use App\Services\Payment\Gateway\BkashGateway;
-use App\Services\Payment\PaymentCalculator;
 use App\Services\SMS\SMS;
 use Carbon\Carbon;
 use Exception;
@@ -29,9 +25,7 @@ class PaymentController extends Controller
         protected StudentRepository $studentRepository,
         protected SettingRepository $settingRepository,
         protected SmsLogRepository $smsLogRepository
-    )
-    {
-    }
+    ) {}
 
     public function create(Request $request, BkashGateway $paymentGateway)
     {
@@ -46,8 +40,8 @@ class PaymentController extends Controller
         $input = [
             'mode' => '0011',
             'payerReference' => '01',
-            'callbackURL' => config('services.bkash_pgw.callback_url') . '/payment/callback',
-            'amount' => (string)  $transportBillPayment->amount,
+            'callbackURL' => config('services.bkash_pgw.callback_url').'/payment/callback',
+            'amount' => (string) $transportBillPayment->amount,
             'currency' => 'BDT',
             'intent' => 'sale',
             'merchantInvoiceNumber' => $transportBillPayment->trans_id,
@@ -126,18 +120,18 @@ class PaymentController extends Controller
             return Inertia::render('Payment/Callback/Failed', [
                 'transport_bill' => $transportBill,
                 'student' => $student,
-                'status_message' => $responseArr['statusMessage'] ?? 'Payment failed'
+                'status_message' => $responseArr['statusMessage'] ?? 'Payment failed',
             ]);
         }
 
         $transportBill->update([
-            'is_paid' => 1
+            'is_paid' => 1,
         ]);
 
         $transportBill->payment->update([
             'status' => PaymentStatus::COMPLETED->value,
             'gateway_trans_id' => $responseArr['trxID'] ?? null,
-            'transaction_date' => now()->format('Y-m-d')
+            'transaction_date' => now()->format('Y-m-d'),
         ]);
 
         $student = $transportBill->student;
@@ -146,7 +140,7 @@ class PaymentController extends Controller
         $smsMessage = str_replace([':amount', ':month_year', ':student_id'], [$transportBill->payment->amount, $monthYear, $student->student_id], $smsFormat);
 
         $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
-        $phone = '88' . $phone;
+        $phone = '88'.$phone;
         $sms->send($phone, $smsMessage);
         $this->smsLogRepository->storeByRequest($phone, $smsMessage);
 
@@ -154,10 +148,10 @@ class PaymentController extends Controller
             sleep(1);
             $paymentGateway->queryPayment($paymentID);
 
-            return redirect()->route('payment.success',  $transportBill->payment->trans_id);
+            return redirect()->route('payment.success', $transportBill->payment->trans_id);
         }
 
-        return redirect()->route('payment.success',  $transportBill->payment->trans_id);
+        return redirect()->route('payment.success', $transportBill->payment->trans_id);
     }
 
     public function paymentSuccess($transId)
@@ -167,7 +161,7 @@ class PaymentController extends Controller
 
         return Inertia::render('Payment/Callback/Success', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -178,7 +172,7 @@ class PaymentController extends Controller
 
         return Inertia::render('Payment/Callback/Completed', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -189,7 +183,7 @@ class PaymentController extends Controller
 
         return Inertia::render('Payment/Callback/Canceled', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 

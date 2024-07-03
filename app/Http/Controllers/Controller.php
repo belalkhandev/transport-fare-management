@@ -10,14 +10,15 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    protected function json(string $message = null, $data = null, $status = 200, array $headers = [], $options = 0)
+
+    protected function json(?string $message = null, $data = null, $status = 200, array $headers = [], $options = 0)
     {
         $content = [];
         if ($message) {
             $content['message'] = $message;
         }
 
-        if (!is_null($data)) {
+        if (! is_null($data)) {
             $content['data'] = $data;
         }
 

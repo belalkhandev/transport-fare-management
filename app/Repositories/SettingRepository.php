@@ -16,17 +16,16 @@ class SettingRepository extends Repository
     {
         return $this->query()->create([
             'name' => $request->name,
-            'value' => $request->value
+            'value' => $request->value,
         ]);
     }
-
 
     public function updateByRequest(Request $request, $settingId)
     {
         return $this->query()->findOrFail($settingId)->update([
-                'name' => $request->name,
-                'value' => $request->value
-            ]);
+            'name' => $request->name,
+            'value' => $request->value,
+        ]);
     }
 
     public function deleteByRequest($settingId)
@@ -42,5 +41,4 @@ class SettingRepository extends Repository
             ->first()
             ?->value;
     }
-
 }

@@ -28,17 +28,18 @@ class MakeRepositoryCommand extends Command
     public function handle()
     {
         $name = $this->argument('name');
-        if (!str_contains($name, 'Repository')) {
+        if (! str_contains($name, 'Repository')) {
             $repositoryName = "{$name}Repository";
         } else {
             $repositoryName = $name;
         }
 
         $modelName = str_replace('Repository', '', $repositoryName);
-        $modelId = lcfirst($modelName) . 'Id';
+        $modelId = lcfirst($modelName).'Id';
 
-        if (!class_exists("App\\Models\\{$modelName}")) {
+        if (! class_exists("App\\Models\\{$modelName}")) {
             $this->error("Model {$modelName} does not exist.");
+
             return;
         }
 
@@ -46,6 +47,7 @@ class MakeRepositoryCommand extends Command
 
         if (file_exists($repositoryPath)) {
             $this->error("Repository {$repositoryName} already exists.");
+
             return;
         }
 
@@ -55,12 +57,12 @@ class MakeRepositoryCommand extends Command
             [
                 '{{Model}}',
                 '{{RepositoryName}}',
-                '{{ModelId}}'
+                '{{ModelId}}',
             ],
             [
                 $modelName,
                 $repositoryName,
-                $modelId
+                $modelId,
             ],
             $stub
         );

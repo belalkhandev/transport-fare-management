@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ],
 
-        'admin'  => [
+        'admin' => [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 

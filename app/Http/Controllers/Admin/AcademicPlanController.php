@@ -20,16 +20,14 @@ class AcademicPlanController extends Controller
         protected AcademicGroupRepository $academicGroupRepository,
         protected AcademicSectionRepository $academicSectionRepository,
         protected AcademicPlanRepository $academicPlanRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $academicPlans = $this->academicPlanRepository->getByPaginate();
 
         return Inertia::render('AcademicPlan/Index', [
-            'academic_plans' => $academicPlans
+            'academic_plans' => $academicPlans,
         ]);
     }
 
@@ -75,7 +73,7 @@ class AcademicPlanController extends Controller
             'academic_groups' => $academicGroups,
             'academic_sections' => $academicSections,
             'versions' => AcademicVersion::values(),
-            'academic_plan' => $academicPlan
+            'academic_plan' => $academicPlan,
         ]);
     }
 

@@ -14,7 +14,7 @@ class AcademicPlan extends Model
         'academic_class_id',
         'academic_group_id',
         'academic_section_id',
-        'academic_version'
+        'academic_version',
     ];
 
     protected $appends = ['name'];
@@ -23,14 +23,17 @@ class AcademicPlan extends Model
     {
         return $this->belongsTo(AcademicYear::class);
     }
+
     public function academicClass()
     {
         return $this->belongsTo(AcademicClass::class);
     }
+
     public function academicGroup()
     {
         return $this->belongsTo(AcademicGroup::class);
     }
+
     public function academicSection()
     {
         return $this->belongsTo(AcademicSection::class);
@@ -47,7 +50,7 @@ class AcademicPlan extends Model
         ];
 
         $nameParts = array_filter($attributes);
+
         return implode(' / ', $nameParts);
     }
-
 }

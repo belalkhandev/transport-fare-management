@@ -19,9 +19,7 @@ class RefundController extends Controller
         protected RefundRepository $refundRepository,
         protected TransportBillingRepository $transportBillRepository,
         protected StudentRepository $studentRepository
-    )
-    {
-    }
+    ) {}
 
     public function getRefund($transId)
     {
@@ -34,7 +32,7 @@ class RefundController extends Controller
 
         return Inertia::render('TransportBill/RefundPayment', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -45,7 +43,7 @@ class RefundController extends Controller
             ->firstOrFail();
 
         if ($payment->status !== PaymentStatus::COMPLETED->value) {
-            abort(406, "Not acceptable");
+            abort(406, 'Not acceptable');
         }
 
         $refund = $this->refundRepository->createRefundByPayment($payment, $request->note);
@@ -57,11 +55,11 @@ class RefundController extends Controller
             'amount' => $response['amount'],
             'charge' => $response['charge'],
             'process_initiated_at' => $response['process_initiated_at'],
-            'status' => $response['status']
+            'status' => $response['status'],
         ]);
 
         $payment->update([
-            'status' => PaymentStatus::REFUNDED->value
+            'status' => PaymentStatus::REFUNDED->value,
         ]);
 
         return to_route('transport-bill.index');

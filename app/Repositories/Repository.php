@@ -12,7 +12,7 @@ abstract class Repository
      *
      * @return Model|Builder
      */
-    abstract public  function model();
+    abstract public function model();
 
     /**
      * @return Builder
@@ -50,7 +50,6 @@ abstract class Repository
     }
 
     /**
-     * @param $primaryKey
      * @return Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null|mixed
      */
     public function find($primaryKey)
@@ -59,7 +58,6 @@ abstract class Repository
     }
 
     /**
-     * @param $primaryKey
      * @return Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null|mixed
      */
     public function findOrFail($primaryKey)
@@ -73,7 +71,6 @@ abstract class Repository
     }
 
     /**
-     * @param array $data
      * @return Builder|Model|mixed
      */
     public function create(array $data)
@@ -82,13 +79,10 @@ abstract class Repository
     }
 
     /**
-     * @param Model $model
-     * @param array $data
      * @return bool
      */
     public function update(Model $model, array $data)
     {
         return $model->update($data);
     }
-
 }

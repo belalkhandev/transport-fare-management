@@ -21,9 +21,7 @@ class SmsController extends Controller
         protected SettingRepository $settingRepository,
         protected TransportBillingRepository $transportBillingRepository,
         protected AreaRepository $areaRepository
-    )
-    {
-    }
+    ) {}
 
     public function sendSms()
     {
@@ -33,12 +31,12 @@ class SmsController extends Controller
     public function send(Request $request, SMS $sms)
     {
         $request->validate([
-            'phone'  => ['required','regex:/(01)[0-9]{9}/'],
-            'message' => ['required']
+            'phone' => ['required', 'regex:/(01)[0-9]{9}/'],
+            'message' => ['required'],
         ]);
 
         $phone = mb_substr($request->phone, mb_strpos($request->phone, '01'));
-        $phone = '88' . $phone;
+        $phone = '88'.$phone;
         $message = $request->message;
 
         $sms->send($phone, $message);
@@ -51,15 +49,16 @@ class SmsController extends Controller
     public function groupSms()
     {
         $areas = $this->areaRepository->query()->orderBy('name')->get();
+
         return Inertia::render('SMS/SendGroup', [
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
 
     public function groupSmsSend(Request $request, SMS $sms)
     {
         $request->validate([
-            'message' => ['required']
+            'message' => ['required'],
         ]);
 
         if ($request->receiver == 'all') {
@@ -75,14 +74,13 @@ class SmsController extends Controller
         }
 
         $bulkSms = [];
-        foreach ($students as $student)
-        {
+        foreach ($students as $student) {
             $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
-            $phone = '88' . $phone;
+            $phone = '88'.$phone;
 
             $bulkSms[] = [
                 'to' => $phone,
-                'message' => $request->message
+                'message' => $request->message,
             ];
 
             $this->smsLogRepository->storeByRequest($phone, $request->message);
@@ -99,7 +97,7 @@ class SmsController extends Controller
         return Inertia::render('SMS/SendDueAlert', [
             'months' => $monthYear['months'],
             'years' => $monthYear['years'],
-            'sms_format' => $smsFormat
+            'sms_format' => $smsFormat,
         ]);
     }
 
@@ -108,23 +106,22 @@ class SmsController extends Controller
         $request->validate([
             'month' => ['required'],
             'year' => ['required'],
-            'sms_format' => ['required']
+            'sms_format' => ['required'],
         ]);
 
         $dueBills = $this->transportBillingRepository->getDueBillsByMonthYear($request->month, $request->year);
 
         $bulkSms = [];
-        foreach ($dueBills as $bill)
-        {
+        foreach ($dueBills as $bill) {
             $phone = mb_substr($bill->student->contact_no, mb_strpos($bill->student->contact_no, '01'));
-            $phone = '88' . $phone;
+            $phone = '88'.$phone;
             $monthYear = Carbon::createFromDate($request->year, $request->month, 1)->format('F y');
             $paymentLink = route('transport-payment.student', $bill->student->student_id);
             $smsMessage = str_replace([':amount', ':month_year', ':payment_link'], [$bill->payment->amount, $monthYear, $paymentLink], $request->sms_format);
 
             $bulkSms[] = [
                 'to' => $phone,
-                'message' => $smsMessage
+                'message' => $smsMessage,
             ];
 
             $this->smsLogRepository->storeByRequest($phone, $smsMessage);
@@ -140,7 +137,7 @@ class SmsController extends Controller
         $logs = $this->smsLogRepository->getLatestByPaginate();
 
         return Inertia::render('SMS/Logs', [
-            'logs' => $logs
+            'logs' => $logs,
         ]);
     }
 
@@ -152,32 +149,32 @@ class SmsController extends Controller
             $timestamp = mktime(0, 0, 0, $i, 1);
             $months[] = [
                 'value' => date('n', $timestamp),
-                'name' => date('F', $timestamp)
+                'name' => date('F', $timestamp),
             ];
         }
 
-        $currentYear =  date('Y');
+        $currentYear = date('Y');
         $lastYear = $currentYear - 1;
         $nextYear = $currentYear + 1;
 
         $years[] = [
             'value' => $lastYear,
-            'name' => $lastYear
+            'name' => $lastYear,
         ];
 
         $years[] = [
             'value' => $currentYear,
-            'name' => $currentYear
+            'name' => $currentYear,
         ];
 
         $years[] = [
             'value' => $nextYear,
-            'name' => $nextYear
+            'name' => $nextYear,
         ];
 
         return [
             'months' => $months,
-            'years' => $years
+            'years' => $years,
         ];
     }
 }

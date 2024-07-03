@@ -1,13 +1,13 @@
 <?php
 
-    return [
-        'roles' => [
-            'system',
-            'root',
-            'admin',
-        ],
+return [
+    'roles' => [
+        'system',
+        'root',
+        'admin',
+    ],
 
-        'permissions' => [
+    'permissions' => [
 
-        ]
-    ];
+    ],
+];

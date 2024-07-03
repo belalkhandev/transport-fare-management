@@ -11,23 +11,21 @@ class AreaController extends Controller
 {
     public function __construct(
         protected AreaRepository $areaRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $areas = $this->areaRepository->getByPaginate();
 
         return Inertia::render('AreaList', [
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'unique:areas,name']
+            'name' => ['required', 'unique:areas,name'],
         ]);
 
         $this->areaRepository->storeByRequest($request);
@@ -38,7 +36,7 @@ class AreaController extends Controller
     public function update(Request $request, $areaId)
     {
         $request->validate([
-            'name' => ['required', 'unique:areas,name,'.$areaId]
+            'name' => ['required', 'unique:areas,name,'.$areaId],
         ]);
 
         $this->areaRepository->updateByRequest($request, $areaId);

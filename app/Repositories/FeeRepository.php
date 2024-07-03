@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class FeeRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -27,8 +27,8 @@ class FeeRepository extends Repository
     {
         return $this->query()->updateOrCreate([
             'area_id' => $request->get('area_id'),
-        ],[
-            'amount' => $request->get('amount')
+        ], [
+            'amount' => $request->get('amount'),
         ]);
     }
 
@@ -36,5 +36,4 @@ class FeeRepository extends Repository
     {
         return $this->query()->findOrFail($feeId)?->delete();
     }
-
 }

@@ -13,7 +13,7 @@ class TransportFee extends Model
         'student_id',
         'fee_id',
         'discounted_amount',
-        'remarks'
+        'remarks',
     ];
 
     public function student()

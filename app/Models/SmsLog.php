@@ -12,6 +12,6 @@ class SmsLog extends Model
     protected $fillable = [
         'phone',
         'message',
-        'status'
+        'status',
     ];
 }

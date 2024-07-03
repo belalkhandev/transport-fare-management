@@ -17,7 +17,9 @@ use Illuminate\Support\Str;
 class BkashGateway extends PaymentGateway implements Refundable
 {
     protected $url;
+
     protected $appKey;
+
     protected $appSecret;
 
     public function __construct()
@@ -132,7 +134,6 @@ class BkashGateway extends PaymentGateway implements Refundable
             $response = $this->queryPayment($payment->gateway_payment_id);
             $queryResponseArr = $response->json() ?: [];
 
-
             $contactNo = Arr::get($queryResponseArr, 'customerMsisdn');
             if ($contactNo) {
                 $data['refunded_to'] = $contactNo;
@@ -196,7 +197,7 @@ class BkashGateway extends PaymentGateway implements Refundable
                 'password' => config('services.bkash_pgw.password'),
             ];
 
-            $endpoint = $this->url . '/token/grant';
+            $endpoint = $this->url.'/token/grant';
 
             $http = Http::withHeaders($headers);
 
@@ -212,9 +213,9 @@ class BkashGateway extends PaymentGateway implements Refundable
                     $accessToken = $responseArr['id_token'] ?? null;
 
                 } catch (Exception $exception) {
-                    Log::error($exception->getMessage() . $exception->getFile() . ':' . $exception->getLine());
+                    Log::error($exception->getMessage().$exception->getFile().':'.$exception->getLine());
                 }
-            } while (!$accessToken && $attempts++ < 2);
+            } while (! $accessToken && $attempts++ < 2);
 
             return $accessToken;
         });

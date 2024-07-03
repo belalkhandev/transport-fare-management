@@ -13,16 +13,14 @@ class SiteSettingsController extends Controller
     public function __construct(
         protected SiteSettingRepository $settingRepository,
         protected MediaRepository $mediaRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $settings = $this->settingRepository->getSettings();
 
         return Inertia::render('SiteSettings', [
-            'settings' => $settings
+            'settings' => $settings,
         ]);
     }
 

@@ -12,7 +12,7 @@ class AcademicClass extends Model
     protected $fillable = [
         'name',
         'numeric_name',
-        'is_active'
+        'is_active',
     ];
 
     public function scopeActive($query)

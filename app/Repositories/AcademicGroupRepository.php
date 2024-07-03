@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AcademicGroupRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -19,16 +19,15 @@ class AcademicGroupRepository extends Repository
     {
         return $this->query()->create([
             'name' => $request->name,
-            'is_active' => $request->is_active ? 1 : 0
+            'is_active' => $request->is_active ? 1 : 0,
         ]);
     }
-
 
     public function updateByRequest(Request $request, $academicGroupId)
     {
         return $this->query()->findOrFail($academicGroupId)->update([
             'name' => $request->name,
-            'is_active' => $request->is_active ? 1 : 0
+            'is_active' => $request->is_active ? 1 : 0,
         ]);
     }
 
@@ -36,5 +35,4 @@ class AcademicGroupRepository extends Repository
     {
         return $this->query()->findOrFail($academicGroupId)->delete();
     }
-
 }

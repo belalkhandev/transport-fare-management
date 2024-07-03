@@ -11,7 +11,7 @@ class TransportBillsExport
         $pdf = Pdf::loadView('exports.transport-bills', [
             'bills' => $bills,
             'totalAmount' => $totalAmount ?? 0,
-            'requestData' => $requestData
+            'requestData' => $requestData,
         ])->setPaper('a4');
 
         return $pdf->download('transport-bill-reports-'.now('Asia/Dhaka')->format('Y-m-d-h-i-s').'.pdf');

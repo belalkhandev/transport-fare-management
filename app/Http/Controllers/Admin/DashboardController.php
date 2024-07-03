@@ -8,19 +8,15 @@ use App\Repositories\PaymentRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-
     public function __construct(
         protected StudentRepository $studentRepository,
         protected TransportBillingRepository $transportBillingRepository,
         protected PaymentRepository $paymentRepository
-    )
-    {}
-
+    ) {}
 
     public function index()
     {
@@ -63,12 +59,12 @@ class DashboardController extends Controller
 
         $chartData = [
             'labels' => $labels,
-            'data' => array_values($data)
+            'data' => array_values($data),
         ];
 
         $latestPayments = $this->paymentRepository->query()
             ->with([
-                'transportBill.student'
+                'transportBill.student',
             ])
             ->where('status', PaymentStatus::COMPLETED->value)
             ->orderByDesc('transaction_date')
@@ -82,7 +78,7 @@ class DashboardController extends Controller
             'total_collections' => $totalCollection ?? 0,
             'total_dues' => $totalDue ?? 0,
             'chart_data' => $chartData,
-            'latest_payments' => $latestPayments
+            'latest_payments' => $latestPayments,
         ]);
     }
 }

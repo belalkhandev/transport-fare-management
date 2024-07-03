@@ -6,7 +6,6 @@ use App\Repositories\PaymentRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportBillingRepository;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TransportPaymentController extends Controller
@@ -16,10 +15,7 @@ class TransportPaymentController extends Controller
         protected PaymentRepository $paymentRepository,
         protected StudentRepository $studentRepository,
         protected SettingRepository $settingRepository
-    )
-    {
-    }
-
+    ) {}
 
     public function index($transId)
     {
@@ -47,7 +43,7 @@ class TransportPaymentController extends Controller
         });
 
         $totalPaidAmount = $transportBills->where('is_paid', 1)->sum(function ($bill) {
-           return $bill->payment->amount;
+            return $bill->payment->amount;
         });
 
         $dueConfig = json_decode($this->settingRepository->getValueByName('due_config'), true);
@@ -59,7 +55,7 @@ class TransportPaymentController extends Controller
             'total_paid_amount' => number_format($totalPaidAmount, 2),
             'total_due_amount' => number_format(($totalBillAmount - $totalPaidAmount) ?? 0, 2),
             'unpaid_bill' => $unpaidBill,
-            'penalty_on_due' => $dueConfig['fine_after_due_date'] ?? 100
+            'penalty_on_due' => $dueConfig['fine_after_due_date'] ?? 100,
         ]);
     }
 }

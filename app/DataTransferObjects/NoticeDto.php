@@ -9,10 +9,7 @@ class NoticeDto
     public function __construct(
         public string $title,
         public string $content
-    )
-    {
-
-    }
+    ) {}
 
     public function fromRequest(Request $request)
     {
@@ -21,5 +18,4 @@ class NoticeDto
             content: $request->validated('content')
         );
     }
-
 }

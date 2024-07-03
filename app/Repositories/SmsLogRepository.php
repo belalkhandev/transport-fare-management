@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\SmsLog;
-use Illuminate\Http\Request;
 
 class SmsLogRepository extends Repository
 {
@@ -21,10 +20,8 @@ class SmsLogRepository extends Repository
         ]);
     }
 
-
     public function deleteByRequest($smsLogId)
     {
         return $this->query()->findOrFail($smsLogId)?->delete();
     }
-
 }

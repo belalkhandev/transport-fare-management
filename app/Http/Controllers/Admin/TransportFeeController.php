@@ -13,17 +13,14 @@ class TransportFeeController extends Controller
     public function __construct(
         protected TransportFeeRepository $transportFeeRepository,
         protected FeeRepository $feeRepository
-    )
-    {
-
-    }
+    ) {}
 
     public function index()
     {
         $transportFees = $this->transportFeeRepository->getByPaginate();
 
         return Inertia::render('TransportFee/Index', [
-            'transport_fees' => $transportFees
+            'transport_fees' => $transportFees,
         ]);
     }
 
@@ -42,14 +39,14 @@ class TransportFeeController extends Controller
 
         return Inertia::render('TransportFee/Edit', [
             'transport_fee' => $transportFee,
-            'fees' => $fees
+            'fees' => $fees,
         ]);
     }
 
     public function update(Request $request, $transportFeeId)
     {
         $request->validate([
-            'fee_id' => 'required'
+            'fee_id' => 'required',
         ]);
 
         $this->transportFeeRepository->updateByRequest($request, $transportFeeId);

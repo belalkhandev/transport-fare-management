@@ -23,9 +23,7 @@ class TransportBillingController extends Controller
         protected PaymentRepository $paymentRepository,
         protected StudentRepository $studentRepository,
         protected SettingRepository $settingRepository
-    )
-    {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -34,7 +32,7 @@ class TransportBillingController extends Controller
             ->select('transport_billings.*')
             ->with([
                 'student',
-                'payment.refund'
+                'payment.refund',
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
@@ -60,8 +58,8 @@ class TransportBillingController extends Controller
             ->paginate()
             ->withQueryString();
 
-        $bills->map(function($bill) {
-           $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
+        $bills->map(function ($bill) {
+            $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
         });
 
         $monthYear = $this->preparedMonthYear();
@@ -70,7 +68,7 @@ class TransportBillingController extends Controller
             'bills' => $bills,
             'months' => $monthYear['months'],
             'years' => $monthYear['years'],
-            'filtering_data' => $request->all()
+            'filtering_data' => $request->all(),
         ]);
     }
 
@@ -80,7 +78,7 @@ class TransportBillingController extends Controller
 
         return Inertia::render('TransportBill/Create', [
             'months' => $monthYear['months'],
-            'years' => $monthYear['years']
+            'years' => $monthYear['years'],
         ]);
 
     }
@@ -89,14 +87,14 @@ class TransportBillingController extends Controller
     {
         $payments = $this->paymentRepository->query()
             ->with([
-                'transportBill.student'
+                'transportBill.student',
             ])
             ->where('status', PaymentStatus::COMPLETED->value)
             ->orderByDesc('transaction_date')
             ->paginate();
 
         return Inertia::render('TransportBill/Payments', [
-            'payments' => $payments
+            'payments' => $payments,
         ]);
     }
 
@@ -106,7 +104,7 @@ class TransportBillingController extends Controller
 
         return Inertia::render('TransportBill/GenerateBill', [
             'months' => $monthYear['months'],
-            'years' => $monthYear['years']
+            'years' => $monthYear['years'],
         ]);
     }
 
@@ -114,12 +112,12 @@ class TransportBillingController extends Controller
     {
         $request->validate([
             'month' => ['required'],
-            'year' => 'required'
+            'year' => 'required',
         ]);
 
         try {
             $this->transportBillRepository->generateMonthlyBill($request);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             return $this->json($e->getMessage(), null, 400);
         }
     }
@@ -132,32 +130,32 @@ class TransportBillingController extends Controller
             $timestamp = mktime(0, 0, 0, $i, 1);
             $months[] = [
                 'value' => date('n', $timestamp),
-                'name' => date('F', $timestamp)
+                'name' => date('F', $timestamp),
             ];
         }
 
-        $currentYear =  date('Y');
+        $currentYear = date('Y');
         $lastYear = $currentYear - 1;
         $nextYear = $currentYear + 1;
 
         $years[] = [
             'value' => $lastYear,
-            'name' => $lastYear
+            'name' => $lastYear,
         ];
 
         $years[] = [
             'value' => $currentYear,
-            'name' => $currentYear
+            'name' => $currentYear,
         ];
 
         $years[] = [
             'value' => $nextYear,
-            'name' => $nextYear
+            'name' => $nextYear,
         ];
 
         return [
             'months' => $months,
-            'years' => $years
+            'years' => $years,
         ];
     }
 
@@ -168,7 +166,7 @@ class TransportBillingController extends Controller
 
         return Inertia::render('TransportBill/PaymentReceiveManually', [
             'transport_bill' => $transportBill,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -187,11 +185,11 @@ class TransportBillingController extends Controller
             'gateway_trans_id' => $request->payment_trans_id,
             'gateway' => $request->gateway,
             'transaction_date' => $request->transaction_date ? Carbon::parse($request->transaction_date)->format('Y-m-d') : now()->format('Y-m-d'),
-            'status' => PaymentStatus::COMPLETED->value
+            'status' => PaymentStatus::COMPLETED->value,
         ]);
 
         $transportBill->update([
-            'is_paid' => 1
+            'is_paid' => 1,
         ]);
 
         if ($request->send_sms) {
@@ -199,7 +197,7 @@ class TransportBillingController extends Controller
             $smsMessage = str_replace([':amount', ':month_year', ':student_id'], [$transportBill->payment->amount, $transportBill->formatted_month_year, $transportBill->student->student_id], $smsFormat);
 
             $phone = mb_substr($transportBill->student->contact_no, mb_strpos($transportBill->student->contact_no, '01'));
-            $phone = '88' . $phone;
+            $phone = '88'.$phone;
 
             $sms->send($phone, $smsMessage);
             $smsLogRepo->storeByRequest($phone, $smsMessage);
@@ -225,11 +223,11 @@ class TransportBillingController extends Controller
         $bills->map(function ($bill) use ($currentDate, $dueConfig) {
             if ($currentDate > $bill->due_date) {
                 $bill->update([
-                    'due_amount' => $dueConfig['fine_after_due_date']
+                    'due_amount' => $dueConfig['fine_after_due_date'],
                 ]);
 
                 $bill->payment->update([
-                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date'],
                 ]);
             }
         });
@@ -241,7 +239,7 @@ class TransportBillingController extends Controller
             ->select('transport_billings.*')
             ->with([
                 'student',
-                'payment.refund'
+                'payment.refund',
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
@@ -269,7 +267,7 @@ class TransportBillingController extends Controller
             return $bill->amount + $bill->due_amount;
         });
 
-        $bills->map(function($bill) {
+        $bills->map(function ($bill) {
             $bill->amount = number_format($bill->amount + $bill->due_amount, 2);
         });
 

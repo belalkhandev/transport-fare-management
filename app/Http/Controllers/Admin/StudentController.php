@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\AcademicVersion;
 use App\Enums\BloodGroup;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportRequest;
 use App\Repositories\AcademicPlanRepository;
-use App\Repositories\AreaRepository;
 use App\Repositories\FeeRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TransportFeeRepository;
@@ -25,9 +23,7 @@ class StudentController extends Controller
         protected StudentRepository $studentRepository,
         protected TransportFeeRepository $transportFeeRepository,
         protected StudentImport $studentImport
-    )
-    {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -35,7 +31,7 @@ class StudentController extends Controller
 
         return Inertia::render('Student/Index', [
             'students' => $students,
-            'filterData' => $request->all()
+            'filterData' => $request->all(),
         ]);
     }
 
@@ -46,7 +42,7 @@ class StudentController extends Controller
             ->first();
 
         return response()->json([
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -55,7 +51,7 @@ class StudentController extends Controller
         $student = $this->studentRepository->getById($studentId);
 
         return Inertia::render('Student/Show', [
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -76,7 +72,7 @@ class StudentController extends Controller
             'academic_plans' => $academicPlans,
             'gender' => GenderEnum::values(),
             'blood_group' => BloodGroup::values(),
-            'fees' => $fees
+            'fees' => $fees,
         ]);
     }
 
@@ -88,7 +84,7 @@ class StudentController extends Controller
             'gender' => ['required'],
             'father_name' => ['required'],
             'mother_name' => ['required'],
-            'contact_no' => ['required']
+            'contact_no' => ['required'],
         ]);
 
         $student = $this->studentRepository->storeByRequest($request);
@@ -109,9 +105,9 @@ class StudentController extends Controller
         $student = $this->studentRepository->query()
             ->with([
                 'academicPlans' => function ($query) {
-                   $query->latest();
+                    $query->latest();
                 },
-                'transportFee'
+                'transportFee',
             ])
             ->findOrFail($studentId);
 
@@ -131,7 +127,7 @@ class StudentController extends Controller
             'gender' => GenderEnum::values(),
             'blood_group' => BloodGroup::values(),
             'fees' => $fees,
-            'student' => $student
+            'student' => $student,
         ]);
     }
 
@@ -145,9 +141,8 @@ class StudentController extends Controller
             'gender' => ['required'],
             'father_name' => ['required'],
             'mother_name' => ['required'],
-            'contact_no' => ['required']
+            'contact_no' => ['required'],
         ]);
-
 
         $this->studentRepository->updateByRequest($request, $studentId);
 
@@ -176,9 +171,9 @@ class StudentController extends Controller
 
     public function storeBulkImport(ImportRequest $request)
     {
-        try{
+        try {
             $students = $this->studentImport->importCsv($request->file('import_file'));
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             return to_route('student.import')
                 ->withErrors(['message' => $e->getMessage()]);
         }
@@ -189,6 +184,6 @@ class StudentController extends Controller
         }
 
         return to_route('student.import')
-            ->with('message', count($students)." New students imported successfully");
+            ->with('message', count($students).' New students imported successfully');
     }
 }

@@ -7,9 +7,8 @@ use Illuminate\Support\Str;
 
 class SiteSettingRepository extends Repository
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -22,7 +21,7 @@ class SiteSettingRepository extends Repository
             ->with([
                 'siteLogo',
                 'siteFavicon',
-                'footerLogo'
+                'footerLogo',
             ])->first();
     }
 
@@ -30,7 +29,7 @@ class SiteSettingRepository extends Repository
     {
         $settings = $this->query()->first();
 
-        if (!$settings) {
+        if (! $settings) {
             return $this->query()->create([
                 'ref' => Str::random(10),
                 'site_title' => $request->input('site_title', null),

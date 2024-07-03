@@ -17,10 +17,10 @@ class Media extends Model
         'type',
         'src',
         'extension',
-        'size'
+        'size',
     ];
 
-    public function __toString():string
+    public function __toString(): string
     {
         return $this->src;
     }
@@ -34,5 +34,4 @@ class Media extends Model
     {
         return $this->morphTo();
     }
-
 }

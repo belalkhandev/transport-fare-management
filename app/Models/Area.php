@@ -11,7 +11,7 @@ class Area extends Model
 
     protected $fillable = [
         'name',
-        'is_active'
+        'is_active',
     ];
 
     public function scopeActive($query)

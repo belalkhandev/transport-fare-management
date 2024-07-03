@@ -14,7 +14,7 @@ class AcademicYear extends Model
         'name',
         'is_active',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     public function scopeActive(Builder $query)

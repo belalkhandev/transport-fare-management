@@ -23,7 +23,7 @@ class Student extends Model
         'blood_group',
         'address_line_1',
         'address_line_2',
-        'is_active'
+        'is_active',
     ];
 
     public function academicPlans()

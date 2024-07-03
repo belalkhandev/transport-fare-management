@@ -9,9 +9,8 @@ use Illuminate\Support\Str;
 
 class MediaRepository extends Repository
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {

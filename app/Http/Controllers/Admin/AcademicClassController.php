@@ -11,23 +11,21 @@ class AcademicClassController extends Controller
 {
     public function __construct(
         protected AcademicClassRepository $academicClassRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $academicClasses = $this->academicClassRepository->getByPaginate();
 
         return Inertia::render('Academic/ClassList', [
-            'academic_classes' => $academicClasses
+            'academic_classes' => $academicClasses,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_classes,name']
+            'name' => ['required', 'unique:academic_classes,name'],
         ]);
 
         $this->academicClassRepository->storeByRequest($request);
@@ -38,7 +36,7 @@ class AcademicClassController extends Controller
     public function update(Request $request, $academicClassId)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_classes,name,'.$academicClassId]
+            'name' => ['required', 'unique:academic_classes,name,'.$academicClassId],
         ]);
 
         $this->academicClassRepository->updateByRequest($request, $academicClassId);

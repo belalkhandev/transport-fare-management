@@ -13,9 +13,7 @@ class FeeController extends Controller
     public function __construct(
         protected FeeRepository $feeRepository,
         protected AreaRepository $areaRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
@@ -27,7 +25,7 @@ class FeeController extends Controller
 
         return Inertia::render('FeeList', [
             'fees' => $fees,
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
 
@@ -35,7 +33,7 @@ class FeeController extends Controller
     {
         $request->validate([
             'area_id' => ['required'],
-            'amount' => ['required']
+            'amount' => ['required'],
         ]);
 
         $this->feeRepository->storeByRequest($request);
@@ -47,7 +45,7 @@ class FeeController extends Controller
     {
         $request->validate([
             'area_id' => ['required'],
-            'amount' => ['required']
+            'amount' => ['required'],
         ]);
 
         $this->feeRepository->storeByRequest($request);

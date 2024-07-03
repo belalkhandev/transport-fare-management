@@ -12,14 +12,17 @@ use Illuminate\Support\Str;
 class TransportBillingRepository extends Repository
 {
     protected SettingRepository $settingRepository;
+
     protected PaymentRepository $paymentRepository;
+
     protected SmsLogRepository $smsLogRepository;
 
     protected StudentRepository $studentRepository;
 
     protected SMS $sms;
+
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -37,7 +40,7 @@ class TransportBillingRepository extends Repository
     {
         return $this->query()->findOrFail($transportBillingId)->update([
 
-            ]);
+        ]);
     }
 
     public function deleteByRequest($transportBillingId)
@@ -63,8 +66,7 @@ class TransportBillingRepository extends Repository
         $students = $this->getApplicableStudents($request->month, $request->year);
         $discount = $this->settingRepository->getValueByName('billing_monthly_discount');
 
-        foreach ($students as $student)
-        {
+        foreach ($students as $student) {
 
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate, $discount);
 
@@ -73,19 +75,20 @@ class TransportBillingRepository extends Repository
                 $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
 
                 $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
-                $phone = '88' . $phone;
+                $phone = '88'.$phone;
 
                 $bulkSms[] = [
                     'to' => $phone,
-                    'message' => $smsMessage
+                    'message' => $smsMessage,
                 ];
 
                 $this->smsLogRepository->storeByRequest($student->contact_no, $smsMessage);
             }
         }
 
-        if($request->send_sms)
+        if ($request->send_sms) {
             $this->sms->sendBulk(json_encode($bulkSms));
+        }
     }
 
     private function getApplicableStudents($month, $year)
@@ -117,25 +120,25 @@ class TransportBillingRepository extends Repository
                 'academic_plan_id' => $student->academicPlans->first()?->id,
                 'due_date' => $dueDate,
                 'amount' => $payableAmount,
-                'is_paid' => 0
+                'is_paid' => 0,
             ]
         );
 
         $this->paymentRepository->query()->updateOrCreate(
             [
                 'transport_billing_id' => $transportBill->id,
-                'gateway' => PaymentGateway::BKASH->value
+                'gateway' => PaymentGateway::BKASH->value,
             ],
             [
                 'trans_id' => Str::random(10),
-                'amount' => $transportBill->amount
+                'amount' => $transportBill->amount,
             ]
         );
 
         return $transportBill;
     }
 
-    private function generatePaymentLink($studentId):string
+    private function generatePaymentLink($studentId): string
     {
         return route('transport-payment.student', $studentId);
     }
@@ -164,19 +167,20 @@ class TransportBillingRepository extends Repository
         $currentDate = now()->format('Y-m-d');
 
         $bills->map(function ($bill) use ($currentDate, $dueConfig) {
-            if (!$bill->is_paid && $currentDate > $bill->due_date) {
+            if (! $bill->is_paid && $currentDate > $bill->due_date) {
                 $bill->update([
-                    'due_amount' => $dueConfig['fine_after_due_date']
+                    'due_amount' => $dueConfig['fine_after_due_date'],
                 ]);
 
                 $bill->payment->update([
-                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date'],
                 ]);
             }
         });
 
         return $bills;
     }
+
     public function getUnpaidBillByStudentId($studentId)
     {
         return $this->query()
@@ -203,11 +207,11 @@ class TransportBillingRepository extends Repository
         $bills->map(function ($bill) use ($currentDate, $dueConfig) {
             if ($currentDate > $bill->due_date) {
                 $bill->update([
-                    'due_amount' => $dueConfig['fine_after_due_date']
+                    'due_amount' => $dueConfig['fine_after_due_date'],
                 ]);
 
                 $bill->payment->update([
-                    'amount' => $bill->amount + $dueConfig['fine_after_due_date']
+                    'amount' => $bill->amount + $dueConfig['fine_after_due_date'],
                 ]);
             }
         });
@@ -217,7 +221,7 @@ class TransportBillingRepository extends Repository
 
     private function calculateDiscountedAmount($amount, $discount, $month, $year): float
     {
-        if (!$discount) {
+        if (! $discount) {
             return $amount;
         }
 
@@ -228,7 +232,7 @@ class TransportBillingRepository extends Repository
         $discountYear = $discountArr['year'] ?? null;
         $discountMonth = $discountArr['month'] ?? null;
 
-        if (!($discountYear == $year && $discountMonth == $month)) {
+        if (! ($discountYear == $year && $discountMonth == $month)) {
             return $amount;
         }
 

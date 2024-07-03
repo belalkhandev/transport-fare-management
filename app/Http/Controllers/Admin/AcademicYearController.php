@@ -11,23 +11,21 @@ class AcademicYearController extends Controller
 {
     public function __construct(
         protected AcademicYearRepository $academicYearRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $academicYears = $this->academicYearRepository->getByPaginate();
 
         return Inertia::render('Academic/YearList', [
-            'academic_years' => $academicYears
+            'academic_years' => $academicYears,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_years,name']
+            'name' => ['required', 'unique:academic_years,name'],
         ]);
 
         $this->academicYearRepository->storeByRequest($request);
@@ -38,7 +36,7 @@ class AcademicYearController extends Controller
     public function update(Request $request, $academicYearId)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_years,name,'.$academicYearId]
+            'name' => ['required', 'unique:academic_years,name,'.$academicYearId],
         ]);
 
         $this->academicYearRepository->updateByRequest($request, $academicYearId);

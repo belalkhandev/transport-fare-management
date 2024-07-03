@@ -29,12 +29,12 @@ class MakeRepoCommand extends Command
     {
         $name = $this->argument('name');
 
-        if (!$name) {
+        if (! $name) {
             $name = $this->ask('Enter the name of the repository');
         }
 
         $this->call('make:repository', [
-           'name' => $name
+            'name' => $name,
         ]);
     }
 }

@@ -11,23 +11,21 @@ class AcademicGroupController extends Controller
 {
     public function __construct(
         protected AcademicGroupRepository $academicGroupRepository
-    )
-    {
-    }
+    ) {}
 
     public function index()
     {
         $academicGroups = $this->academicGroupRepository->getByPaginate();
 
         return Inertia::render('Academic/GroupList', [
-            'academic_groups' => $academicGroups
+            'academic_groups' => $academicGroups,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_groups,name']
+            'name' => ['required', 'unique:academic_groups,name'],
         ]);
 
         $this->academicGroupRepository->storeByRequest($request);
@@ -38,7 +36,7 @@ class AcademicGroupController extends Controller
     public function update(Request $request, $academicGroupId)
     {
         $request->validate([
-            'name' => ['required', 'unique:academic_groups,name,'.$academicGroupId]
+            'name' => ['required', 'unique:academic_groups,name,'.$academicGroupId],
         ]);
 
         $this->academicGroupRepository->updateByRequest($request, $academicGroupId);

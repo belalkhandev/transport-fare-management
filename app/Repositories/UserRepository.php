@@ -6,9 +6,8 @@ use App\Models\User;
 
 class UserRepository extends Repository
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {

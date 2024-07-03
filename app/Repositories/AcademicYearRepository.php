@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class AcademicYearRepository extends Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function model()
     {
@@ -22,7 +22,7 @@ class AcademicYearRepository extends Repository
             'name' => $request->get('name'),
             'start_date' => Carbon::parse($request->get('start_date'))->format('Y-m-d'),
             'end_date' => Carbon::parse($request->get('end_date'))->format('Y-m-d'),
-            'is_active' => $request->get('is_active') ? 1 : 0
+            'is_active' => $request->get('is_active') ? 1 : 0,
         ]);
     }
 
@@ -32,7 +32,7 @@ class AcademicYearRepository extends Repository
             'name' => $request->get('name'),
             'start_date' => Carbon::parse($request->get('start_date'))->format('Y-m-d'),
             'end_date' => Carbon::parse($request->get('end_date'))->format('Y-m-d'),
-            'is_active' => $request->get('is_active') ? 1 : 0
+            'is_active' => $request->get('is_active') ? 1 : 0,
         ]);
     }
 
@@ -40,5 +40,4 @@ class AcademicYearRepository extends Repository
     {
         return $this->query()->findOrFail($academicYearId)?->delete();
     }
-
 }
