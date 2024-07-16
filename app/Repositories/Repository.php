@@ -22,9 +22,13 @@ abstract class Repository
         return $this->model()::query();
     }
 
-    public function getAll()
+    public function getAll(?string $orderByColumn = null, ?string $orderBy = null)
     {
-        return $this->query()->get();
+        return $this->query()
+            ->when($orderByColumn, function ($query) use ($orderByColumn, $orderBy) {
+                $query->orderBy($orderByColumn, $orderBy ?: 'ASC');
+            })
+            ->get();
     }
 
     public function getByPaginate($limit = 15)

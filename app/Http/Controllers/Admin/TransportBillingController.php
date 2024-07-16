@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\EducationLevel;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
+use App\Repositories\AreaRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\SmsLogRepository;
@@ -23,12 +24,15 @@ class TransportBillingController extends Controller
         protected TransportBillingRepository $transportBillRepository,
         protected PaymentRepository $paymentRepository,
         protected StudentRepository $studentRepository,
-        protected SettingRepository $settingRepository
+        protected SettingRepository $settingRepository,
+        protected AreaRepository $areaRepository
     ) {}
 
     public function index(Request $request)
     {
         $this->checkDueBill();
+        $areas = $request->areas ? $request->areas : null;
+
         $bills = $this->transportBillRepository->query()
             ->select('transport_billings.*')
             ->with([
@@ -58,6 +62,12 @@ class TransportBillingController extends Controller
             ->when($educationLevel = $request->education_level, function ($query) use ($educationLevel) {
                 $query->where('students.education_level', $educationLevel);
             })
+            ->when($areas, function ($query) use ($areas) {
+                $query->leftJoin('transport_fees', 'transport_fees.student_id', '=', 'students.id')
+                    ->leftJoin('fees', 'fees.id', '=', 'transport_fees.fee_id')
+                    ->leftJoin('areas', 'fees.area_id', '=', 'areas.id')
+                    ->whereIn('areas.name', $areas);
+            })
             ->latest('transport_billings.created_at')
             ->paginate()
             ->withQueryString();
@@ -74,6 +84,7 @@ class TransportBillingController extends Controller
             'years' => $monthYear['years'],
             'filtering_data' => $request->all(),
             'education_levels' => EducationLevel::values(),
+            'areas' => $this->areaRepository->getAll('name', 'ASC'),
         ]);
     }
 
@@ -240,12 +251,13 @@ class TransportBillingController extends Controller
 
     public function export(Request $request, TransportBillsExport $billsExport)
     {
+        $areas = $request->areas ? $request->areas : null;
         $bills = $this->transportBillRepository->query()
             ->select('transport_billings.*')
             ->with([
                 'student',
                 'payment.refund',
-                'student.transportFee.fee.area'
+                'student.transportFee.fee.area',
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
@@ -269,6 +281,13 @@ class TransportBillingController extends Controller
             })
             ->when($educationLevel = $request->education_level, function ($query) use ($educationLevel) {
                 $query->where('students.education_level', $educationLevel);
+            })
+            ->when($areas, function ($query) use ($areas) {
+                $query->leftJoin('transport_fees', 'transport_fees.student_id', '=', 'students.id')
+                    ->leftJoin('fees', 'fees.id', '=', 'transport_fees.fee_id')
+                    ->leftJoin('areas', 'fees.area_id', '=', 'areas.id')
+                    ->whereIn('areas.name', $areas)
+                    ->orderBy('areas.name', 'ASC');
             })
             ->orderBy('students.education_level')
             ->get();

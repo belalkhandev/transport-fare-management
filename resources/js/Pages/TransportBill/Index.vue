@@ -2,11 +2,11 @@
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
-import ActiveStatusLabel from "@/Components/ActiveStatusLabel.vue";
 import PaymentStatusLabel from "@/Components/PaymentStatusLabel.vue";
-import RefundStatusLabel from "@/Components/RefundStatusLabel.vue";
 import moment from "moment";
 import NavLink from "@/Components/NavLink.vue";
+import Multiselect from "@vueform/multiselect";
+import '@vueform/multiselect/themes/default.css'
 
 const props = defineProps({
     bills: {
@@ -22,6 +22,9 @@ const props = defineProps({
     education_levels: {
         type: Array
     },
+    areas: {
+        type: Array
+    },
     filtering_data: {
         type: Object,
         default: () => ({})
@@ -29,6 +32,8 @@ const props = defineProps({
 });
 
 const form = useForm({});
+
+const areaOptions = props.areas.map(area => area.name);
 
 const deleteAction = (bill_id) => {
     Swal.fire({
@@ -61,6 +66,7 @@ const filtering_form = useForm({
     year: props.filtering_data.year ? props.filtering_data.year : '',
     payment_status: props.filtering_data.payment_status ? props.filtering_data.payment_status : '',
     education_level: props.filtering_data.education_level ? props.filtering_data.education_level : '',
+    areas: props.filtering_data.areas ? props.filtering_data.areas : [],
 });
 
 const submitSearchForm = () => {
@@ -68,7 +74,6 @@ const submitSearchForm = () => {
         preserveScroll: true,
     })
 }
-
 </script>
 
 <template>
@@ -85,7 +90,8 @@ const submitSearchForm = () => {
                         month: filtering_form.month,
                         year: filtering_form.year,
                         payment_status: filtering_form.payment_status,
-                        education_level:filtering_form.education_level
+                        education_level:filtering_form.education_level,
+                        areas:filtering_form.areas
                     })" class="btn btn-sm btn-outline-danger">Export</a>
                 </div>
             </div>
@@ -129,6 +135,22 @@ const submitSearchForm = () => {
                                         <option value="">All Level</option>
                                         <option v-for="education_level in education_levels" :value=education_level>{{ education_level.charAt(0).toUpperCase() + education_level.slice(1).toLowerCase() }}</option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <Multiselect
+                                    v-model="filtering_form.areas"
+                                    :options="areaOptions"
+                                    :mode="'multiple'"
+                                    :searchable="true"
+                                    :placeholder="'Select areas'"
+                                >
+
+                                </Multiselect>
+                                <div v-if="filtering_form.areas.length">
+                                    <span v-for="filtering_area in filtering_form.areas" class="text-gray-500 text-sm">{{ filtering_area }}, </span>
                                 </div>
                             </div>
                         </div>
