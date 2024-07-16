@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\EducationLevel;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\PaymentRepository;
@@ -54,6 +55,9 @@ class TransportBillingController extends Controller
                     $query->where('is_paid', 0);
                 }
             })
+            ->when($educationLevel = $request->education_level, function ($query) use ($educationLevel) {
+                $query->where('students.education_level', $educationLevel);
+            })
             ->latest('transport_billings.created_at')
             ->paginate()
             ->withQueryString();
@@ -69,6 +73,7 @@ class TransportBillingController extends Controller
             'months' => $monthYear['months'],
             'years' => $monthYear['years'],
             'filtering_data' => $request->all(),
+            'education_levels' => EducationLevel::values(),
         ]);
     }
 
@@ -240,6 +245,7 @@ class TransportBillingController extends Controller
             ->with([
                 'student',
                 'payment.refund',
+                'student.transportFee.fee.area'
             ])
             ->leftJoin('students', 'students.id', '=', 'transport_billings.student_id')
             ->leftJoin('payments', 'transport_billings.id', '=', 'payments.transport_billing_id')
@@ -261,6 +267,10 @@ class TransportBillingController extends Controller
                     $query->where('is_paid', 0);
                 }
             })
+            ->when($educationLevel = $request->education_level, function ($query) use ($educationLevel) {
+                $query->where('students.education_level', $educationLevel);
+            })
+            ->orderBy('students.education_level')
             ->get();
 
         $totalAmount = $bills->sum(function ($bill) {

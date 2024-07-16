@@ -14,6 +14,9 @@ const props = defineProps({
     blood_group: {
         type: Array,
     },
+    education_level: {
+        type: Array,
+    },
     academic_plans: {
         type: Object,
         default: () => ({})
@@ -32,6 +35,7 @@ const form = useForm({
     mother_name: '',
     gender: '',
     blood_group: '',
+    education_level: '',
     dob: '',
     contact_no: '',
     emergency_contact_no: '',
@@ -85,6 +89,16 @@ const submitForm = () => {
                                         <option v-for="academic_plan in academic_plans" :value="academic_plan.id">{{ academic_plan.name }}</option>
                                     </select>
                                     <InputError class="mt-2" :message="form.errors.academic_plan_id" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Education Level</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.education_level" class="form-control">
+                                        <option value="">Select Education Level</option>
+                                        <option v-for="item in education_level" :value="item">{{ item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.education_level" />
                                 </div>
                             </div>
                             <div class="form-group row">

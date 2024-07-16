@@ -12,7 +12,7 @@ class TransportBillsExport
             'bills' => $bills,
             'totalAmount' => $totalAmount ?? 0,
             'requestData' => $requestData,
-        ])->setPaper('a4');
+        ])->setPaper('a4', 'landscape');
 
         return $pdf->download('transport-bill-reports-'.now('Asia/Dhaka')->format('Y-m-d-h-i-s').'.pdf');
     }

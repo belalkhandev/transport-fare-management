@@ -1,8 +1,7 @@
 <script setup>
 defineProps({
     is_active: {
-        type: Boolean,
-        default: true,
+        type: Number,
     },
 });
 </script>

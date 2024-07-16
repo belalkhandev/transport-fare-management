@@ -90,6 +90,7 @@ const submitForm = () => {
                             <th>Contact</th>
                             <th>Area - Fee</th>
                             <th>Academic Plan</th>
+                            <th>Edu. Level</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -107,9 +108,11 @@ const submitForm = () => {
                             <td>{{ student.contact_no }}</td>
                             <td>{{ student.transport_fee ? student.transport_fee.fee.area.name + ' - ' +student.transport_fee.fee.amount : '' }}</td>
                             <td>
-                                {{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}</td>
+                                {{ student.academic_plans[0] ? student.academic_plans[0].name : '' }}
+                            </td>
+                            <td>{{ student.education_level }}</td>
                             <td>
-                                <ActiveStatusLabel :status="student.is_active"/>
+                                <ActiveStatusLabel :is_active="student.is_active"/>
                             </td>
                             <td>
                                 <div class="action">

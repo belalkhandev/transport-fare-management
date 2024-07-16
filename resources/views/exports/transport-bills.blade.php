@@ -63,6 +63,10 @@
             @if($requestData['payment_status'])
                 <li>Status: {{ $requestData['payment_status'] }}</li>
             @endif
+
+            @if($requestData['education_level'])
+                <li>Education Level: {{ ucfirst($requestData['education_level']) }}</li>
+            @endif
         </ul>
     </header>
 
@@ -70,8 +74,10 @@
         <thead>
         <tr>
             <th>Student ID</th>
+            <th>Education Level</th>
             <th>Name</th>
             <th>Contact</th>
+            <th>Area</th>
             <th>Billing Month</th>
             <th>Amount</th>
             <th>Status</th>
@@ -81,8 +87,10 @@
         @foreach($bills as $bill)
             <tr>
                 <td>{{ $bill->student->student_id }}</td>
+                <td>{{ ucfirst($bill->student->education_level) }}</td>
                 <td>{{ $bill->student->name }}</td>
                 <td>{{ $bill->student->contact_no }}</td>
+                <td>{{ $bill->student->transportFee->fee->area->name }}</td>
                 <td>{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y') }}</td>
                 <td>{{ $bill->amount }}</td>
                 <td>
@@ -91,7 +99,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="4">
+            <td colspan="6">
                 <b>Total</b>
             </td>
             <td colspan="2">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\BloodGroup;
+use App\Enums\EducationLevel;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportRequest;
@@ -72,6 +73,7 @@ class StudentController extends Controller
             'academic_plans' => $academicPlans,
             'gender' => GenderEnum::values(),
             'blood_group' => BloodGroup::values(),
+            'education_level' => EducationLevel::values(),
             'fees' => $fees,
         ]);
     }
@@ -80,6 +82,7 @@ class StudentController extends Controller
     {
         $request->validate([
             'student_id' => ['required', 'unique:students,student_id'],
+            'education_level' => ['required'],
             'name' => ['required'],
             'gender' => ['required'],
             'father_name' => ['required'],
@@ -126,6 +129,7 @@ class StudentController extends Controller
             'academic_plans' => $academicPlans,
             'gender' => GenderEnum::values(),
             'blood_group' => BloodGroup::values(),
+            'education_level' => EducationLevel::values(),
             'fees' => $fees,
             'student' => $student,
         ]);
@@ -137,6 +141,7 @@ class StudentController extends Controller
 
         $request->validate([
             'student_id' => ['required'],
+            'education_level' => ['required'],
             'name' => ['required'],
             'gender' => ['required'],
             'father_name' => ['required'],

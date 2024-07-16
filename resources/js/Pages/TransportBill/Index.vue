@@ -19,6 +19,9 @@ const props = defineProps({
     years: {
         type: Object
     },
+    education_levels: {
+        type: Array
+    },
     filtering_data: {
         type: Object,
         default: () => ({})
@@ -57,6 +60,7 @@ const filtering_form = useForm({
     month: props.filtering_data.month ? props.filtering_data.month : '',
     year: props.filtering_data.year ? props.filtering_data.year : '',
     payment_status: props.filtering_data.payment_status ? props.filtering_data.payment_status : '',
+    education_level: props.filtering_data.education_level ? props.filtering_data.education_level : '',
 });
 
 const submitSearchForm = () => {
@@ -80,7 +84,8 @@ const submitSearchForm = () => {
                         search: filtering_form.search,
                         month: filtering_form.month,
                         year: filtering_form.year,
-                        payment_status: filtering_form.payment_status
+                        payment_status: filtering_form.payment_status,
+                        education_level:filtering_form.education_level
                     })" class="btn btn-sm btn-outline-danger">Export</a>
                 </div>
             </div>
@@ -92,26 +97,45 @@ const submitSearchForm = () => {
                                 <input type="text" v-model="filtering_form.search" class="form-control" placeholder="Search key">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group d-flex">
-                                <select v-model="filtering_form.payment_status" class="mr-2 form-select">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select v-model="filtering_form.payment_status" class="form-select">
                                     <option value="">Status</option>
                                     <option value="paid">Paid</option>
                                     <option value="unpaid">Unpaid</option>
                                 </select>
-                                <select v-model="filtering_form.month" id="monthYear" class="mr-2 form-select">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select v-model="filtering_form.month" id="monthYear" class="form-select">
                                     <option value="">All Month</option>
                                     <option v-for="month in months" :value=month.value>{{ month.name }}</option>
                                 </select>
-                                <select v-model="filtering_form.year" id="monthYear" class="ml-2 form-select">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select v-model="filtering_form.year" id="monthYear" class="form-select">
                                     <option value="">All Year</option>
                                     <option v-for="year in years" :value=year.value>{{ year.name }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <Link :href="route('transport-bill.index')" class="btn btn-outline-warning">Reset</Link>
-                            <button type="submit" class="ml-2 btn btn-outline-primary">Search</button>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <select v-model="filtering_form.education_level" id="monthYear" class="form-select">
+                                        <option value="">All Level</option>
+                                        <option v-for="education_level in education_levels" :value=education_level>{{ education_level.charAt(0).toUpperCase() + education_level.slice(1).toLowerCase() }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-outline-primary">Search</button>
+                            <Link :href="route('transport-bill.index')" class="ml-2 btn btn-outline-warning">Reset</Link>
                         </div>
                     </div>
                 </form>
@@ -140,6 +164,8 @@ const submitSearchForm = () => {
                             </td>
                             <td>
                                 <Link :href="route('student.show', bill.student.id)">{{ bill.student.student_id }}</Link>
+                                <small v-if="bill.student.education_level == 'school'" class="ml-2 bg-indigo-400 text-white px-1 rounded-full">{{ bill.student.education_level }}</small>
+                                <small v-else class="ml-2 bg-blue-400 px-1 text-white rounded-full">{{ bill.student.education_level }}</small>
                                 <p class="m-0 p-0">
                                     {{ bill.student.name }}
                                 </p>

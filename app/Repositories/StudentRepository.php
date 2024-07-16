@@ -72,6 +72,7 @@ class StudentRepository extends Repository
     {
         return $this->query()->create([
             'student_id' => $request->get('student_id'),
+            'education_level' => $request->get('education_level'),
             'name' => $request->get('name'),
             'father_name' => $request->get('father_name'),
             'mother_name' => $request->get('mother_name'),
@@ -91,6 +92,7 @@ class StudentRepository extends Repository
     {
         return $this->query()->findOrFail($studentId)?->update([
             'student_id' => $request->get('student_id'),
+            'education_level' => $request->get('education_level'),
             'name' => $request->get('name'),
             'father_name' => $request->get('father_name'),
             'mother_name' => $request->get('mother_name'),
@@ -110,6 +112,7 @@ class StudentRepository extends Repository
     {
         return $this->query()->create([
             'student_id' => $data['student_id'],
+            'education_level' => $data['education_level'] ?? null,
             'name' => $data['name'],
             'father_name' => $data['father_name'],
             'mother_name' => $data['mother_name'],

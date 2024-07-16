@@ -49,6 +49,10 @@ const props = defineProps({
                                     <td>Blood Group :</td>
                                     <td>{{ student.blood_group }}</td>
                                 </tr>
+                                <tr>
+                                    <td>Education Level :</td>
+                                    <td>{{ student.education_level }}</td>
+                                </tr>
                             </table>
                         </div>
                         <div class="col-md-3">

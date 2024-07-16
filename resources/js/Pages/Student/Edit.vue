@@ -14,6 +14,9 @@ const props = defineProps({
     gender: {
         type: Array,
     },
+    education_level: {
+        type: Array,
+    },
     blood_group: {
         type: Array,
     },
@@ -30,6 +33,7 @@ const props = defineProps({
 
 const form = useForm({
     student_id: props.student.student_id,
+    education_level: props.student.education_level,
     name: props.student.name,
     father_name: props.student.father_name,
     mother_name: props.student.mother_name,
@@ -52,7 +56,6 @@ const submitForm = () => {
     form.post(route('student.edit', props.student.id), {
         preserveScroll: true,
         onSuccess: () => {
-            form.reset();
             previewImage.value = null;
             Swal.fire(
                 'Congratulation',
@@ -88,6 +91,16 @@ const submitForm = () => {
                                         <option v-for="academic_plan in academic_plans" :value="academic_plan.id">{{ academic_plan.name }}</option>
                                     </select>
                                     <InputError class="mt-2" :message="form.errors.academic_plan_id" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-form-label col-md-4">Education Level</label>
+                                <div class="col-md-8">
+                                    <select v-model="form.education_level" class="form-control">
+                                        <option value="">Select Education Level</option>
+                                        <option v-for="item in education_level" :value="item">{{ item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() }}</option>
+                                    </select>
+                                    <InputError class="mt-2" :message="form.errors.education_level" />
                                 </div>
                             </div>
                             <div class="form-group row">
