@@ -7,6 +7,7 @@ use App\Models\TransportBilling;
 use App\Services\SMS\SMS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TransportBillingRepository extends Repository
@@ -67,15 +68,17 @@ class TransportBillingRepository extends Repository
         $discount = $this->settingRepository->getValueByName('billing_monthly_discount');
 
         foreach ($students as $student) {
-
             $transportBill = $this->storeTransportBillForStudent($student, $request->month, $request->year, $dueDate, $discount);
+            
+            if (!$transportBill) {
+                continue;
+            }
 
-            if ($request->send_sms) {
+            $phone = $this->formatContactNumber($student->contact_no);
+
+            if ($request->send_sms && $phone && $smsFormat) {
                 $paymentLink = $this->generatePaymentLink($student->student_id);
                 $smsMessage = str_replace([':amount', ':month_year', ':due_date', ':payment_link'], [$transportBill->amount, $monthYear, $dueDate, $paymentLink], $smsFormat);
-
-                $phone = mb_substr($student->contact_no, mb_strpos($student->contact_no, '01'));
-                $phone = '88'.$phone;
 
                 $bulkSms[] = [
                     'to' => $phone,
@@ -91,24 +94,45 @@ class TransportBillingRepository extends Repository
         }
     }
 
+    private function formatContactNumber(string $number): ?string
+    {
+        $digits = preg_replace('/\D/', '', $number);
+
+        if (str_starts_with($digits, '880')) $formatted = $digits;
+        elseif (str_starts_with($digits, '01')) $formatted = '88' . $digits;
+        elseif (str_starts_with($digits, '8801')) $formatted = $digits;
+        else return null;
+
+        return strlen($formatted) === 13 ? $formatted : null;
+    }
+
+
+
     private function getApplicableStudents($month, $year)
     {
         $this->studentRepository = app(StudentRepository::class);
 
-        $studentsIds = $this->query()
+        $excludeStudentIds = $this->query()
             ->where('month', $month)
             ->where('year', $year)
+            ->where('is_paid', 1)
             ->get()
             ->pluck('student_id')
             ->toArray();
 
-        return $this->studentRepository->getActiveStudents($studentsIds);
+        return $this->studentRepository->getActiveStudents($excludeStudentIds);
     }
 
     private function storeTransportBillForStudent($student, $month, $year, $dueDate, $discount)
     {
-        $originalAmount = $student->transportFee->discounted_amount ?? $student->transportFee->fee->amount;
-        $payableAmount = $this->calculateDiscountedAmount($originalAmount, $discount, $month, $year);
+        
+        $originalAmount = $student->transportFee->discounted_amount ?? $student->transportFee?->fee?->amount;
+        
+        if (!$originalAmount) {
+            return null;
+        }
+        
+        $payableAmount = $this->calculateDiscountedAmount($originalAmount, $discount, $month, $year, $student->education_level);
 
         $transportBill = $this->query()->updateOrCreate(
             [
@@ -161,7 +185,8 @@ class TransportBillingRepository extends Repository
         $bills = $this->query()
             ->with('payment')
             ->where('student_id', $studentId)
-            ->latest('month')
+            ->orderByDesc('year')
+            ->orderByDesc('month')
             ->get();
 
         $currentDate = now()->format('Y-m-d');
@@ -219,7 +244,7 @@ class TransportBillingRepository extends Repository
         return $bills;
     }
 
-    private function calculateDiscountedAmount($amount, $discount, $month, $year): float
+    private function calculateDiscountedAmount($amount, $discount, $month, $year, $educationLevel = null): float
     {
         if (! $discount) {
             return $amount;
@@ -227,8 +252,8 @@ class TransportBillingRepository extends Repository
 
         $discountArr = json_decode($discount, true);
 
-        $discountPercentage = $discountArr['discount_in_percentage'] ?? 0;
-        $discountInAmount = $discountArr['discount_in_amount'] ?? 0;
+        $discountPercentage = $discountArr['discount_percentage'][$educationLevel] ?? 0;
+        $discountInAmount = $discountArr['discount_amount'][$educationLevel] ?? 0;
         $discountYear = $discountArr['year'] ?? null;
         $discountMonth = $discountArr['month'] ?? null;
 

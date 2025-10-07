@@ -60,7 +60,7 @@ class StudentImport
             $student = $this->studentRepository->storeByImportData($studentInfo);
 
             if (isset($studentInfo['academic_plan_id']) && $studentInfo['academic_plan_id']) {
-                $studentInfo->academicPlans()->attach([$studentInfo['academic_plan_id']]);
+                $student->academicPlans()->attach([$studentInfo['academic_plan_id']]);
             }
 
             if (isset($studentInfo['area'], $studentInfo['fee']) && $studentInfo['area'] && $studentInfo['fee']) {

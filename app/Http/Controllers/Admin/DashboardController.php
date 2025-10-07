@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $totalStudents = $this->studentRepository->query()->count();
+        $totalStudents = $this->studentRepository->query()->where('is_active', 1)->count();
         $totalBills = $this->transportBillingRepository->query()
             ->select('amount', 'due_amount', 'is_paid')
             ->get();
@@ -29,7 +29,10 @@ class DashboardController extends Controller
             return $query->amount + $query->due_amount;
         });
 
-        $totalCollection = $this->paymentRepository->query()->where('status', PaymentStatus::COMPLETED->value)->get()->sum('amount');
+        $totalCollection = $this->paymentRepository->query()
+        ->where('status', PaymentStatus::COMPLETED->value)
+        ->get()
+        ->sum('amount');
 
         $totalDue = $totalBillAmount - $totalCollection;
 
@@ -46,6 +49,7 @@ class DashboardController extends Controller
 
         $paymentData = $this->paymentRepository->query()
             ->whereMonth('transaction_date', Carbon::now()->month)
+            ->whereYear('transaction_date', Carbon::now()->year)
             ->selectRaw('DATE(transaction_date) as date, SUM(amount) as total_amount')
             ->groupBy('date')
             ->orderBy('date')

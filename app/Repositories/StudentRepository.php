@@ -30,7 +30,7 @@ class StudentRepository extends Repository
             ->when($searchKey, function ($query) use ($searchKey) {
                 $query->where('student_id', 'LIKE', '%'.$searchKey.'%')->orWhere('contact_no', 'LIKE', '%'.$searchKey.'%')->orWhere('name', 'LIKE', '%'.$searchKey.'%');
             })
-            ->orderBy('is_active')
+            ->orderByDesc('is_active')
             ->latest()
             ->paginate($limit);
     }
@@ -132,7 +132,7 @@ class StudentRepository extends Repository
         return $this->query()->findOrFail($studentId)?->delete();
     }
 
-    public function getActiveStudents(array $withoutStudentIds = [])
+    public function getActiveStudents(array $excludeStudentIds = [])
     {
         return $this->query()
             ->with([
@@ -141,7 +141,7 @@ class StudentRepository extends Repository
                 },
                 'transportFee',
             ])
-            ->whereNotIn('id', $withoutStudentIds)
+            ->whereNotIn('id', $excludeStudentIds)
             ->active()
             ->get();
     }

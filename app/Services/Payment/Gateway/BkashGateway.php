@@ -4,7 +4,7 @@ namespace App\Services\Payment\Gateway;
 
 use App\Models\Payment;
 use App\Models\Refund;
-use App\Models\Settings;
+use App\Models\Setting;
 use App\Services\Payment\Gateway\Contracts\Refundable;
 use Carbon\Carbon;
 use Exception;
@@ -31,7 +31,7 @@ class BkashGateway extends PaymentGateway implements Refundable
 
     public function getServiceCharge(float $amount, $store_amount = 0): float
     {
-        $percentage = Settings::getValue('bkash_pgw_charge_percentage', 1.5);
+        $percentage = Setting::getValue('bkash_pgw_charge_percentage', 1.5);
 
         return round($amount * ($percentage / 100), 2);
     }

@@ -140,7 +140,7 @@ class StudentController extends Controller
         $student = $this->studentRepository->query()->findOrFail($studentId);
 
         $request->validate([
-            'student_id' => ['required'],
+            'student_id' => ['required', 'unique:students,student_id,'.$studentId],
             'education_level' => ['required'],
             'name' => ['required'],
             'gender' => ['required'],
